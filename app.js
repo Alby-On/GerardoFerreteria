@@ -21,13 +21,17 @@ _supabase.auth.onAuthStateChange((event, session) => {
 
 // 4. Funciones de Interfaz
 function mostrarInterfazPrivada(user) {
-    if (authForms) authForms.style.display = 'none'; // Oculta registro/login
+    if (authForms) authForms.style.display = 'none'; 
     btnLogout.style.display = 'inline';
-    userInfo.style.display = 'inline';
     userInfo.innerText = `Hola, ${user.email}`;
-    seccionCliente.style.display = 'block';
     
+    // Mostrar secciones privadas
+    seccionCliente.style.display = 'block';
+    document.getElementById('seccion-perfil').style.display = 'block';
+    
+    // Cargar los datos desde la DB
     cargarPedidos(user.id);
+    cargarPerfil(user.id);
 }
 
 function mostrarInterfazPublica() {
@@ -108,5 +112,43 @@ async function cargarPedidos(userId) {
                 </div>
             </div>
         `).join('');
+    }
+}
+// A. Cargar datos del perfil al iniciar sesión
+async function cargarPerfil(userId) {
+    const { data, error } = await _supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+
+    if (data) {
+        document.getElementById('perfil-nombre').value = data.nombre || '';
+        document.getElementById('perfil-rut').value = data.rut || '';
+        document.getElementById('perfil-direccion').value = data.direccion || '';
+        document.getElementById('perfil-telefono').value = data.telefono || '';
+    }
+}
+
+// B. Guardar o actualizar los datos
+async function guardarPerfil() {
+    const user = (await _supabase.auth.getUser()).data.user;
+    if (!user) return;
+
+    const updates = {
+        id: user.id,
+        nombre: document.getElementById('perfil-nombre').value,
+        rut: document.getElementById('perfil-rut').value,
+        direccion: document.getElementById('perfil-direccion').value,
+        telefono: document.getElementById('perfil-telefono').value,
+        updated_at: new Date()
+    };
+
+    const { error } = await _supabase.from('profiles').upsert(updates);
+
+    if (error) {
+        alert("Error al actualizar: " + error.message);
+    } else {
+        alert("¡Datos de perfil actualizados correctamente!");
     }
 }
