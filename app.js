@@ -69,3 +69,24 @@ btnLogin.onclick = async () => {
 btnLogout.onclick = async () => {
     await _supabase.auth.signOut();
 };
+async function handleSignUp() {
+    const email = document.getElementById('reg-email').value;
+    const password = document.getElementById('reg-password').value;
+    const nombre = document.getElementById('reg-nombre').value;
+
+    const { data, error } = await _supabase.auth.signUp({
+        email: email,
+        password: password,
+        options: {
+            data: {
+                nombre: nombre // Esto lo recibe el trigger de arriba
+            }
+        }
+    });
+
+    if (error) {
+        alert("Error: " + error.message);
+    } else {
+        alert("¡Registro exitoso! Revisa tu email para confirmar.");
+    }
+}
