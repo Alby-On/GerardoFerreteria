@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ferretería Online | Albyon Digital</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>Ferretería Industrial</h1>
+        <nav id="auth-nav">
+            <button id="btn-login">Iniciar Sesión</button>
+            <span id="user-info" style="display:none;"></span>
+            <button id="btn-logout" style="display:none;">Salir</button>
+        </nav>
+    </header>
+
+    <main>
+        <section id="productos">
+            <h2>Nuestros Productos</h2>
+            <div class="grid-productos">
+                <div class="card">
+                    <img src="https://via.placeholder.com/150" alt="Taladro">
+                    <h3>Taladro Percutor 18V</h3>
+                    <p>$45.990</p>
+                    <div id="shopify-button-contenedor">
+                        <button class="btn-comprar">Comprar</button> 
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="seccion-cliente" style="display:none;">
+            <h2>Mi Historial de Pedidos</h2>
+            <div id="historial-lista">
+                <p>Cargando tus pedidos...</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
