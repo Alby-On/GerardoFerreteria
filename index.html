@@ -42,7 +42,16 @@
         </section>
 
         <hr>
-
+        <section id="seccion-perfil" style="display:none; background: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #ddd;">
+            <h2>Datos de Despacho y Facturación</h2>
+            <div class="form-perfil" style="display: flex; flex-direction: column; gap: 10px; max-width: 400px;">
+                <input type="text" id="perfil-nombre" placeholder="Nombre Completo">
+                <input type="text" id="perfil-rut" placeholder="RUT (ej: 12.345.678-9)">
+                <input type="text" id="perfil-direccion" placeholder="Dirección en Chillán">
+                <input type="text" id="perfil-telefono" placeholder="Teléfono de contacto">
+                <button onclick="guardarPerfil()" style="background: #28a745; color: white; border: none; padding: 10px; cursor: pointer;">Actualizar Mis Datos</button>
+            </div>
+        </section>
         <section id="seccion-cliente" style="display:none;">
             <h2>Mi Historial de Pedidos</h2>
             <div id="historial-lista">
