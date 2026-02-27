@@ -1,4 +1,4 @@
-/* Archivo: shopify-button.js (Versión Estabilizada) */
+/* Archivo: shopify-button.js (Versión de Diagnóstico) */
 (function () {
     const scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
     
@@ -9,57 +9,31 @@
         });
 
         ShopifyBuy.UI.onReady(client).then(function (ui) {
-            const node = document.getElementById('contenedor-tienda-dinamica');
-            if (!node) return;
-
-            node.innerHTML = ''; // Limpiar cargando
-
-            client.collection.fetchAllWithProducts().then((collections) => {
-                collections.forEach((collection) => {
-                    const div = document.createElement('div');
-                    div.id = 'collection-' + collection.id;
-                    node.appendChild(div);
-
-                    ui.createComponent('collection', {
-                        id: collection.id,
-                        node: div,
-                        options: {
-                            "product": {
-                                "buttonDestination": "cart",
-                                "contents": {
-                                    "img": true,
-                                    "title": true,
-                                    "price": true,
-                                    "button": true
-                                },
-                                "text": { "button": "Agregar" }
-                            },
-                            "cart": {
-                                "startOpen": false,
-                                "popup": false,
-                                "text": {
-                                    "title": "Carrito",
-                                    "total": "Subtotal",
-                                    "button": "Pagar"
-                                }
-                            },
-                            // Agregamos esto para evitar el error de indexOf en el modal
-                            "modalProduct": {
-                                "contents": {
-                                    "img": true,
-                                    "imgWithCarousel": true,
-                                    "button": true,
-                                    "buttonWithQuantity": true
-                                }
-                            }
+            // Intentamos renderizar solo UNA colección primero para probar estabilidad
+            ui.createComponent('collection', {
+                id: '482113093857', // Tu ID de colección
+                node: document.getElementById('contenedor-tienda-dinamica'),
+                moneyFormat: '%24%7B%7Bamount%7D%7D', // Formato estándar
+                options: {
+                    "product": {
+                        "buttonDestination": "cart",
+                        "variantId": "all",
+                        "contents": {
+                            "img": true,
+                            "title": true,
+                            "price": true,
+                            "button": true
                         }
-                    });
-                });
-            }).catch(err => console.error("Error en API Shopify:", err));
-        });
+                    },
+                    "cart": {
+                        "startOpen": false,
+                        "popup": false
+                    }
+                }
+            });
+        }).catch(err => console.error("Error en UI de Shopify:", err));
     }
 
-    // Carga del script
     if (window.ShopifyBuy) {
         ShopifyBuyInit();
     } else {
