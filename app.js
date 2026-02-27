@@ -1,15 +1,17 @@
-// Configuración (Reemplaza con tus credenciales de Supabase)
-const SUPABASE_URL = 'https://tu-proyecto.supabase.co';
-const SUPABASE_KEY = 'tu-anon-key-aqui';
+// 1. Configuración de Supabase
+const SUPABASE_URL = 'https://afrfaeouzkjdkkqeozgq.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFmcmZhZW91emtqZGtrcWVvemdxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyMTg1OTUsImV4cCI6MjA4Nzc5NDU5NX0.CRUaz7sNOuotsV3tVM5O2KvTerAT6uTXHaTy4yKKAdM';
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const btnLogin = document.getElementById('btn-login');
+// 2. Referencias a elementos del DOM
 const btnLogout = document.getElementById('btn-logout');
 const userInfo = document.getElementById('user-info');
 const seccionCliente = document.getElementById('seccion-cliente');
+const authForms = document.getElementById('auth-forms');
 
-// 1. Detectar cambios en la sesión
+// 3. Observador de estado de la sesión
 _supabase.auth.onAuthStateChange((event, session) => {
+    console.log("Evento de Auth:", event);
     if (session) {
         mostrarInterfazPrivada(session.user);
     } else {
@@ -17,76 +19,94 @@ _supabase.auth.onAuthStateChange((event, session) => {
     }
 });
 
+// 4. Funciones de Interfaz
 function mostrarInterfazPrivada(user) {
-    btnLogin.style.display = 'none';
+    if (authForms) authForms.style.display = 'none'; // Oculta registro/login
     btnLogout.style.display = 'inline';
     userInfo.style.display = 'inline';
-    userInfo.innerText = `Bienvenido: ${user.email}`;
+    userInfo.innerText = `Hola, ${user.email}`;
     seccionCliente.style.display = 'block';
+    
     cargarPedidos(user.id);
 }
 
 function mostrarInterfazPublica() {
-    btnLogin.style.display = 'inline';
+    if (authForms) authForms.style.display = 'block'; // Muestra registro/login
     btnLogout.style.display = 'none';
     userInfo.style.display = 'none';
     seccionCliente.style.display = 'none';
 }
 
-// 2. Función para cargar pedidos desde Supabase
-async function cargarPedidos(userId) {
-    const { data, error } = await _supabase
-        .from('pedidos')
-        .select('*')
-        .eq('user_id', userId);
-
-    const contenedor = document.getElementById('historial-lista');
-    if (error) {
-        contenedor.innerHTML = '<p>Error al cargar pedidos.</p>';
-        return;
-    }
-    
-    if (data.length === 0) {
-        contenedor.innerHTML = '<p>Aún no tienes pedidos.</p>';
-    } else {
-        contenedor.innerHTML = data.map(p => `
-            <div style="border-bottom: 1px solid #eee; padding: 10px 0;">
-                <strong>Pedido #${p.id}</strong> - Estado: <span>${p.estado}</span> - Total: $${p.monto}
-            </div>
-        `).join('');
-    }
-}
-
-// Evento Login (aquí podrías abrir un modal o redirigir)
-btnLogin.onclick = async () => {
-    // Para simplificar, usamos un login rápido (deberás configurar el método en Supabase)
-    const email = prompt("Introduce tu email:");
-    const password = prompt("Introduce tu contraseña:");
-    const { error } = await _supabase.auth.signInWithPassword({ email, password });
-    if (error) alert("Error: " + error.message);
-};
-
-btnLogout.onclick = async () => {
-    await _supabase.auth.signOut();
-};
+// 5. Lógica de Autenticación (Registro y Login)
 async function handleSignUp() {
     const email = document.getElementById('reg-email').value;
     const password = document.getElementById('reg-password').value;
     const nombre = document.getElementById('reg-nombre').value;
 
+    if (!email || !password || !nombre) {
+        alert("Por favor, completa todos los campos.");
+        return;
+    }
+
     const { data, error } = await _supabase.auth.signUp({
         email: email,
         password: password,
         options: {
-            data: {
-                nombre: nombre // Esto lo recibe el trigger de arriba
-            }
+            data: { nombre: nombre } // Se envía al trigger de la DB
         }
     });
 
     if (error) {
-        alert("Error: " + error.message);
+        alert("Error en registro: " + error.message);
     } else {
-        alert("¡Registro exitoso! Revisa tu email para confirmar.");
+        alert("¡Registro exitoso! Revisa tu email para confirmar tu cuenta.");
+    }
+}
+
+// Función opcional para Login (si añades campos de login después)
+async function handleLogin() {
+    const email = prompt("Email:");
+    const password = prompt("Contraseña:");
+    const { error } = await _supabase.auth.signInWithPassword({ email, password });
+    if (error) alert("Error: " + error.message);
+}
+
+btnLogout.onclick = async () => {
+    const { error } = await _supabase.auth.signOut();
+    if (error) console.error("Error al salir:", error.message);
+};
+
+// 6. Gestión de Datos (Pedidos)
+async function cargarPedidos(userId) {
+    const { data, error } = await _supabase
+        .from('pedidos')
+        .select('*')
+        .eq('user_id', userId)
+        .order('fecha', { ascending: false });
+
+    const contenedor = document.getElementById('historial-lista');
+    
+    if (error) {
+        contenedor.innerHTML = '<p>Error al obtener historial.</p>';
+        return;
+    }
+    
+    if (data.length === 0) {
+        contenedor.innerHTML = '<p>No tienes pedidos registrados aún.</p>';
+    } else {
+        contenedor.innerHTML = data.map(p => `
+            <div style="border-bottom: 1px solid #ddd; padding: 15px 0; display: flex; justify-content: space-between;">
+                <div>
+                    <strong>Pedido #${p.id}</strong><br>
+                    <small>${new Date(p.fecha).toLocaleDateString()}</small>
+                </div>
+                <div>
+                    <span style="background: #eee; padding: 4px 8px; border-radius: 4px;">${p.estado}</span>
+                </div>
+                <div>
+                    <strong>$${p.monto_total || 0}</strong>
+                </div>
+            </div>
+        `).join('');
     }
 }
