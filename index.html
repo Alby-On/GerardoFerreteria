@@ -6,67 +6,70 @@
     <title>Ferretería Industrial | Albyon Digital</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { font-family: sans-serif; padding: 20px; background: #f4f4f4; }
-        header { display: flex; justify-content: space-between; align-items: center; background: #333; color: white; padding: 10px 20px; border-radius: 8px; }
+        body { font-family: sans-serif; padding: 20px; background: #f4f4f4; color: #333; }
+        header { display: flex; justify-content: space-between; align-items: center; background: #333; color: white; padding: 10px 20px; border-radius: 8px; margin-bottom: 20px; }
         input { padding: 8px; margin-bottom: 5px; border: 1px solid #ccc; border-radius: 4px; }
+        
+        /* Contenedor de productos siempre visible */
+        #productos { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         #contenedor-tienda-dinamica { display: flex; flex-direction: column; gap: 40px; margin-top: 20px; }
-        .mensaje-registro { background: #fff3cd; color: #856404; padding: 20px; border-radius: 8px; text-align: center; border: 1px solid #ffeeba; }
+        
+        .seccion-privada { background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #ddd; margin-top: 20px; }
+        .auth-card { background: white; padding: 20px; border-radius: 8px; max-width: 400px; margin-bottom: 20px; border: 1px solid #ddd; }
     </style>
 </head>
 <body>
     <header>
         <h1>Ferretería Industrial</h1>
         <nav id="auth-nav">
-            <span id="user-info" style="display:none;"></span>
-            <button id="btn-logout" style="display:none;">Salir</button>
+            <span id="user-info">Bienvenido</span>
+            <button id="btn-logout" style="display:none; margin-left:10px;">Salir</button>
         </nav>
     </header>
 
     <main>
+        <section id="productos">
+            <h2>Catálogo de Productos</h2>
+            <div id="contenedor-tienda-dinamica">
+                <p>Cargando productos de la ferretería...</p>
+            </div>
+        </section>
+
+        <hr style="margin: 40px 0;">
+
         <section id="auth-forms">
-            <div id="register-container" style="background: white; padding: 20px; border-radius: 8px; max-width: 400px; margin: 20px 0;">
-                <h3>Registro para Clientes</h3>
+            <div id="register-container" class="auth-card">
+                <h3>¿Quieres guardar tus datos?</h3>
+                <p style="font-size: 0.9em; color: #666;">Regístrate para ver tu historial de pedidos y guardar tu dirección de despacho.</p>
                 <div style="display: flex; flex-direction: column; gap: 10px;">
                     <input type="text" id="reg-nombre" placeholder="Nombre Completo">
                     <input type="email" id="reg-email" placeholder="Tu Email">
                     <input type="password" id="reg-password" placeholder="Contraseña">
-                    <button onclick="handleSignUp()" style="padding: 10px; background: #007bff; color: white; border: none; cursor: pointer;">Registrarme</button>
+                    <button onclick="handleSignUp()" style="padding: 10px; background: #007bff; color: white; border: none; cursor: pointer; border-radius: 4px;">Crear Cuenta</button>
                     <button onclick="handleLogin()" style="background: none; border: none; color: #007bff; cursor: pointer; text-decoration: underline;">Ya tengo cuenta (Login)</button>
                 </div>
             </div>
         </section>
 
-        <section id="productos" style="display:none;">
-            <h2>Catálogo de Productos</h2>
-            <div id="contenedor-tienda-dinamica">
-                <p>Cargando colecciones de Shopify...</p>
-            </div>
-        </section>
+        <div id="area-cliente" style="display: none;">
+            <section id="seccion-perfil" class="seccion-privada">
+                <h2>Mis Datos de Despacho (Chillán)</h2>
+                <div class="form-perfil" style="display: flex; flex-direction: column; gap: 10px; max-width: 400px;">
+                    <input type="text" id="perfil-nombre" placeholder="Nombre Completo">
+                    <input type="text" id="perfil-rut" placeholder="RUT">
+                    <input type="text" id="perfil-direccion" placeholder="Dirección">
+                    <input type="text" id="perfil-telefono" placeholder="Teléfono">
+                    <button onclick="guardarPerfil()" style="background: #28a745; color: white; border: none; padding: 10px; cursor: pointer; border-radius: 4px;">Guardar cambios</button>
+                </div>
+            </section>
 
-        <section id="tienda-bloqueada" class="mensaje-registro">
-            <h3>Bienvenido a nuestra Ferretería</h3>
-            <p>Para ver nuestros precios y comprar en línea, por favor <strong>regístrate</strong> o <strong>inicia sesión</strong>.</p>
-        </section>
-
-        <hr>
-
-        <section id="seccion-perfil" style="display:none; background: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #ddd;">
-            <h2>Datos de Despacho y Facturación</h2>
-            <div class="form-perfil" style="display: flex; flex-direction: column; gap: 10px; max-width: 400px;">
-                <input type="text" id="perfil-nombre" placeholder="Nombre Completo">
-                <input type="text" id="perfil-rut" placeholder="RUT (ej: 12.345.678-9)">
-                <input type="text" id="perfil-direccion" placeholder="Dirección en Chillán">
-                <input type="text" id="perfil-telefono" placeholder="Teléfono de contacto">
-                <button onclick="guardarPerfil()" style="background: #28a745; color: white; border: none; padding: 10px; cursor: pointer;">Actualizar Mis Datos</button>
-            </div>
-        </section>
-
-        <section id="seccion-cliente" style="display:none; background: #fff; padding: 20px; border-radius: 8px;">
-            <h2>Mi Historial de Pedidos</h2>
-            <div id="historial-lista">
-                <p>Cargando tus pedidos...</p>
-            </div>
-        </section>
+            <section id="seccion-cliente" class="seccion-privada">
+                <h2>Mi Historial de Pedidos</h2>
+                <div id="historial-lista">
+                    <p>No tienes pedidos registrados aún.</p>
+                </div>
+            </section>
+        </div>
     </main>
 
     <script src="app.js"></script>
