@@ -1,16 +1,7 @@
-/* Archivo: shopify-button.js */
+/* Archivo: shopify-button.js (Dinámico) */
 (function () {
     var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
-    if (window.ShopifyBuy) {
-        if (window.ShopifyBuy.UI) {
-            ShopifyBuyInit();
-        } else {
-            loadScript();
-        }
-    } else {
-        loadScript();
-    }
-
+    
     function loadScript() {
         var script = document.createElement('script');
         script.async = true;
@@ -19,59 +10,42 @@
         script.onload = ShopifyBuyInit;
     }
 
+    if (window.ShopifyBuy && window.ShopifyBuy.UI) {
+        ShopifyBuyInit();
+    } else {
+        loadScript();
+    }
+
     function ShopifyBuyInit() {
-        var client = ShopifyBuy.buildClient({
+        const client = ShopifyBuy.buildClient({
             domain: 'zidiwr-ax.myshopify.com',
             storefrontAccessToken: '715840bf165817aa2713937962be8670',
         });
+
         ShopifyBuy.UI.onReady(client).then(function (ui) {
-            ui.createComponent('collection', {
-                id: '482113093857',
-                node: document.getElementById('collection-component-1772222004797'),
-                moneyFormat: '%24%7B%7Bamount_no_decimals%7D%7D',
-                options: {
-                    "product": {
-                        "styles": {
+            // AQUÍ ESTÁ EL TRUCO: Buscamos todas las colecciones de tu tienda
+            client.collection.fetchAllWithProducts().then((collections) => {
+                
+                collections.forEach((collection) => {
+                    // Por cada colección en Shopify, creamos un contenedor dinámico
+                    const wrapper = document.getElementById('contenedor-tienda-dinamica');
+                    const div = document.createElement('div');
+                    div.id = 'coll-' + collection.id;
+                    wrapper.appendChild(div);
+
+                    // Renderizamos la colección en ese nuevo div
+                    ui.createComponent('collection', {
+                        id: collection.id,
+                        node: div,
+                        moneyFormat: '%24%7B%7Bamount_no_decimals%7D%7D',
+                        options: {
                             "product": {
-                                "@media (min-width: 601px)": {
-                                    "max-width": "calc(25% - 20px)",
-                                    "margin-left": "20px",
-                                    "margin-bottom": "50px",
-                                    "width": "calc(25% - 20px)"
-                                },
-                                "img": {
-                                    "height": "calc(100% - 15px)",
-                                    "position": "absolute",
-                                    "left": "0",
-                                    "right": "0",
-                                    "top": "0"
-                                },
-                                "imgWrapper": {
-                                    "padding-top": "calc(75% + 15px)",
-                                    "position": "relative",
-                                    "height": "0"
-                                }
+                                "styles": { "product": { "width": "230px" } },
+                                "text": { "button": "Agregar al carro" }
                             }
-                        },
-                        "text": { "button": "Añadir al carrito" }
-                    },
-                    "cart": {
-                        "text": {
-                            "title": "Carro de compras",
-                            "total": "Subtotal",
-                            "empty": "Tu carrito está vacío",
-                            "notice": "Los códigos de envío y descuento se agregan al momento del pago.",
-                            "button": "Finalizar Compra",
-                            "noteDescription": "Instrucciones especiales del pedido"
-                        },
-                        "contents": { "note": true },
-                        "styles": {
-                            "title": { "color": "#121010" },
-                            "header": { "color": "#121010" }
-                            /* He resumido los estilos para mantener el archivo limpio, Shopify los aplicará */
                         }
-                    }
-                }
+                    });
+                });
             });
         });
     }
