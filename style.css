@@ -1,87 +1,143 @@
-/* Configuración General */
-body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
+/* 1. CONFIGURACIÓN GENERAL */
+body { 
+    font-family: 'Segoe UI', Roboto, sans-serif; 
+    margin: 0; 
+    padding: 0; 
+    background-color: #f4f4f4;
+}
 
-/* Header y Buscador */
+/* 2. HEADER TOP (Logo y Buscador) */
 .header-top {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
-    padding: 20px;
-    background: #f8f9fa;
+    padding: 20px 5%;
+    background: white;
 }
 
-.search-container { display: flex; gap: 5px; }
-.search-container input, select, button {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-.search-container button { background: #d9534f; color: white; cursor: pointer; border: none; }
-
-/* Navbar con Menú Desplegable */
-.navbar { background: #333; color: white; }
-.nav-links { list-style: none; display: flex; justify-content: center; margin: 0; padding: 0; }
-.nav-links li { position: relative; }
-.nav-links a { color: white; padding: 15px 20px; display: block; text-decoration: none; }
-.nav-links a:hover { background: #444; }
-
-/* Animación del Dropdown */
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background: #fff;
-    min-width: 220px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-    z-index: 1;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: all 0.3s ease;
+.logo h1 {
+    margin: 0;
+    color: #333;
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-.dropdown:hover .dropdown-content {
-    display: block;
-    opacity: 1;
-    transform: translateY(0);
+.search-container {
+    display: flex;
+    gap: 0; /* Unidos para que parezca una sola barra */
 }
 
-.dropdown-content a { color: #333; padding: 12px; border-bottom: 1px solid #eee; }
-.dropdown-content a:hover { background: #f1f1f1; }
+.search-container select, 
+.search-container input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    outline: none;
+}
 
-/* Footer */
-.main-footer { background: #222; color: #fff; padding: 30px; margin-top: 50px; }
-.footer-content { display: flex; justify-content: space-between; align-items: center; max-width: 1000px; margin: auto; }
-.footer-nav a { color: #ccc; margin-left: 15px; text-decoration: none; font-size: 0.9em; }
-.copy { text-align: center; margin-top: 20px; font-size: 0.8em; color: #777; }
-/* Contenedor de la Navbar para separar Categorías del resto */
+.search-container select {
+    border-radius: 4px 0 0 4px;
+    background: #f9f9f9;
+    cursor: pointer;
+}
+
+.search-container input {
+    width: 300px;
+    border-left: none;
+}
+
+.search-container button {
+    padding: 12px 25px;
+    background: #d9534f;
+    color: white;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.search-container button:hover {
+    background: #c9302c;
+}
+
+/* 3. NAVBAR PRINCIPAL (Categorías separadas) */
+.navbar {
+    background: #333;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
 .nav-container {
     display: flex;
-    justify-content: space-between;
-    max-width: 1200px;
+    justify-content: space-between; /* Empuja categorías a la izq y links a la der */
+    align-items: center;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 5%;
 }
 
-/* Estilo especial para el botón de Categorías */
-.category-btn {
-    background-color: #d9534f; /* Un rojo ferretero para destacar */
+/* Botón de Categorías (Izquierda) */
+.dropbtn-cat {
+    background-color: #d9534f;
+    color: white;
+    padding: 15px 25px;
+    font-size: 15px;
     font-weight: bold;
-    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-.category-btn:hover {
-    background-color: #c9302c !important;
+/* Enlaces de Navegación (Derecha) */
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
 }
 
-/* Animación de despliegue */
+.nav-links a {
+    color: #eee;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 18px 0;
+    display: block;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    color: #ffcc00;
+}
+
+/* Botón Productos resaltado */
+.btn-shopify {
+    color: #ffcc00 !important;
+    font-weight: bold !important;
+}
+
+/* 4. MENÚ DESPLEGABLE ANIMADO */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
 .dropdown-content {
     display: block;
     position: absolute;
-    background: #fff;
-    min-width: 250px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    z-index: 100;
+    left: 0;
+    background-color: white;
+    min-width: 280px;
+    box-shadow: 0px 10px 20px rgba(0,0,0,0.1);
+    z-index: 1000;
     
-    /* Estado inicial para la animación */
+    /* Animación */
     visibility: hidden;
     opacity: 0;
     transform: translateY(15px);
@@ -94,8 +150,42 @@ body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
     transform: translateY(0);
 }
 
-/* Resalte para el botón que lleva a Shopify */
-.highlight-prod {
-    color: #ffcc00 !important; /* Un color que invite al clic */
-    font-weight: 600;
+.dropdown-content a {
+    color: #333 !important;
+    padding: 12px 20px;
+    text-decoration: none;
+    display: block;
+    border-bottom: 1px solid #f0f0f0;
+    transition: 0.2s;
+}
+
+.dropdown-content a:hover {
+    background-color: #f8f8f8;
+    padding-left: 30px;
+    color: #d9534f !important;
+}
+
+/* 5. FOOTER */
+.main-footer {
+    background: #222;
+    color: white;
+    padding: 40px 5%;
+    margin-top: 50px;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-nav a {
+    color: #aaa;
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 14px;
+}
+
+.footer-nav a:hover {
+    color: white;
 }
