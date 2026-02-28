@@ -14,44 +14,24 @@
     <aside class="sidebar-filtros">
         <div class="filtro-seccion">
             <h3>Categorías</h3>
-            <ul class="filtro-lista">
-                <li><a href="#">Herramientas</a></li>
-                <li><a href="#">Electricidad</a></li>
-                <li><a href="#">Pinturas</a></li>
-                <li><a href="#">Seguridad</a></li>
-                <li><a href="#">Pisos y Revestimientos</a></li>
-                <li><a href="#">Ferretería y Gasfitería</a></li>
-                <li><a href="#">Maderas y Tableros</a></li>
-                <li><a href="#">Materiales de Construcción</a></li>
+            <ul class="filtro-lista" id="menu-categorias">
+                <li><a href="#" class="btn-categoria" data-archivo="herramientas.js">Herramientas</a></li>
+                <li><a href="#" class="btn-categoria" data-archivo="electricidad.js">Electricidad</a></li>
+                <li><a href="#" class="btn-categoria" data-archivo="pinturas.js">Pinturas</a></li>
+                <li><a href="#" class="btn-categoria" data-archivo="seguridad.js">Seguridad</a></li>
+                <li><a href="#" class="btn-categoria" data-archivo="pisosrevestimientos.js">Pisos y Revestimientos</a></li>
+                <li><a href="#" class="btn-categoria" data-archivo="ferreteriagasfiteria.js">Ferretería y Gasfitería</a></li>
+                <li><a href="#" class="btn-categoria" data-archivo="maderastableros.js">Maderas y Tableros</a></li>
+                <li><a href="#" class="btn-categoria" data-archivo="materialesconstruccion.js">Materiales de Construcción</a></li>
             </ul>
         </div>
 
-        <div class="filtro-seccion">
-            <h3>Filtrar por Marca</h3>
-            <ul class="filtro-marcas">
-                <li><input type="checkbox" id="bosch"><label for="bosch">Bosch</label></li>
-                <li><input type="checkbox" id="makita"><label for="makita">Makita</label></li>
-                <li><input type="checkbox" id="bauker"><label for="bauker">Bauker</label></li>
-                <li><input type="checkbox" id="stanley"><label for="stanley">Stanley</label></li>
-            </ul>
-        </div>
-
-        <div class="filtro-seccion">
-            <h3>Filtrar por Color</h3>
-            <div class="color-grid">
-                <span class="color-box" style="background: red;"></span>
-                <span class="color-box" style="background: blue;"></span>
-                <span class="color-box" style="background: black;"></span>
-                <span class="color-box" style="background: yellow;"></span>
-                <span class="color-box" style="background: gray;"></span>
-            </div>
-        </div>
-    </aside>
+        </aside>
 
     <section class="catalogo-container">
-        <h2 class="section-title">Nuestro Catálogo</h2>
+        <h2 id="titulo-coleccion" class="section-title">Nuestro Catálogo</h2>
         <div id="shopify-products-load">
-            <p>Cargando productos...</p>
+            <p>Selecciona una categoría para ver los productos.</p>
         </div>
     </section>
 </main>
