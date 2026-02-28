@@ -25,7 +25,7 @@ body {
 
 .search-container {
     display: flex;
-    gap: 0; /* Unidos para que parezca una sola barra */
+    gap: 0; 
 }
 
 .search-container select, 
@@ -61,29 +61,36 @@ body {
     background: #c9302c;
 }
 
-/* 3. NAVBAR PRINCIPAL (Categorías separadas) */
+/* 3. NAVBAR PRINCIPAL (Categorías como bloque independiente) */
 .navbar {
     background: #333;
     color: white;
     position: sticky;
     top: 0;
     z-index: 1000;
+    height: 55px; /* Altura definida para alinear los bloques */
 }
 
 .nav-container {
     display: flex;
-    justify-content: space-between; /* Empuja categorías a la izq y links a la der */
-    align-items: center;
+    justify-content: space-between;
+    align-items: stretch; /* Estira el bloque de categorías al alto total */
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 5%;
+    height: 100%;
 }
 
-/* Botón de Categorías (Izquierda) */
+/* Bloque de Categorías (Izquierda) */
+.nav-left {
+    display: flex;
+    align-items: stretch;
+}
+
 .dropbtn-cat {
-    background-color: #d9534f;
+    background-color: #d9534f; /* Fondo rojo constante */
     color: white;
-    padding: 15px 25px;
+    padding: 0 30px;
     font-size: 15px;
     font-weight: bold;
     border: none;
@@ -91,9 +98,20 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
+    height: 100%; /* Ocupa todo el alto de la navbar */
+    transition: background 0.3s;
+}
+
+.dropbtn-cat:hover {
+    background-color: #c9302c;
 }
 
 /* Enlaces de Navegación (Derecha) */
+.nav-right {
+    display: flex;
+    align-items: center;
+}
+
 .nav-links {
     list-style: none;
     display: flex;
@@ -107,8 +125,6 @@ body {
     text-decoration: none;
     font-size: 15px;
     font-weight: 500;
-    padding: 18px 0;
-    display: block;
     transition: 0.3s;
 }
 
@@ -122,26 +138,29 @@ body {
     font-weight: bold !important;
 }
 
-/* 4. MENÚ DESPLEGABLE ANIMADO */
+/* 4. MENÚ DESPLEGABLE (Hacia abajo desde el bloque) */
 .dropdown {
     position: relative;
-    display: inline-block;
+    display: flex;
+    align-items: stretch;
 }
 
 .dropdown-content {
     display: block;
     position: absolute;
+    top: 100%; /* Empieza justo debajo del bloque rojo */
     left: 0;
     background-color: white;
     min-width: 280px;
     box-shadow: 0px 10px 20px rgba(0,0,0,0.1);
     z-index: 1000;
     
-    /* Animación */
+    /* Animación de caída */
     visibility: hidden;
     opacity: 0;
-    transform: translateY(15px);
+    transform: translateY(-10px);
     transition: all 0.3s ease-in-out;
+    border-top: 2px solid #d9534f;
 }
 
 .dropdown:hover .dropdown-content {
@@ -154,9 +173,10 @@ body {
     color: #333 !important;
     padding: 12px 20px;
     text-decoration: none;
-    display: block;
+    display: block !important;
     border-bottom: 1px solid #f0f0f0;
     transition: 0.2s;
+    font-weight: normal;
 }
 
 .dropdown-content a:hover {
