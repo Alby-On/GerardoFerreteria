@@ -3,76 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ferretería Industrial | Albyon Digital</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        body { font-family: sans-serif; padding: 20px; background: #f4f4f4; color: #333; }
-        header { display: flex; justify-content: space-between; align-items: center; background: #333; color: white; padding: 10px 20px; border-radius: 8px; margin-bottom: 20px; }
-        input { padding: 8px; margin-bottom: 5px; border: 1px solid #ccc; border-radius: 4px; }
-        
-        /* Contenedor de productos siempre visible */
-        #productos { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        #contenedor-tienda-dinamica { display: flex; flex-direction: column; gap: 40px; margin-top: 20px; }
-        
-        .seccion-privada { background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #ddd; margin-top: 20px; }
-        .auth-card { background: white; padding: 20px; border-radius: 8px; max-width: 400px; margin-bottom: 20px; border: 1px solid #ddd; }
-    </style>
+    <title>Gerardo Ferretería | Todo para tu obra</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>Ferretería Industrial</h1>
-        <nav id="auth-nav">
-            <span id="user-info">Bienvenido</span>
-            <button id="btn-logout" style="display:none; margin-left:10px;">Salir</button>
+
+    <header class="main-header">
+        <div class="header-top">
+            <div class="logo">
+                <h1>Gerardo Ferretería</h1> </div>
+            
+            <div class="search-container">
+                <select id="cat-selector">
+                    <option value="todas">Todas las categorías</option>
+                    <option value="herramientas">Herramientas</option>
+                    <option value="electricidad">Electricidad</option>
+                    <option value="pinturas">Pinturas</option>
+                </select>
+                <input type="text" placeholder="¿Qué estás buscando?">
+                <button type="submit">Buscar</button>
+            </div>
+        </div>
+
+        <nav class="navbar">
+            <ul class="nav-links">
+                <li><a href="#">Inicio</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Productos ▼</a>
+                    <div class="dropdown-content">
+                        <a href="#">Herramientas</a>
+                        <a href="#">Electricidad</a>
+                        <a href="#">Pinturas</a>
+                        <a href="#">Seguridad</a>
+                        <a href="#">Pisos y Revestimientos</a>
+                        <a href="#">Ferretería y Gasfitería</a>
+                        <a href="#">Maderas y Tableros</a>
+                        <a href="#">Materiales de Construcción</a>
+                    </div>
+                </li>
+                <li><a href="#">Nosotros</a></li>
+                <li><a href="#">Contáctanos</a></li>
+            </ul>
         </nav>
     </header>
 
-    <main>
-        <section id="productos">
-            <h2>Catálogo de Productos</h2>
-            <div id="contenedor-tienda-dinamica">
-                <p>Cargando productos de la ferretería...</p>
-            </div>
-        </section>
-
-        <hr style="margin: 40px 0;">
-
-        <section id="auth-forms">
-            <div id="register-container" class="auth-card">
-                <h3>¿Quieres guardar tus datos?</h3>
-                <p style="font-size: 0.9em; color: #666;">Regístrate para ver tu historial de pedidos y guardar tu dirección de despacho.</p>
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <input type="text" id="reg-nombre" placeholder="Nombre Completo">
-                    <input type="email" id="reg-email" placeholder="Tu Email">
-                    <input type="password" id="reg-password" placeholder="Contraseña">
-                    <button onclick="handleSignUp()" style="padding: 10px; background: #007bff; color: white; border: none; cursor: pointer; border-radius: 4px;">Crear Cuenta</button>
-                    <button onclick="handleLogin()" style="background: none; border: none; color: #007bff; cursor: pointer; text-decoration: underline;">Ya tengo cuenta (Login)</button>
-                </div>
-            </div>
-        </section>
-
-        <div id="area-cliente" style="display: none;">
-            <section id="seccion-perfil" class="seccion-privada">
-                <h2>Mis Datos de Despacho (Chillán)</h2>
-                <div class="form-perfil" style="display: flex; flex-direction: column; gap: 10px; max-width: 400px;">
-                    <input type="text" id="perfil-nombre" placeholder="Nombre Completo">
-                    <input type="text" id="perfil-rut" placeholder="RUT">
-                    <input type="text" id="perfil-direccion" placeholder="Dirección">
-                    <input type="text" id="perfil-telefono" placeholder="Teléfono">
-                    <button onclick="guardarPerfil()" style="background: #28a745; color: white; border: none; padding: 10px; cursor: pointer; border-radius: 4px;">Guardar cambios</button>
-                </div>
-            </section>
-
-            <section id="seccion-cliente" class="seccion-privada">
-                <h2>Mi Historial de Pedidos</h2>
-                <div id="historial-lista">
-                    <p>No tienes pedidos registrados aún.</p>
-                </div>
-            </section>
-        </div>
+    <main style="height: 500px; padding: 20px; text-align: center;">
+        <h2>Bienvenidos a Gerardo Ferretería</h2>
+        <p>Tu aliado en construcción y hogar.</p>
     </main>
 
-    <script src="app.js"></script>
-    <script src="shopify-button.js"></script>
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-logo">Gerardo Ferretería</div>
+            <nav class="footer-nav">
+                <a href="#">Inicio</a>
+                <a href="#">Productos</a>
+                <a href="#">Nosotros</a>
+                <a href="#">Contacto</a>
+            </nav>
+        </div>
+        <p class="copy">&copy; 2026 Gerardo Ferretería - Todos los derechos reservados</p>
+    </footer>
+
 </body>
 </html>
