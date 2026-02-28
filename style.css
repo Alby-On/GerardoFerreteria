@@ -209,47 +209,51 @@ body {
 .footer-nav a:hover {
     color: white;
 }
-/* Layout Principal */
+/* Layout Principal: 2 columnas */
 .tienda-layout {
-    display: grid;
-    grid-template-columns: 280px 1fr; /* 280px para filtros, el resto para productos */
-    gap: 30px;
-    max-width: 1400px;
+    display: flex;
+    gap: 40px;
+    max-width: 1300px;
     margin: 40px auto;
-    padding: 0 5%;
+    padding: 0 20px;
+    align-items: flex-start;
 }
 
-/* Sidebar Estilo */
+/* Sidebar (Columna Izquierda) */
 .sidebar-filtros {
-    background: white;
-    padding: 20px;
+    width: 280px;
+    flex-shrink: 0; /* Evita que se encoja */
+    background: #fff;
+    padding: 25px;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    height: fit-content;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
 .sidebar-filtros h3 {
-    font-size: 18px;
-    color: #333;
+    font-size: 1.1rem;
     margin-bottom: 15px;
-    border-left: 4px solid #d9534f;
-    padding-left: 10px;
+    color: #333;
+    text-transform: uppercase;
+    border-bottom: 2px solid #d9534f;
+    display: inline-block;
 }
 
-.filtro-lista {
+/* Limpieza de listas */
+.filtro-lista, .filtro-marcas {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
-.filtro-lista li {
-    margin-bottom: 10px;
+.filtro-lista li, .filtro-marcas li {
+    margin-bottom: 12px;
 }
 
 .filtro-lista a {
     text-decoration: none;
-    color: #666;
-    transition: 0.3s;
-    font-size: 14px;
+    color: #555;
+    font-size: 15px;
+    transition: 0.2s;
 }
 
 .filtro-lista a:hover {
@@ -257,38 +261,51 @@ body {
     padding-left: 5px;
 }
 
-/* Checkboxes de Marcas */
-.checks li {
+/* Checkboxes */
+.filtro-marcas li {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 14px;
-    color: #555;
+    cursor: pointer;
 }
 
-/* Grid de Colores */
+/* Colores */
 .color-grid {
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+    gap: 8px;
 }
 
-.color-btn {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
+.color-box {
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
     border: 1px solid #ddd;
     cursor: pointer;
-    transition: transform 0.2s;
 }
 
-.color-btn:hover {
-    transform: scale(1.2);
+/* Contenedor de Productos (Columna Derecha) */
+.catalogo-container {
+    flex-grow: 1;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+.section-title {
+    font-size: 2rem;
+    margin-bottom: 30px;
+    color: #222;
+}
+
+.divisor {
+    border: 0;
+    border-top: 1px solid #eee;
+    margin: 20px 0;
+}
+
+/* Responsive para celulares */
+@media (max-width: 900px) {
     .tienda-layout {
-        grid-template-columns: 1fr; /* En móviles el filtro se va arriba */
+        flex-direction: column;
+    }
+    .sidebar-filtros {
+        width: 100%;
     }
 }
