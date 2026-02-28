@@ -314,3 +314,30 @@ body {
         box-sizing: border-box;
     }
 }
+/* Layout General */
+.tienda-layout {
+    display: flex;
+    gap: 30px;
+    padding: 20px;
+}
+
+.sidebar-filtros {
+    width: 250px;
+    flex-shrink: 0;
+}
+
+.catalogo-container {
+    flex-grow: 1;
+}
+
+/* Estilo para los botones activos en el menú */
+.btn-categoria.active {
+    color: #007bff; /* O el color corporativo de la ferretería */
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+/* Espaciado para el componente de Shopify */
+#shopify-products-load {
+    min-height: 400px; /* Evita que el footer salte mientras carga */
+}
