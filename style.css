@@ -1,6 +1,54 @@
-body { font-family: sans-serif; margin: 0; padding: 20px; background: #f4f4f4; }
-header { display: flex; justify-content: space-between; align-items: center; background: #333; color: white; padding: 10px 20px; border-radius: 8px; }
-.grid-productos { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; }
-.card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
-.btn-comprar { background: #95bf47; color: white; border: none; padding: 10px; cursor: pointer; border-radius: 4px; }
-#seccion-cliente { margin-top: 40px; background: #fff; padding: 20px; border-radius: 8px; }
+/* Configuración General */
+body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
+
+/* Header y Buscador */
+.header-top {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 20px;
+    background: #f8f9fa;
+}
+
+.search-container { display: flex; gap: 5px; }
+.search-container input, select, button {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.search-container button { background: #d9534f; color: white; cursor: pointer; border: none; }
+
+/* Navbar con Menú Desplegable */
+.navbar { background: #333; color: white; }
+.nav-links { list-style: none; display: flex; justify-content: center; margin: 0; padding: 0; }
+.nav-links li { position: relative; }
+.nav-links a { color: white; padding: 15px 20px; display: block; text-decoration: none; }
+.nav-links a:hover { background: #444; }
+
+/* Animación del Dropdown */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background: #fff;
+    min-width: 220px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    z-index: 1;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.dropdown-content a { color: #333; padding: 12px; border-bottom: 1px solid #eee; }
+.dropdown-content a:hover { background: #f1f1f1; }
+
+/* Footer */
+.main-footer { background: #222; color: #fff; padding: 30px; margin-top: 50px; }
+.footer-content { display: flex; justify-content: space-between; align-items: center; max-width: 1000px; margin: auto; }
+.footer-nav a { color: #ccc; margin-left: 15px; text-decoration: none; font-size: 0.9em; }
+.copy { text-align: center; margin-top: 20px; font-size: 0.8em; color: #777; }
