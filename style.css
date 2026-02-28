@@ -209,3 +209,86 @@ body {
 .footer-nav a:hover {
     color: white;
 }
+/* Layout Principal */
+.tienda-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr; /* 280px para filtros, el resto para productos */
+    gap: 30px;
+    max-width: 1400px;
+    margin: 40px auto;
+    padding: 0 5%;
+}
+
+/* Sidebar Estilo */
+.sidebar-filtros {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    height: fit-content;
+}
+
+.sidebar-filtros h3 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 15px;
+    border-left: 4px solid #d9534f;
+    padding-left: 10px;
+}
+
+.filtro-lista {
+    list-style: none;
+    padding: 0;
+}
+
+.filtro-lista li {
+    margin-bottom: 10px;
+}
+
+.filtro-lista a {
+    text-decoration: none;
+    color: #666;
+    transition: 0.3s;
+    font-size: 14px;
+}
+
+.filtro-lista a:hover {
+    color: #d9534f;
+    padding-left: 5px;
+}
+
+/* Checkboxes de Marcas */
+.checks li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: #555;
+}
+
+/* Grid de Colores */
+.color-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.color-btn {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.color-btn:hover {
+    transform: scale(1.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .tienda-layout {
+        grid-template-columns: 1fr; /* En móviles el filtro se va arriba */
+    }
+}
