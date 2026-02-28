@@ -61,34 +61,33 @@ body {
     background: #c9302c;
 }
 
-/* 3. NAVBAR PRINCIPAL (Categorías como bloque independiente) */
+/* 3. NAVBAR PRINCIPAL */
 .navbar {
     background: #333;
     color: white;
     position: sticky;
     top: 0;
     z-index: 1000;
-    height: 55px; /* Altura definida para alinear los bloques */
+    height: 55px;
 }
 
 .nav-container {
     display: flex;
     justify-content: space-between;
-    align-items: stretch; /* Estira el bloque de categorías al alto total */
+    align-items: stretch;
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 5%;
     height: 100%;
 }
 
-/* Bloque de Categorías (Izquierda) */
 .nav-left {
     display: flex;
     align-items: stretch;
 }
 
 .dropbtn-cat {
-    background-color: #d9534f; /* Fondo rojo constante */
+    background-color: #d9534f;
     color: white;
     padding: 0 30px;
     font-size: 15px;
@@ -98,7 +97,7 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-    height: 100%; /* Ocupa todo el alto de la navbar */
+    height: 100%;
     transition: background 0.3s;
 }
 
@@ -106,7 +105,6 @@ body {
     background-color: #c9302c;
 }
 
-/* Enlaces de Navegación (Derecha) */
 .nav-right {
     display: flex;
     align-items: center;
@@ -118,6 +116,10 @@ body {
     gap: 30px;
     margin: 0;
     padding: 0;
+}
+
+.nav-links li {
+    list-style: none; /* Asegura que no haya puntos en la navbar */
 }
 
 .nav-links a {
@@ -132,13 +134,12 @@ body {
     color: #ffcc00;
 }
 
-/* Botón Productos resaltado */
 .btn-shopify {
     color: #ffcc00 !important;
     font-weight: bold !important;
 }
 
-/* 4. MENÚ DESPLEGABLE (Hacia abajo desde el bloque) */
+/* 4. MENÚ DESPLEGABLE */
 .dropdown {
     position: relative;
     display: flex;
@@ -148,14 +149,12 @@ body {
 .dropdown-content {
     display: block;
     position: absolute;
-    top: 100%; /* Empieza justo debajo del bloque rojo */
+    top: 100%;
     left: 0;
     background-color: white;
     min-width: 280px;
     box-shadow: 0px 10px 20px rgba(0,0,0,0.1);
     z-index: 1000;
-    
-    /* Animación de caída */
     visibility: hidden;
     opacity: 0;
     transform: translateY(-10px);
@@ -185,7 +184,95 @@ body {
     color: #d9534f !important;
 }
 
-/* 5. FOOTER */
+/* 5. DISEÑO DE TIENDA (LAYOUT 2 COLUMNAS) */
+.tienda-layout {
+    display: flex;
+    gap: 40px;
+    max-width: 1300px;
+    margin: 40px auto;
+    padding: 0 20px;
+    align-items: flex-start;
+}
+
+.sidebar-filtros {
+    width: 280px;
+    flex-shrink: 0;
+    background: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.sidebar-filtros h3 {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    color: #333;
+    text-transform: uppercase;
+    border-bottom: 2px solid #d9534f;
+    display: inline-block;
+}
+
+/* Limpieza absoluta de listas en sidebar */
+.filtro-lista, .filtro-marcas {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.filtro-lista li, .filtro-marcas li {
+    list-style: none !important;
+    margin-bottom: 12px;
+}
+
+.filtro-lista a {
+    text-decoration: none;
+    color: #555;
+    font-size: 15px;
+    transition: 0.2s;
+}
+
+.filtro-lista a:hover {
+    color: #d9534f;
+    padding-left: 5px;
+}
+
+.filtro-marcas li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.color-grid {
+    display: flex;
+    gap: 8px;
+}
+
+.color-box {
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.catalogo-container {
+    flex-grow: 1;
+}
+
+.section-title {
+    font-size: 2rem;
+    margin-bottom: 30px;
+    color: #222;
+}
+
+.divisor {
+    border: 0;
+    border-top: 1px solid #eee;
+    margin: 20px 0;
+}
+
+/* 6. FOOTER */
 .main-footer {
     background: #222;
     color: white;
@@ -209,103 +296,21 @@ body {
 .footer-nav a:hover {
     color: white;
 }
-/* Layout Principal: 2 columnas */
-.tienda-layout {
-    display: flex;
-    gap: 40px;
-    max-width: 1300px;
-    margin: 40px auto;
-    padding: 0 20px;
-    align-items: flex-start;
+
+.copy {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.8em;
+    color: #777;
 }
 
-/* Sidebar (Columna Izquierda) */
-.sidebar-filtros {
-    width: 280px;
-    flex-shrink: 0; /* Evita que se encoja */
-    background: #fff;
-    padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-}
-
-.sidebar-filtros h3 {
-    font-size: 1.1rem;
-    margin-bottom: 15px;
-    color: #333;
-    text-transform: uppercase;
-    border-bottom: 2px solid #d9534f;
-    display: inline-block;
-}
-
-/* Limpieza de listas */
-.filtro-lista, .filtro-marcas {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.filtro-lista li, .filtro-marcas li {
-    margin-bottom: 12px;
-}
-
-.filtro-lista a {
-    text-decoration: none;
-    color: #555;
-    font-size: 15px;
-    transition: 0.2s;
-}
-
-.filtro-lista a:hover {
-    color: #d9534f;
-    padding-left: 5px;
-}
-
-/* Checkboxes */
-.filtro-marcas li {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-}
-
-/* Colores */
-.color-grid {
-    display: flex;
-    gap: 8px;
-}
-
-.color-box {
-    width: 20px;
-    height: 20px;
-    border-radius: 3px;
-    border: 1px solid #ddd;
-    cursor: pointer;
-}
-
-/* Contenedor de Productos (Columna Derecha) */
-.catalogo-container {
-    flex-grow: 1;
-}
-
-.section-title {
-    font-size: 2rem;
-    margin-bottom: 30px;
-    color: #222;
-}
-
-.divisor {
-    border: 0;
-    border-top: 1px solid #eee;
-    margin: 20px 0;
-}
-
-/* Responsive para celulares */
+/* 7. RESPONSIVE */
 @media (max-width: 900px) {
     .tienda-layout {
         flex-direction: column;
     }
     .sidebar-filtros {
         width: 100%;
+        box-sizing: border-box;
     }
 }
