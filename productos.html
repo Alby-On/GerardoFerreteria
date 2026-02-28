@@ -10,7 +10,7 @@
 
     <header id="header-placeholder" class="main-header"></header>
 
-    <main class="tienda-layout">
+   <main class="tienda-layout">
     <aside class="sidebar-filtros">
         <h3>Categorías</h3>
         <ul class="filtro-lista">
@@ -24,29 +24,29 @@
             <li><a href="#">Materiales de Construcción</a></li>
         </ul>
 
-        <hr>
+        <hr class="divisor">
 
         <h3>Filtrar por Marca</h3>
-        <ul class="filtro-lista checks">
-            <li><input type="checkbox" id="m1"> <label for="m1">Bosch</label></li>
-            <li><input type="checkbox" id="m2"> <label for="m2">Makita</label></li>
-            <li><input type="checkbox" id="m3"> <label for="m3">Bauker</label></li>
-            <li><input type="checkbox" id="m4"> <label for="m4">Stanley</label></li>
+        <ul class="filtro-marcas">
+            <li><input type="checkbox" id="bosch"> <label for="bosch">Bosch</label></li>
+            <li><input type="checkbox" id="makita"> <label for="makita">Makita</label></li>
+            <li><input type="checkbox" id="bauker"> <label for="bauker">Bauker</label></li>
+            <li><input type="checkbox" id="stanley"> <label for="stanley">Stanley</label></li>
         </ul>
 
-        <hr>
+        <hr class="divisor">
 
         <h3>Filtrar por Color</h3>
         <div class="color-grid">
-            <button class="color-btn" style="background: red;" title="Rojo"></button>
-            <button class="color-btn" style="background: blue;" title="Azul"></button>
-            <button class="color-btn" style="background: black;" title="Negro"></button>
-            <button class="color-btn" style="background: yellow;" title="Amarillo"></button>
-            <button class="color-btn" style="background: grey;" title="Gris"></button>
+            <span class="color-box" style="background: red;"></span>
+            <span class="color-box" style="background: blue;"></span>
+            <span class="color-box" style="background: black;"></span>
+            <span class="color-box" style="background: yellow;"></span>
+            <span class="color-box" style="background: gray;"></span>
         </div>
     </aside>
 
-    <section class="productos-grid">
+    <section class="catalogo-container">
         <h2 class="section-title">Nuestro Catálogo</h2>
         <div id="shopify-products-load">
             <p>Cargando productos...</p>
