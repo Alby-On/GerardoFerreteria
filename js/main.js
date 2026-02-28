@@ -38,9 +38,9 @@ document.addEventListener("DOMContentLoaded", () => {
             if (scriptViejo) { scriptViejo.remove(); }
 
             // Crear y cargar el nuevo script de la colección
-            const nuevoScript = document.createElement('script');
+            const nombreArchivo = enlace.getAttribute('data-archivo');
             nuevoScript.id = 'script-dinamico-shopify';
-            nuevoScript.src = `js/colecciones/${archivo}`;
+            nuevoScript.src = 'js/colecciones/' + nombreArchivo;
             nuevoScript.async = true;
 
             // Manejo de error si el archivo .js no existe
