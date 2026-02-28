@@ -52,3 +52,50 @@ body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
 .footer-content { display: flex; justify-content: space-between; align-items: center; max-width: 1000px; margin: auto; }
 .footer-nav a { color: #ccc; margin-left: 15px; text-decoration: none; font-size: 0.9em; }
 .copy { text-align: center; margin-top: 20px; font-size: 0.8em; color: #777; }
+/* Contenedor de la Navbar para separar Categorías del resto */
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Estilo especial para el botón de Categorías */
+.category-btn {
+    background-color: #d9534f; /* Un rojo ferretero para destacar */
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.category-btn:hover {
+    background-color: #c9302c !important;
+}
+
+/* Animación de despliegue */
+.dropdown-content {
+    display: block;
+    position: absolute;
+    background: #fff;
+    min-width: 250px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    z-index: 100;
+    
+    /* Estado inicial para la animación */
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(15px);
+    transition: all 0.3s ease-in-out;
+}
+
+.dropdown:hover .dropdown-content {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Resalte para el botón que lleva a Shopify */
+.highlight-prod {
+    color: #ffcc00 !important; /* Un color que invite al clic */
+    font-weight: 600;
+}
