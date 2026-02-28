@@ -8,74 +8,33 @@
 </head>
 <body>
 
-    <header class="main-header">
-        <div class="header-top">
-            <div class="logo">
-                <h1>Gerardo Ferretería</h1> </div>
-            
-            <div class="search-container">
-                <select id="cat-selector">
-                    <option value="todas">Todas las categorías</option>
-                    <option value="herramientas">Herramientas</option>
-                    <option value="electricidad">Electricidad</option>
-                    <option value="pinturas">Pinturas</option>
-                </select>
-                <input type="text" placeholder="¿Qué estás buscando?">
-                <button type="submit">Buscar</button>
-            </div>
-        </div>
+    <header id="header-placeholder" class="main-header"></header>
 
-       <nav class="navbar">
-    <div class="nav-container">
-        
-        <div class="nav-left">
-            <div class="dropdown">
-                <button class="category-block-btn">
-                    <span class="icon">☰</span> CATEGORÍAS
-                </button>
-                <div class="dropdown-content">
-                    <a href="#">Herramientas</a>
-                    <a href="#">Electricidad</a>
-                    <a href="#">Pinturas</a>
-                    <a href="#">Seguridad</a>
-                    <a href="#">Pisos y Revestimientos</a>
-                    <a href="#">Ferretería y Gasfitería</a>
-                    <a href="#">Maderas y Tableros</a>
-                    <a href="#">Materiales de Construcción</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="nav-right">
-            <ul class="nav-links">
-                <li><a href="#">Inicio</a></li>
-                <li><a href="URL-TU-SHOPIFY" class="btn-shopify">Productos</a></li>
-                <li><a href="#">Nosotros</a></li>
-                <li><a href="#">Contáctanos</a></li>
-            </ul>
-        </div>
-        
-    </div>
-</nav>
-    </header>
-
-    <main style="height: 500px; padding: 20px; text-align: center;">
+    <main style="min-height: 500px; padding: 20px; text-align: center;">
         <h2>Bienvenidos a Gerardo Ferretería</h2>
         <p>Tu aliado en construcción y hogar.</p>
     </main>
 
-    <footer class="main-footer">
-        <div class="footer-content">
-            <div class="footer-logo">Gerardo Ferretería</div>
-            <nav class="footer-nav">
-                <a href="#">Inicio</a>
-                <a href="#">Productos</a>
-                <a href="#">Nosotros</a>
-                <a href="#">Contacto</a>
-            </nav>
-        </div>
-        <p class="copy">&copy; 2026 Gerardo Ferretería - Todos los derechos reservados</p>
-    </footer>
+    <footer id="footer-placeholder" class="main-footer"></footer>
 
+    <script>
+        function loadComponent(id, file) {
+            fetch(file)
+                .then(response => {
+                    if (!response.ok) throw new Error("Error al cargar " + file);
+                    return response.text();
+                })
+                .then(data => {
+                    document.getElementById(id).innerHTML = data;
+                })
+                .catch(error => console.error(error));
+        }
+
+        // Cargamos los componentes al iniciar
+        document.addEventListener("DOMContentLoaded", () => {
+            loadComponent('header-placeholder', 'componentes/header.html');
+            loadComponent('footer-placeholder', 'componentes/footer.html');
+        });
+    </script>
 </body>
 </html>
