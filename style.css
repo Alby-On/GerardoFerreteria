@@ -315,68 +315,52 @@ body {
     }
 }
 /* ==========================================================================
-   8. CORRECCIÓN DEFINITIVA GRID SHOPIFY (4 COLUMNAS)
+    8. CORRECCIÓN DEFINITIVA GRID SHOPIFY (4 COLUMNAS)
    ========================================================================== */
 
-/* 1. Atacamos el contenedor que Shopify crea automáticamente */
-.shopify-buy__product-set {
+/* Esto fuerza al contenedor a permitir que los hijos fluyan en grid */
+#shopify-products-load iframe {
+    width: 100% !important;
+    grid-column: 1 / -1; /* Ocupa todo el ancho si hay iframe */
+}
+
+/* Forzamos el grid en la clase que genera el SDK */
+.shopify-buy-frame, .shopify-buy__product-set {
     display: grid !important;
     grid-template-columns: repeat(4, 1fr) !important;
     gap: 20px !important;
     width: 100% !important;
-    max-width: 100% !important;
 }
 
-/* 2. Quitamos los anchos fijos que Shopify le pone a cada producto */
+/* Ajuste de tarjetas para que no se amontonen */
 .shopify-buy__product {
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 !important;
     display: flex !important;
     flex-direction: column !important;
-    height: 100% !important; /* Para que todas midan lo mismo */
+    height: 100% !important;
     background: #fff;
     border: 1px solid #eee;
     padding: 15px !important;
     box-sizing: border-box !important;
 }
 
-/* 3. Aseguramos que el contenedor de carga no restrinja el flujo */
-#shopify-products-load {
-    width: 100% !important;
-    display: block !important; /* El grid ahora lo maneja la clase interna de arriba */
-}
-
-/* 4. Uniformidad de Imágenes */
+/* Mantenemos tus alturas uniformes */
 .shopify-buy__product-img-wrapper {
     height: 200px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    margin-bottom: 10px !important;
 }
 
-.shopify-buy__product-img {
-    max-height: 100% !important;
-    object-fit: contain !important;
-}
-
-/* 5. Alineación de botones al fondo */
-.shopify-buy__product-price-size {
-    margin-top: auto !important;
-    font-weight: bold;
-    color: #d9534f;
-}
-
-/* 6. RESPONSIVE para tu S22 Ultra y Tablets */
+/* RESPONSIVE: Vital para tu S22 Ultra */
 @media (max-width: 1100px) {
     .shopify-buy__product-set { grid-template-columns: repeat(3, 1fr) !important; }
 }
-
 @media (max-width: 850px) {
     .shopify-buy__product-set { grid-template-columns: repeat(2, 1fr) !important; }
 }
-
 @media (max-width: 520px) {
     .shopify-buy__product-set { grid-template-columns: 1fr !important; }
 }
