@@ -341,50 +341,76 @@ async function actualizarVisualizacionCarro() {
     const response = await queryShopify(query);
     const cart = response.data?.cart;
 
-    if (cart) {
-        // Guardamos la URL de pago por si acaso cambió
-        localStorage.setItem('shopify_checkout_url', cart.checkoutUrl);
+    if (!cart) return;
 
-        // Actualizar contador del header y total del lateral
-        if (document.getElementById('cart-count')) document.getElementById('cart-count').textContent = cart.totalQuantity;
-        if (document.getElementById('carrito-total-monto')) {
-            document.getElementById('carrito-total-monto').textContent = `$${Math.round(cart.cost.totalAmount.amount).toLocaleString('es-CL')}`;
-        }
+    // ================================
+    // GUARDAR CHECKOUT URL
+    // ================================
+    localStorage.setItem('shopify_checkout_url', cart.checkoutUrl);
 
-        const listContainer = document.getElementById('carrito-items-lista');
-        if (listContainer) {
-            if (cart.lines.edges.length === 0) {
-                listContainer.innerHTML = '<p class="carrito-vacio">Tu carrito está vacío</p>';
-                return;
-            }
-
-            listContainer.innerHTML = ''; 
-            cart.lines.edges.forEach(item => {
-                const prod = item.node.merchandise;
-                const lineId = item.node.id;
-                const qty = item.node.quantity;
-
-                const div = document.createElement('div');
-                div.style.cssText = 'display: flex; align-items: center; padding: 15px 0; border-bottom: 1px solid #eee; gap: 10px;';
-                div.innerHTML = `
-                    <img src="${prod.image.url}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
-                    <div style="flex-grow: 1;">
-                        <div style="font-weight: bold; font-size: 0.9rem; color: #333;">${prod.product.title}</div>
-                        <div style="display: flex; align-items: center; gap: 10px; margin-top: 5px;">
-                            <div style="display: flex; border: 1px solid #ddd; border-radius: 4px;">
-                                <button onclick="cambiarCantidad('${lineId}', ${qty - 1})" style="padding: 2px 8px; border: none; cursor: pointer;">-</button>
-                                <span style="padding: 2px 8px; font-size: 0.8rem;">${qty}</span>
-                                <button onclick="cambiarCantidad('${lineId}', ${qty + 1})" style="padding: 2px 8px; border: none; cursor: pointer;">+</button>
-                            </div>
-                            <span style="font-size: 0.8rem; font-weight: bold;">$${Math.round(prod.price.amount * qty).toLocaleString('es-CL')}</span>
-                        </div>
-                    </div>
-                    <button onclick="quitarProducto('${lineId}')" style="background: none; border: none; color: #e63946; cursor: pointer; font-size: 1.1rem;" title="Quitar producto">🗑️</button>
-                `;
-                listContainer.appendChild(div);
-            });
-        }
+    // ================================
+    // ACTUALIZAR CONTADOR HEADER
+    // ================================
+    const countEl = document.getElementById('cart-count');
+    if (countEl) {
+        countEl.textContent = cart.totalQuantity;
+        countEl.style.display = cart.totalQuantity > 0 ? 'inline-block' : 'none';
     }
+
+    // ================================
+    // ACTUALIZAR TOTAL
+    // ================================
+    const totalEl = document.getElementById('carrito-total-monto');
+    if (totalEl) {
+        const total = Number(cart.cost.totalAmount.amount);
+        totalEl.textContent = `$${Math.round(total).toLocaleString('es-CL')}`;
+    }
+
+    // ================================
+    // ACTUALIZAR LISTA LATERAL
+    // ================================
+    const listContainer = document.getElementById('carrito-items-lista');
+    if (!listContainer) return;
+
+    if (cart.lines.edges.length === 0) {
+        listContainer.innerHTML = '<p class="carrito-vacio">Tu carrito está vacío</p>';
+        return;
+    }
+
+    listContainer.innerHTML = '';
+
+    cart.lines.edges.forEach(item => {
+        const prod = item.node.merchandise;
+        const lineId = item.node.id;
+        const qty = item.node.quantity;
+        const price = Number(prod.price.amount);
+        const imageUrl = prod.image ? prod.image.url : '';
+
+        const div = document.createElement('div');
+        div.style.cssText = 'display: flex; align-items: center; padding: 15px 0; border-bottom: 1px solid #eee; gap: 10px;';
+
+        div.innerHTML = `
+            <img src="${imageUrl}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+            <div style="flex-grow: 1;">
+                <div style="font-weight: bold; font-size: 0.9rem; color: #333;">${prod.product.title}</div>
+                <div style="display: flex; align-items: center; gap: 10px; margin-top: 5px;">
+                    <div style="display: flex; border: 1px solid #ddd; border-radius: 4px;">
+                        <button onclick="cambiarCantidad('${lineId}', ${qty - 1})" style="padding: 2px 8px; border: none; cursor: pointer;">-</button>
+                        <span style="padding: 2px 8px; font-size: 0.8rem;">${qty}</span>
+                        <button onclick="cambiarCantidad('${lineId}', ${qty + 1})" style="padding: 2px 8px; border: none; cursor: pointer;">+</button>
+                    </div>
+                    <span style="font-size: 0.8rem; font-weight: bold;">
+                        $${Math.round(price * qty).toLocaleString('es-CL')}
+                    </span>
+                </div>
+            </div>
+            <button onclick="quitarProducto('${lineId}')" 
+                style="background: none; border: none; color: #e63946; cursor: pointer; font-size: 1.1rem;" 
+                title="Quitar producto">🗑️</button>
+        `;
+
+        listContainer.appendChild(div);
+    });
 }
 // Función para sumar o restar
 window.cambiarCantidad = async function(lineId, nuevaCantidad) {
