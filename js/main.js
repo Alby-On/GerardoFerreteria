@@ -78,6 +78,20 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
             });
         }
+        // ACTIVAR CATEGORÍA DESDE URL (?cat=algo)
+const urlParams = new URLSearchParams(window.location.search);
+const categoriaSolicitada = urlParams.get('cat');
+
+if (categoriaSolicitada) {
+    const botonFiltrar = document.querySelector(
+        `.btn-categoria[data-categoria="${categoriaSolicitada}"]`
+    );
+
+    if (botonFiltrar) {
+        botonFiltrar.click();
+        botonFiltrar.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+}
     });
 
     // CARGA AUTOMÁTICA DE OFERTAS (Si estamos en el index)
