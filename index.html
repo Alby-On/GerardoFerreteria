@@ -11,29 +11,32 @@
     <header id="header-placeholder" class="main-header"></header>
 
 <main style="min-height: 500px; padding: 20px; text-align: center;">
-    <h2>Bienvenidos a Gerardo Ferretería</h2>
-    <p>Tu aliado en construcción y hogar.</p>
+    <h2>🔥 Ofertas en Gerardo Ferretería</h2>
+    <p>Haz clic en las categorías para filtrar los descuentos</p>
 
-    <div class="contenedor-ofertas">
-        {% for product in collections.all.products %}
-            {% if product.tags contains 'descuento1' or product.tags contains 'descuento2' %}
-                
-                <div class="tarjeta-oferta" 
-                     data-categoria="{% if product.tags contains 'descuento1' %}descuento1{% else %}descuento2{% endif %}"
-                     style="display: inline-block; width: 250px; margin: 10px; border: 1px solid #ddd; border-radius: 8px; padding: 15px; vertical-align: top;">
-                    
-                    <img src="{{ product.featured_image | img_url: '300x300' }}" style="width: 100%; border-radius: 5px;">
-                    <h4 style="margin: 10px 0;">{{ product.title }}</h4>
-                    <p style="color: #e63946; font-weight: bold; font-size: 1.2rem;">{{ product.price | money }}</p>
-                    
-                    <a href="{{ product.url }}" class="btn-detalles" 
-                       style="display: block; background: #333; color: #fff; padding: 10px; text-decoration: none; border-radius: 4px;">
-                       Ver Detalles
-                    </a>
-                </div>
+    <div id="carrusel-ofertas" style="display: flex; overflow-x: auto; gap: 20px; padding: 20px; justify-content: center;">
+        
+        <div class="tarjeta-oferta" data-categoria="Herramientas">
+            <img src="url-de-tu-imagen-taladro.jpg" alt="Taladro" style="width: 200px; border-radius: 10px;">
+            <h3>Taladro Percutor</h3>
+            <p style="color: red; font-weight: bold;">$45.990</p>
+            <button class="btn-detalles">Ver Detalles</button>
+        </div>
 
-            {% endif %}
-        {% endfor %}
+        <div class="tarjeta-oferta" data-categoria="Electricidad">
+            <img src="url-de-tu-imagen-cable.jpg" alt="Cable" style="width: 200px; border-radius: 10px;">
+            <h3>Rollo Cable 2.5mm</h3>
+            <p style="color: red; font-weight: bold;">$22.500</p>
+            <button class="btn-detalles">Ver Detalles</button>
+        </div>
+
+        <div class="tarjeta-oferta" data-categoria="Pinturas">
+            <img src="url-de-tu-imagen-pintura.jpg" alt="Pintura" style="width: 200px; border-radius: 10px;">
+            <h3>Látex Extra Blanco</h3>
+            <p style="color: red; font-weight: bold;">$18.900</p>
+            <button class="btn-detalles">Ver Detalles</button>
+        </div>
+
     </div>
 </main>
 
