@@ -61,8 +61,8 @@ function templateProducto(prod) {
 document.addEventListener("DOMContentLoaded", () => {
     // 1. Carga componentes siempre (Header/Footer)
     Promise.all([
-        loadComponent('header-placeholder', 'componentes/header.html'),
-        loadComponent('footer-placeholder', 'componentes/footer.html')
+        loadComponent('header-placeholder', 'components/header.html'),
+        loadComponent('footer-placeholder', 'components/footer.html')
     ]).then(() => {
         inicializarBusquedaUniversal();
         
