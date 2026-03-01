@@ -51,6 +51,7 @@
     color: #fff !important;
     transform: translateX(5px);
 }
+
 /* ==========================================================================
     6. GRID DE PRODUCTOS (Centrado y Optimizado)
    ========================================================================== */
@@ -90,17 +91,19 @@
     height: 200px !important;
     width: 100% !important;
     display: flex !important;
-    align-items: center !important;    /* Centrado vertical de la imagen */
-    justify-content: center !important; /* Centrado horizontal de la imagen */
+    align-items: center !important;    /* Centrado vertical */
+    justify-content: center !important; /* Centrado horizontal */
     overflow: hidden !important;
     margin-bottom: 15px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
 }
 
 .shopify-buy__product-img {
     max-height: 100% !important;
     max-width: 100% !important;
     object-fit: contain !important;
-    margin: 0 auto !important;         /* Refuerzo de centrado */
+    margin: 0 auto !important;
 }
 
 /* --- CENTRADO DE TÍTULO --- */
@@ -111,19 +114,19 @@
     font-weight: 600 !important;
     color: #222;
     width: 100% !important;
-    display: block !important;         /* Asegura que ocupe el ancho para centrar texto */
+    display: block !important;
     text-align: center !important;
 }
 
 /* --- CENTRADO DE PRECIO --- */
 .shopify-buy__product-price-size {
-    margin-top: auto !important;       /* Empuja hacia abajo para alineación uniforme */
+    margin-top: auto !important;
     color: #d9534f;
     font-weight: bold;
     font-size: 18px !important;
     margin-bottom: 15px !important;
-    width: 100% !important;            /* Ocupa el ancho total */
-    display: block !important;         /* Permite que el text-align funcione */
+    width: 100% !important;
+    display: block !important;
     text-align: center !important;
 }
 
@@ -131,7 +134,9 @@
 .shopify-buy__btn-wrapper {
     width: 100% !important;
     display: flex !important;
-    justify-content: center !important; /* Centra el botón si es más pequeño que el contenedor */
+    justify-content: center !important; /* Centra el botón horizontalmente */
+    margin-left: auto !important;
+    margin-right: auto !important;
 }
 
 .shopify-buy__btn {
@@ -144,6 +149,7 @@
     font-weight: bold !important;
     border-radius: 4px !important;
     transition: background 0.3s;
+    margin: 0 auto !important; /* Refuerzo de centrado */
 }
 
 .shopify-buy__btn:hover {
@@ -155,6 +161,7 @@
     display: none !important;
     position: absolute !important;
 }
+
 /* ==========================================================================
     RESPONSIVE
    ========================================================================== */
@@ -184,12 +191,13 @@
         grid-template-columns: repeat(1, 1fr) !important;
     }
 }
+
 /* ==========================================================================
     7. PÁGINA DE DETALLE DINÁMICA (PDP)
    ========================================================================== */
 .detalle-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Imagen izquierda | Info derecha */
+    grid-template-columns: 1fr 1fr;
     gap: 40px;
     margin-top: 50px;
     padding: 20px;
@@ -251,7 +259,7 @@
 }
 
 .btn-comprar-ahora:hover {
-    background: #d9534f; /* Rojo Albyon */
+    background: #d9534f;
 }
 
 .descripcion-texto {
@@ -268,7 +276,6 @@
     text-decoration: none;
 }
 
-/* Línea divisora */
 hr {
     border: 0;
     border-top: 1px solid #eee;
