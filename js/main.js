@@ -552,6 +552,9 @@ async function prepararCheckout() {
             btn.disabled = true;
         }
 
+        // DEBUG: Verifica en consola qué estás enviando
+        console.log("Enviando a:", shopifyConfig.url);
+
         const response = await fetch(shopifyConfig.url, {
             method: 'POST',
             headers: shopifyConfig.headers,
@@ -561,11 +564,18 @@ async function prepararCheckout() {
             })
         });
 
+        // VALIDACIÓN DE RESPUESTA: Si no es JSON (es HTML), esto lo atrapará
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error("Respuesta no exitosa de Shopify:", errorText);
+            throw new Error(`Servidor respondió con código ${response.status}. Revisa la URL y el Token.`);
+        }
+
         const result = await response.json();
 
         // Revisar si Shopify devolvió errores específicos de usuario
         if (result.errors || (result.data?.cartUpdate?.userErrors?.length > 0)) {
-            const errorMsg = result.data?.cartUpdate?.userErrors[0]?.message || "Error de validación";
+            const errorMsg = result.data?.cartUpdate?.userErrors?.[0]?.message || result.errors?.[0]?.message || "Error de validación";
             throw new Error(errorMsg);
         }
 
@@ -577,8 +587,14 @@ async function prepararCheckout() {
         }
 
     } catch (e) {
-        console.error("Error técnico:", e);
-        alert("Error: " + e.message);
+        console.error("Error técnico detallado:", e);
+        
+        // Si el error es el de JSON, damos un mensaje más claro
+        if (e.message.includes("is not valid JSON")) {
+            alert("Error: La tienda respondió con un formato incorrecto (HTML). Revisa que la URL de Shopify sea correcta.");
+        } else {
+            alert("Error: " + e.message);
+        }
         
         if (btn) {
             btn.innerText = originalText;
@@ -586,7 +602,6 @@ async function prepararCheckout() {
         }
     }
 }
-
 /* ==========================================================================
     Validación de RUT 
    ========================================================================== */
