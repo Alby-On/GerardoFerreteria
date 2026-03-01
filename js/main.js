@@ -57,4 +57,24 @@ document.addEventListener("DOMContentLoaded", () => {
             enlace.classList.add('active');
         });
     });
+
+    // 3. Lógica para detectar categoría desde la URL (Navegación externa)
+    const urlParams = new URLSearchParams(window.location.search);
+    const categoriaURL = urlParams.get('cat');
+
+    if (categoriaURL) {
+        // Buscamos el botón en el sidebar que coincida con el nombre del archivo
+        const botonAClickear = document.querySelector(`.btn-categoria[data-archivo="${categoriaURL}"]`);
+        
+        if (botonAClickear) {
+            // Un pequeño retraso de 300ms para asegurar que el DOM y los componentes estén listos
+            setTimeout(() => {
+                botonAClickear.click();
+                
+                // Opcional: Desplazar la vista hacia los productos si el catálogo está muy abajo
+                const target = document.getElementById('shopify-products-load');
+                if(target) target.scrollIntoView({ behavior: 'smooth' });
+            }, 300);
+        }
+    }
 });
