@@ -112,38 +112,38 @@ function inicializarBusquedaUniversal() {
 
 function ejecutarFiltroEnTienda(termino) {
     const term = termino.toLowerCase().trim();
+    const contenedor = document.getElementById('shopify-products-load');
     
-    // 1. Cargamos la colección global
+    // 1. Limpiamos y cargamos la colección global
     cargarColeccionDesdeBusqueda('todo.js', `Resultados para: "${term}"`);
 
-    // 2. Función de limpieza profunda
-    const aplicarFiltroReal = () => {
+    // 2. Creamos el "Guardia" (Observer)
+    const guardia = new MutationObserver((mutations) => {
         const productos = document.querySelectorAll('.shopify-buy__product');
         
         if (productos.length > 0) {
             productos.forEach(prod => {
+                // Buscamos el título dentro del producto
                 const tituloElemento = prod.querySelector('.shopify-buy__product-title');
                 
-                if (tituloElemento) {
+                if (tituloElemento && tituloElemento.textContent !== "") {
                     const nombre = tituloElemento.textContent.toLowerCase();
                     
                     if (nombre.includes(term)) {
-                        // FUERZA BRUTA: Aplicamos estilos directamente al elemento
-                        prod.setAttribute('style', 'display: flex !important;');
+                        prod.style.setProperty('display', 'flex', 'important');
                     } else {
-                        // FUERZA BRUTA: Lo sacamos del flujo
-                        prod.setAttribute('style', 'display: none !important; position: absolute !important;');
+                        prod.style.setProperty('display', 'none', 'important');
                     }
                 }
             });
         }
-    };
-
-    // 3. Ejecutamos la limpieza varias veces para ganarle a la carga lenta de Shopify
-    // Ejecuta de inmediato, a los 1s, 2s, 3s y 5s.
-    [0, 1000, 2000, 3000, 5000].forEach(delay => {
-        setTimeout(aplicarFiltroReal, delay);
     });
+
+    // 3. Le decimos al guardia que vigile el contenedor de productos
+    guardia.observe(contenedor, { childList: true, subtree: true });
+
+    // 4. Por seguridad, dejamos de vigilar después de 10 segundos para no gastar batería
+    setTimeout(() => guardia.disconnect(), 10000);
 }
 // Función auxiliar para carga de scripts
 function cargarColeccionDesdeBusqueda(archivo, tituloTexto) {
