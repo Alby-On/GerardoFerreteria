@@ -1,11 +1,27 @@
-(function() {
-    const shopifyConfig = {
-        domain: 'zidiwr-ax.myshopify.com',
-        accessToken: '715840bf165817aa2713937962be8670',
-        apiVersion: '2024-01'
-    };
+// 1. Configuración de Shopify Storefront API
+const shopifyConfig = {
+    domain: 'zidiwr-ax.myshopify.com',
+    accessToken: '715840bf165817aa2713937962be8670',
+    apiVersion: '2024-01'
+};
 
-    async function queryShopify(query) {
+// Función para cargar componentes estáticos (Header/Footer)
+function loadComponent(id, file) {
+    return fetch(file)
+        .then(response => {
+            if (!response.ok) throw new Error("Error al cargar " + file);
+            return response.text();
+        })
+        .then(data => {
+            const el = document.getElementById(id);
+            if (el) el.innerHTML = data;
+        })
+        .catch(error => console.error(error));
+}
+
+// 2. Función Maestra para consultas GraphQL
+async function queryShopify(query) {
+    try {
         const response = await fetch(`https://${shopifyConfig.domain}/api/${shopifyConfig.apiVersion}/graphql.json`, {
             method: 'POST',
             headers: {
@@ -15,91 +31,148 @@
             body: JSON.stringify({ query })
         });
         return await response.json();
+    } catch (error) {
+        console.error("Error en la petición API:", error);
     }
+}
 
-    async function cargarDetalleProducto() {
+// 3. Plantilla de Producto (Usa el ID codificado para detalles.html)
+function templateProducto(prod) {
+    const precio = Math.round(prod.variants.edges[0].node.price.amount);
+    const imagen = prod.images.edges[0]?.node.url || 'img/placeholder.jpg';
+    
+    // btoa convierte el ID de Shopify a Base64 para una URL limpia
+    const idProducto = btoa(prod.id); 
+
+    return `
+        <div class="shopify-buy__product">
+            <div class="shopify-buy__product-img-wrapper">
+                <img src="${imagen}" class="shopify-buy__product-img" alt="${prod.title}">
+            </div>
+            <h3 class="shopify-buy__product-title">${prod.title}</h3>
+            <div class="shopify-buy__product-price-size">$${precio.toLocaleString('es-CL')}</div>
+            <a href="detalles.html?id=${idProducto}" class="shopify-buy__btn" style="text-decoration:none; text-align:center;">
+                Ver Detalles
+            </a>
+        </div>
+    `;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    // 1. Carga componentes siempre (Header/Footer)
+    Promise.all([
+        loadComponent('header-placeholder', 'componentes/header.html'),
+        loadComponent('footer-placeholder', 'componentes/footer.html')
+    ]).then(() => {
+        inicializarBusquedaUniversal();
+        
+        // 2. SOLO si existe el menú de categorías, activamos los clics
+        const menuCat = document.getElementById('menu-categorias');
+        if (menuCat) {
+            const enlaces = document.querySelectorAll('.btn-categoria');
+            enlaces.forEach(enlace => {
+                enlace.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const categoria = enlace.getAttribute('data-categoria');
+                    const nombreCategoria = enlace.textContent;
+                    ejecutarCargaPorCategoria(categoria, nombreCategoria);
+                });
+            });
+        }
+    });
+
+    // 3. SOLO si existe el contenedor de productos, buscamos por URL
+    const contenedorProductos = document.getElementById('shopify-products-load');
+    if (contenedorProductos) {
         const urlParams = new URLSearchParams(window.location.search);
-        const idCodificado = urlParams.get('id');
-        if (!idCodificado) return;
-
-        try {
-            const productId = atob(idCodificado);
-            const query = `{
-              node(id: "${productId}") {
-                ... on Product {
-                  title
-                  descriptionHtml
-                  images(first: 1) { edges { node { url } } }
-                  variants(first: 1) { edges { node { id price { amount } } } }
-                }
-              }
-            }`;
-
-            const { data } = await queryShopify(query);
-            const prod = data.node;
-
-            if (prod) {
-                document.getElementById('prod-title').textContent = prod.title;
-                document.getElementById('prod-price').textContent = `$${Math.round(prod.variants.edges[0].node.price.amount).toLocaleString('es-CL')}`;
-                document.getElementById('prod-description').innerHTML = prod.descriptionHtml;
-                document.getElementById('main-img').src = prod.images.edges[0].node.url;
-
-                const variantId = prod.variants.edges[0].node.id;
-                const btnAddCart = document.getElementById('btn-add-cart');
-
-                if (btnAddCart) {
-                    // Limpiamos eventos previos para evitar duplicados
-                    const newBtn = btnAddCart.cloneNode(true);
-                    btnAddCart.parentNode.replaceChild(newBtn, btnAddCart);
-                    
-                    newBtn.addEventListener('click', () => {
-                        console.log("🟢 Clic detectado. Variante:", variantId);
-                        crearCheckout(variantId);
-                    });
-                }
-            }
-        } catch (e) {
-            console.error("❌ Error carga inicial:", e);
+        const busquedaURL = urlParams.get('q');
+        if (busquedaURL) {
+            ejecutarBusquedaAPI(decodeURIComponent(busquedaURL));
         }
     }
+});
+// 4. Buscador Universal
+function inicializarBusquedaUniversal() {
+    const inputBuscar = document.getElementById('search-input');
+    const btnBuscar = document.getElementById('search-btn');
 
-    async function crearCheckout(variantId) {
-        const btn = document.getElementById('btn-add-cart');
-        btn.innerText = "Procesando...";
-        btn.disabled = true;
+    if (btnBuscar && inputBuscar) {
+        const realizarBusqueda = () => {
+            const termino = inputBuscar.value.toLowerCase().trim();
+            if (termino === "") return;
 
-        const mutation = `
-        mutation {
-          checkoutCreate(input: {
-            lineItems: [{ variantId: "${variantId}", quantity: 1 }]
-          }) {
-            checkout { webUrl }
-            checkoutUserErrors { message field }
-          }
-        }`;
-
-        try {
-            console.log("📡 Enviando Mutation a Shopify...");
-            const response = await queryShopify(mutation);
-            console.log("📥 Respuesta completa de Shopify:", response);
-
-            if (response.data && response.data.checkoutCreate.checkout) {
-                console.log("🚀 Redirigiendo a:", response.data.checkoutCreate.checkout.webUrl);
-                window.location.href = response.data.checkoutCreate.checkout.webUrl;
+            if (window.location.pathname.includes('productos.html')) {
+                ejecutarBusquedaAPI(termino);
             } else {
-                const errors = response.data?.checkoutCreate?.checkoutUserErrors;
-                console.error("❌ Errores de Checkout:", errors || response.errors);
-                alert("Shopify dice: " + (errors?.[0]?.message || "Error desconocido"));
-                btn.innerText = "Añadir al Carro";
-                btn.disabled = false;
+                window.location.href = `productos.html?q=${encodeURIComponent(termino)}`;
             }
-        } catch (e) {
-            console.error("❌ Error crítico en el proceso:", e);
-            btn.innerText = "Añadir al Carro";
-            btn.disabled = false;
-        }
-    }
+        };
 
-    if (document.readyState === 'complete') cargarDetalleProducto();
-    else window.addEventListener('load', cargarDetalleProducto);
-})();
+        btnBuscar.addEventListener('click', realizarBusqueda);
+        inputBuscar.addEventListener('keypress', (e) => { if (e.key === 'Enter') realizarBusqueda(); });
+    }
+}
+
+// 5. Consultas con campo ID incluido
+async function ejecutarBusquedaAPI(termino) {
+    const contenedor = document.getElementById('shopify-products-load');
+    const titulo = document.getElementById('titulo-coleccion');
+    
+    if (titulo) titulo.textContent = `Resultados para: "${termino}"`;
+    contenedor.innerHTML = `<p style="grid-column: 1/-1; text-align: center;">Buscando productos...</p>`;
+
+    // SE AGREGA EL CAMPO "id" EN EL QUERY
+    const query = `
+    {
+      products(first: 50, query: "title:${termino}*") {
+        edges {
+          node {
+            id
+            title
+            onlineStoreUrl
+            images(first: 1) { edges { node { url } } }
+            variants(first: 1) { edges { node { price { amount } } } }
+          }
+        }
+      }
+    }`;
+
+    const { data } = await queryShopify(query);
+    renderizarProductos(data?.products?.edges);
+}
+
+async function ejecutarCargaPorCategoria(tag, nombre) {
+    const contenedor = document.getElementById('shopify-products-load');
+    const titulo = document.getElementById('titulo-coleccion');
+    
+    if (titulo) titulo.textContent = nombre;
+    contenedor.innerHTML = `<p style="grid-column: 1/-1; text-align: center;">Cargando ${nombre}...</p>`;
+
+    // SE AGREGA EL CAMPO "id" EN EL QUERY
+    const query = `
+    {
+      products(first: 50, query: "tag:${tag}") {
+        edges {
+          node {
+            id
+            title
+            onlineStoreUrl
+            images(first: 1) { edges { node { url } } }
+            variants(first: 1) { edges { node { price { amount } } } }
+          }
+        }
+      }
+    }`;
+
+    const { data } = await queryShopify(query);
+    renderizarProductos(data?.products?.edges);
+}
+
+function renderizarProductos(edges) {
+    const contenedor = document.getElementById('shopify-products-load');
+    if (!edges || edges.length === 0) {
+        contenedor.innerHTML = `<p style="grid-column: 1/-1; text-align: center;">No se encontraron productos.</p>`;
+        return;
+    }
+    contenedor.innerHTML = edges.map(edge => templateProducto(edge.node)).join('');
+}
