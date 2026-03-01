@@ -10,11 +10,26 @@
         <p class="carrito-vacio">Tu carrito está vacío</p>
     </div>
 
+    <div class="carrito-facturacion" style="padding: 15px; border-top: 1px solid #eee; background: #f9f9f9;">
+        <label style="font-weight: bold; font-size: 0.9rem;">Tipo de Documento:</label>
+        <select id="tipo-documento" style="width: 100%; margin-bottom: 10px; padding: 5px;" onchange="toggleCamposFactura()">
+            <option value="boleta">Boleta (Solo RUT)</option>
+            <option value="factura">Factura (Empresa)</option>
+        </select>
+
+        <input type="text" id="rut-cliente" placeholder="RUT (ej: 12.345.678-9)" style="width: 100%; padding: 8px; margin-bottom: 5px; border: 1px solid #ccc; border-radius: 4px;">
+        
+        <div id="campos-factura" style="display: none;">
+            <input type="text" id="razon-social" placeholder="Razón Social" style="width: 100%; padding: 8px; margin-bottom: 5px; border: 1px solid #ccc; border-radius: 4px;">
+            <input type="text" id="giro-empresa" placeholder="Giro de la empresa" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+        </div>
+    </div>
+
     <div class="carrito-footer">
         <div class="total-container">
             <span>Total:</span>
             <span id="carrito-total-monto">$0.00</span>
         </div>
-        <button class="btn-checkout" onclick="irAPagar()">Finalizar Compra</button>
+        <button class="btn-checkout" onclick="prepararCheckout()">Finalizar Compra</button>
     </div>
 </aside>
