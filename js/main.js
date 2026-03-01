@@ -59,42 +59,38 @@ function templateProducto(prod) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    // Carga inicial de Header y Footer
+    // 1. Carga componentes siempre (Header/Footer)
     Promise.all([
         loadComponent('header-placeholder', 'componentes/header.html'),
         loadComponent('footer-placeholder', 'componentes/footer.html')
     ]).then(() => {
         inicializarBusquedaUniversal();
         
-        // Delegación de eventos para categorías
-        const enlaces = document.querySelectorAll('.btn-categoria');
-        enlaces.forEach(enlace => {
-            enlace.addEventListener('click', (e) => {
-                e.preventDefault();
-                const categoria = enlace.getAttribute('data-categoria');
-                const nombreCategoria = enlace.textContent;
-                
-                if (categoria) {
+        // 2. SOLO si existe el menú de categorías, activamos los clics
+        const menuCat = document.getElementById('menu-categorias');
+        if (menuCat) {
+            const enlaces = document.querySelectorAll('.btn-categoria');
+            enlaces.forEach(enlace => {
+                enlace.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const categoria = enlace.getAttribute('data-categoria');
+                    const nombreCategoria = enlace.textContent;
                     ejecutarCargaPorCategoria(categoria, nombreCategoria);
-                    enlaces.forEach(el => el.classList.remove('active'));
-                    enlace.classList.add('active');
-                }
+                });
             });
-        });
+        }
     });
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const busquedaURL = urlParams.get('q');
-
-    if (busquedaURL) {
-        setTimeout(() => {
-            const inputInterno = document.getElementById('search-input');
-            if (inputInterno) inputInterno.value = decodeURIComponent(busquedaURL);
+    // 3. SOLO si existe el contenedor de productos, buscamos por URL
+    const contenedorProductos = document.getElementById('shopify-products-load');
+    if (contenedorProductos) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const busquedaURL = urlParams.get('q');
+        if (busquedaURL) {
             ejecutarBusquedaAPI(decodeURIComponent(busquedaURL));
-        }, 500);
+        }
     }
 });
-
 // 4. Buscador Universal
 function inicializarBusquedaUniversal() {
     const inputBuscar = document.getElementById('search-input');
