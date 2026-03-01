@@ -341,3 +341,31 @@ body {
 #shopify-products-load {
     min-height: 400px; /* Evita que el footer salte mientras carga */
 }
+/* Contenedor principal de Shopify */
+#shopify-products-load {
+    display: grid !important;
+    /* Crea 4 columnas de igual tamaño */
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 20px; /* Espacio entre productos */
+    padding: 20px 0;
+}
+
+/* Ajuste para tablets (2 columnas) */
+@media (max-width: 992px) {
+    #shopify-products-load {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Ajuste para celulares (1 columna - ideal para tu S22 Ultra) */
+@media (max-width: 576px) {
+    #shopify-products-load {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Ajuste de las imágenes para que no se deformen */
+.shopify-buy__product-img-wrapper {
+    max-height: 250px;
+    object-fit: contain;
+}
