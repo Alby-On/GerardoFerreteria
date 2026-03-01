@@ -61,7 +61,8 @@ document.addEventListener("DOMContentLoaded", () => {
     Promise.all([
         loadComponent('header-placeholder', 'components/header.html'),
         loadComponent('footer-placeholder', 'components/footer.html'),
-        loadComponent('whatsapp-placeholder', 'components/whatsapp.html')
+        loadComponent('whatsapp-placeholder', 'components/whatsapp.html'),
+        loadComponent('whatsapp-placeholder', 'carro_compras.html')
     ]).then(() => {
         inicializarBusquedaUniversal();
         
