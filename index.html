@@ -10,24 +10,32 @@
 
     <header id="header-placeholder" class="main-header"></header>
 
-    <main style="min-height: 500px; padding: 20px; text-align: center;">
+<main style="min-height: 500px; padding: 20px; text-align: center;">
     <h2>Bienvenidos a Gerardo Ferretería</h2>
     <p>Tu aliado en construcción y hogar.</p>
 
-    <div class="ofertas-carousel">
-        {% assign productos_oferta = collections.all.products %}
-        {% for product in productos_oferta %}
+    <div class="contenedor-ofertas">
+        {% for product in collections.all.products %}
             {% if product.tags contains 'descuento1' or product.tags contains 'descuento2' %}
-                <div class="product-card">
-                    <img src="{{ product.featured_image | img_url: '300x300', crop: 'center' }}" alt="{{ product.title }}">
-                    <h3>{{ product.title }}</h3>
-                    <p class="price">{{ product.price | money }}</p>
-                    <a href="{{ product.url }}" class="btn-detalles">Ver Detalles</a>
+                
+                <div class="tarjeta-oferta" 
+                     data-categoria="{% if product.tags contains 'descuento1' %}descuento1{% else %}descuento2{% endif %}"
+                     style="display: inline-block; width: 250px; margin: 10px; border: 1px solid #ddd; border-radius: 8px; padding: 15px; vertical-align: top;">
+                    
+                    <img src="{{ product.featured_image | img_url: '300x300' }}" style="width: 100%; border-radius: 5px;">
+                    <h4 style="margin: 10px 0;">{{ product.title }}</h4>
+                    <p style="color: #e63946; font-weight: bold; font-size: 1.2rem;">{{ product.price | money }}</p>
+                    
+                    <a href="{{ product.url }}" class="btn-detalles" 
+                       style="display: block; background: #333; color: #fff; padding: 10px; text-decoration: none; border-radius: 4px;">
+                       Ver Detalles
+                    </a>
                 </div>
+
             {% endif %}
         {% endfor %}
     </div>
-    </main>
+</main>
 
     <footer id="footer-placeholder" class="main-footer"></footer>
 
