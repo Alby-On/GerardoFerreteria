@@ -414,3 +414,19 @@ body {
     #shopify-products-load { grid-template-columns: 1fr !important; }
     .precio-grande { font-size: 1.8rem; }
 }
+/* Espaciado para el bloque de compra */
+.acciones-compra {
+    margin: 20px 0;
+}
+
+/* Estilo para el separador */
+hr {
+    border: 0;
+    border-top: 1px solid #eee;
+    margin: 25px 0;
+}
+
+/* Aseguramos que la descripción no quede muy pegada al HR */
+.descripcion-texto {
+    margin-top: 10px;
+}
