@@ -450,3 +450,36 @@ hr {
     color: #444;
     font-size: 1.05rem;
 }
+.acciones-compra {
+    display: flex;
+    flex-direction: column; /* En móvil uno sobre otro */
+    gap: 15px;
+    margin: 25px 0;
+}
+
+.selector-cantidad {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+}
+
+.selector-cantidad input {
+    padding: 10px;
+    width: 70px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+/* En tablets o PC se ven de lado */
+@media (min-width: 768px) {
+    .acciones-compra {
+        flex-direction: row; 
+        align-items: flex-end;
+    }
+    .btn-comprar-ahora {
+        flex: 1;
+    }
+}
