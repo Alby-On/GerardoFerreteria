@@ -78,3 +78,55 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 });
+// 4. Lógica de Búsqueda Global "Albyon Search"
+const inputBuscar = document.getElementById('search-input');
+const btnBuscar = document.getElementById('search-btn');
+
+if (btnBuscar) {
+    btnBuscar.addEventListener('click', () => {
+        const termino = inputBuscar.value.toLowerCase().trim();
+        
+        if (termino === "") return;
+
+        // 1. Forzamos la carga de la colección maestra "todo.js"
+        // (Debes tener este archivo en js/colecciones/todo.js)
+        const botonTodo = document.createElement('a');
+        botonTodo.setAttribute('data-archivo', 'todo.js');
+        botonTodo.textContent = "Resultados de búsqueda";
+        
+        // Disparamos la carga (reutilizando tu lógica de scripts dinámicos)
+        cargarColeccionDesdeBusqueda('todo.js', `Resultados para: "${termino}"`);
+
+        // 2. Esperamos a que los productos aparezcan para filtrar
+        const intervaloBusqueda = setInterval(() => {
+            const productos = document.querySelectorAll('.shopify-buy__product');
+            
+            if (productos.length > 0) {
+                productos.forEach(prod => {
+                    const nombre = prod.querySelector('.shopify-buy__product-title').textContent.toLowerCase();
+                    // Si el nombre contiene la palabra (ej: cable), se queda. Si no, se va.
+                    prod.style.display = nombre.includes(termino) ? 'flex' : 'none';
+                });
+                clearInterval(intervaloBusqueda);
+            }
+        }, 500); // Revisa cada medio segundo hasta que carguen
+    });
+}
+
+// Función auxiliar para no repetir código de carga
+function cargarColeccionDesdeBusqueda(archivo, tituloTexto) {
+    const contenedor = document.getElementById('shopify-products-load');
+    const titulo = document.getElementById('titulo-coleccion');
+    
+    if (titulo) titulo.textContent = tituloTexto;
+    contenedor.innerHTML = `<p>Buscando coincidencias...</p>`;
+
+    const scriptViejo = document.getElementById('script-dinamico-shopify');
+    if (scriptViejo) scriptViejo.remove();
+
+    const nuevoScript = document.createElement('script');
+    nuevoScript.id = 'script-dinamico-shopify';
+    nuevoScript.src = 'js/colecciones/' + archivo;
+    nuevoScript.async = true;
+    document.body.appendChild(nuevoScript);
+}
