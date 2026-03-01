@@ -415,3 +415,91 @@ body {
     border: none !important;
     position: absolute !important;
 }
+/* ==========================================================================
+   1. ESTRUCTURA PRINCIPAL (GRID)
+   ========================================================================== */
+.detalle-grid {
+    display: grid;
+    /* Divide la pantalla en dos columnas iguales (Imagen | Info) */
+    grid-template-columns: 1fr 1fr;
+    /* Espaciado entre la columna de imagen y la de texto */
+    gap: 40px;
+    /* Margen superior para separar del Header */
+    margin-top: 50px;
+    padding: 20px;
+}
+
+
+
+/* ==========================================================================
+   2. SECCIÓN DE IMAGEN
+   ========================================================================== */
+.detalle-imagen img {
+    /* Ajusta la imagen al ancho de su columna */
+    width: 100%;
+    /* Limita el alto para que no se desborde en pantallas grandes */
+    max-height: 500px;
+    /* Mantiene la proporción sin deformar el producto */
+    object-fit: contain;
+    border-radius: 8px;
+    background: #f9f9f9;
+}
+
+/* ==========================================================================
+   3. INFORMACIÓN Y PRECIOS
+   ========================================================================== */
+.precio-grande {
+    /* Tamaño destacado para el valor del producto */
+    font-size: 2rem;
+    /* Color rojo corporativo de Albyon Digital */
+    color: #d9534f; 
+    font-weight: bold;
+    margin: 15px 0;
+}
+
+.descripcion-texto {
+    /* Mejora la legibilidad de párrafos largos */
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 25px;
+}
+
+/* ==========================================================================
+   4. BOTONES Y ACCIONES
+   ========================================================================== */
+.btn-comprar-ahora {
+    background: #333;
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    /* Hace que el botón ocupe todo el ancho disponible */
+    width: 100%;
+    font-size: 1.1rem;
+    transition: 0.3s ease;
+}
+
+.btn-comprar-ahora:hover {
+    /* Efecto visual al pasar el mouse o tocar en el S22 Ultra */
+    background: #d9534f;
+}
+
+.btn-volver {
+    display: block;
+    margin-top: 20px;
+    color: #777;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   5. RESPONSIVE (MÓVILES Y TABLETS)
+   ========================================================================== */
+@media (max-width: 768px) {
+    .detalle-grid { 
+        /* En celulares, las columnas se apilan una sobre otra */
+        grid-template-columns: 1fr; 
+        gap: 20px;
+    }
+}
