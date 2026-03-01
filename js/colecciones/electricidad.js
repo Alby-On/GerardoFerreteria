@@ -29,6 +29,7 @@
         moneyFormat: '%24%7B%7Bamount_no_decimals%7D%7D',
         options: {
   "product": {
+    "iframe": false, // <--- CAMBIO CLAVE: Permite que tu CSS controle el diseño
     "styles": {
       "product": {
         "@media (min-width: 601px)": {
@@ -51,6 +52,7 @@
     }
   },
   "productSet": {
+    "iframe": false, // <--- CAMBIO CLAVE: Desactiva el contenedor aislado
     "styles": {
       "products": {
         "@media (min-width: 601px)": {
@@ -58,15 +60,13 @@
         }
       }
     },
-    /* --- CAMBIOS PARA PAGINACIÓN Y CANTIDAD --- */
     "contents": {
       "pagination": true 
     },
     "text": {
       "button": "Cargar más productos" 
     },
-    "pageSize": 32 // 8 filas de 4 productos
-    /* ------------------------------------------ */
+    "pageSize": 32 
   },
   "modalProduct": {
     "contents": {
