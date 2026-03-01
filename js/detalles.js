@@ -76,18 +76,19 @@
         btn.innerText = "Añadiendo...";
         btn.disabled = true;
 
-        // Recuperar carrito guardado
         let cartId = localStorage.getItem('shopify_cart_id');
 
         try {
             if (!cartId) {
-                // Si no hay carrito, crear uno nuevo
                 await crearCarritoNuevo(variantId);
             } else {
-                // Si ya existe, añadir el nuevo producto
                 await añadirProductoAlCarrito(cartId, variantId);
             }
             
+            // === AQUÍ VA LA LÍNEA ===
+            await actualizarVisualizacionCarro(); 
+            // ========================
+
             btn.innerText = "¡Añadido!";
             setTimeout(() => {
                 btn.innerText = "Añadir más";
