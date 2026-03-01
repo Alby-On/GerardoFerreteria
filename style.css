@@ -166,13 +166,14 @@ body {
     display: block !important;
     border-bottom: 1px solid #f0f0f0;
     transition: 0.2s;
+    font-weight: normal;
 }
 
-/* 5. DISEÑO DE TIENDA */
+/* 5. DISEÑO DE TIENDA (LAYOUT) */
 .tienda-layout {
     display: flex;
     gap: 40px;
-    max-width: 1400px; /* Aumentado para dar espacio a las 4 columnas */
+    max-width: 1400px;
     margin: 40px auto;
     padding: 0 20px;
     align-items: flex-start;
@@ -189,111 +190,94 @@ body {
 
 .catalogo-container {
     flex-grow: 1;
-    min-width: 0; /* Evita que el grid rompa el layout */
+    min-width: 0;
+}
+
+.btn-categoria.active {
+    color: #d9534f !important;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+/* 6. FOOTER */
+.main-footer {
+    background: #222;
+    color: white;
+    padding: 40px 5%;
+    margin-top: 50px;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 /* ==========================================================================
-    8. GRID DE PRODUCTOS UNIVERSAL (4 COLUMNAS x 4 FILAS+)
+    8. GRID DE PRODUCTOS UNIVERSAL (4 COLUMNAS - AJUSTE FINAL)
    ========================================================================== */
 
-/* Forzamos que el contenedor de Shopify no use floats y se active como Grid */
+/* Forzamos el Grid en el contenedor inyectado de Shopify */
 #shopify-products-load .shopify-buy__product-set,
 #shopify-products-load .shopify-buy__product-set--parent {
     display: grid !important;
     grid-template-columns: repeat(4, 1fr) !important;
-    gap: 25px !important;
+    gap: 20px !important;
     width: 100% !important;
-    max-width: 100% !important;
+    align-items: stretch !important;
 }
 
-/* Estilo unificado para cada Tarjeta de Producto */
+/* Uniformidad de las tarjetas */
 #shopify-products-load .shopify-buy__product {
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 !important;
     display: flex !important;
     flex-direction: column !important;
-    height: 100% !important; /* Todas miden lo mismo */
+    height: 100% !important;
     background: #fff !important;
     border: 1px solid #eee !important;
-    border-radius: 8px !important;
     padding: 15px !important;
     box-sizing: border-box !important;
-    transition: transform 0.2s ease;
 }
 
-#shopify-products-load .shopify-buy__product:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-/* Alineación de imágenes para que todos los títulos empiecen a la misma altura */
+/* Ajuste de imágenes para que todas midan lo mismo */
 #shopify-products-load .shopify-buy__product-img-wrapper {
     height: 200px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     margin-bottom: 15px !important;
-    background: #fff;
 }
 
 #shopify-products-load .shopify-buy__product-img {
     max-height: 100% !important;
-    width: auto !important;
     object-fit: contain !important;
 }
 
-/* Títulos: Máximo 2 líneas para mantener simetría */
-#shopify-products-load .shopify-buy__product-title {
-    font-size: 15px !important;
-    height: 42px !important;
-    overflow: hidden !important;
-    line-height: 1.4 !important;
-    margin-bottom: 10px !important;
-}
-
-/* Precio y Botón: Empujados al fondo para que siempre estén alineados abajo */
+/* Empujar botones al final para alineación perfecta */
 #shopify-products-load .shopify-buy__product-price-size {
-    margin-top: auto !important; 
-    color: #d9534f !important;
-    font-weight: bold !important;
-    font-size: 1.1rem !important;
-    padding-bottom: 10px;
+    margin-top: auto !important;
+    font-weight: bold;
+    color: #d9534f;
+    padding-top: 10px;
 }
 
 #shopify-products-load .shopify-buy__btn {
     width: 100% !important;
-    padding: 12px !important;
-    font-weight: bold !important;
-    text-transform: uppercase !important;
 }
 
-/* 9. PAGINACIÓN Y RESPONSIVE */
-.shopify-buy__collection-pagination-button {
-    display: block !important;
-    margin: 40px auto !important;
-    padding: 12px 35px !important;
-    background-color: #333 !important;
-    color: white !important;
-    border: none !important;
-    border-radius: 4px !important;
-    cursor: pointer !important;
-}
-
+/* 9. RESPONSIVE (Celulares y Tablets) */
 @media (max-width: 1100px) {
-    #shopify-products-load .shopify-buy__product-set { 
-        grid-template-columns: repeat(3, 1fr) !important; 
-    }
+    #shopify-products-load .shopify-buy__product-set { grid-template-columns: repeat(3, 1fr) !important; }
 }
 
-@media (max-width: 850px) {
-    #shopify-products-load .shopify-buy__product-set { 
-        grid-template-columns: repeat(2, 1fr) !important; 
-    }
+@media (max-width: 900px) {
+    .tienda-layout { flex-direction: column; }
+    .sidebar-filtros { width: 100%; }
+    #shopify-products-load .shopify-buy__product-set { grid-template-columns: repeat(2, 1fr) !important; }
 }
 
-@media (max-width: 520px) {
-    #shopify-products-load .shopify-buy__product-set { 
-        grid-template-columns: 1fr !important; 
-    }
+@media (max-width: 576px) {
+    #shopify-products-load .shopify-buy__product-set { grid-template-columns: 1fr !important; }
 }
