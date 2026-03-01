@@ -256,17 +256,35 @@ function renderizarProductos(edges) {
     contenedor.innerHTML = edges.map(edge => templateProducto(edge.node)).join('');
 }
 
-// --- FUNCIONES PARA EL CARRITO ---
+// --- NUEVA LÓGICA DEL CARRITO LATERAL ---
 
+// 1. Abrir y Cerrar el panel
+window.toggleCarrito = function() {
+    const sidebar = document.getElementById('carrito-lateral');
+    const overlay = document.getElementById('carrito-overlay');
+    
+    if (sidebar && overlay) {
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('visible');
+        
+        // Si se abre, refrescamos los productos desde Shopify
+        if (sidebar.classList.contains('open')) {
+            actualizarVisualizacionCarro();
+        }
+    }
+};
+
+// 2. Redirigir al checkout de Shopify (Mantenemos tu lógica)
 window.irAPagar = function() {
     const url = localStorage.getItem('shopify_checkout_url');
     if (url) {
         window.location.href = url;
     } else {
-        alert("El carrito está vacío.");
+        alert("El carrito está vacío o no se ha generado el checkout.");
     }
 }
 
+// 3. Consultar Shopify y actualizar TU HTML dinámico
 async function actualizarVisualizacionCarro() {
     const cartId = localStorage.getItem('shopify_cart_id');
     if (!cartId) return;
@@ -274,8 +292,8 @@ async function actualizarVisualizacionCarro() {
     const query = `{
       cart(id: "${cartId}") {
         totalQuantity
-        cost { totalAmount { amount currencyCode } }
-        lines(first: 10) {
+        cost { totalAmount { amount } }
+        lines(first: 15) {
           edges {
             node {
               quantity
@@ -296,36 +314,36 @@ async function actualizarVisualizacionCarro() {
     const cart = response.data?.cart;
 
     if (cart) {
+        // Actualizar contador del botón en el header
         const countEl = document.getElementById('cart-count');
-        const totalEl = document.getElementById('cart-total');
-        const listContainer = document.getElementById('cart-items-list');
-
         if (countEl) countEl.textContent = cart.totalQuantity;
-        if (totalEl) totalEl.textContent = `Total: $${Math.round(cart.cost.totalAmount.amount).toLocaleString('es-CL')}`;
+        
+        // Actualizar total con tu ID: carrito-total-monto
+        const totalEl = document.getElementById('carrito-total-monto');
+        if (totalEl) totalEl.textContent = `$${Math.round(cart.cost.totalAmount.amount).toLocaleString('es-CL')}`;
 
+        // Renderizar lista en tu ID: carrito-items-lista
+        const listContainer = document.getElementById('carrito-items-lista');
         if (listContainer) {
-            listContainer.innerHTML = ''; 
+            if (cart.lines.edges.length === 0) {
+                listContainer.innerHTML = '<p class="carrito-vacio">Tu carrito está vacío</p>';
+                return;
+            }
+
+            listContainer.innerHTML = ''; // Limpiar previo
             cart.lines.edges.forEach(item => {
                 const prod = item.node.merchandise;
                 const div = document.createElement('div');
-                div.className = 'item-carrito-lateral';
-                div.style.display = 'flex';
-                div.style.marginBottom = '15px';
-                div.style.alignItems = 'center';
+                div.style.cssText = 'display: flex; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; gap: 10px;';
                 div.innerHTML = `
-                    <img src="${prod.image.url}" style="width: 60px; height: 60px; margin-right: 15px; object-fit: cover; border-radius: 4px;">
+                    <img src="${prod.image.url}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
                     <div style="flex-grow: 1;">
-                        <div style="font-weight: bold; font-size: 14px;">${prod.product.title}</div>
-                        <div style="font-size: 13px; color: #666;">Cant: ${item.node.quantity} x $${Math.round(prod.price.amount).toLocaleString('es-CL')}</div>
+                        <div style="font-weight: bold; font-size: 14px; color: #333;">${prod.product.title}</div>
+                        <div style="font-size: 13px; color: #666;">${item.node.quantity} x $${Math.round(prod.price.amount).toLocaleString('es-CL')}</div>
                     </div>
                 `;
                 listContainer.appendChild(div);
             });
         }
     }
-}
-
-// Carga inicial del contador
-if (localStorage.getItem('shopify_cart_id')) {
-    setTimeout(actualizarVisualizacionCarro, 1000); 
 }
