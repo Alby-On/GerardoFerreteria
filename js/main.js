@@ -1,4 +1,4 @@
-// 1. Configuración de Shopify Storefront API
+// 1. Configuración de Shopify Storefront API (Actualizada)
 const shopifyConfig = {
     domain: 'zidiwr-ax.myshopify.com',
     accessToken: '22259948ae8b45daf91294ada0ff44b4',
@@ -492,7 +492,6 @@ function toggleCamposFactura() {
    ========================================================================== */
 
 async function prepararCheckout() {
-    // 1. Capturar elementos y validar que existan en el DOM
     const elTipo = document.getElementById('tipo-documento');
     const elRut = document.getElementById('rut-cliente');
     const cartId = localStorage.getItem('shopify_cart_id');
@@ -505,20 +504,17 @@ async function prepararCheckout() {
     const tipo = elTipo.value;
     const rutInput = elRut.value.trim();
 
-    // 2. Validar el RUT (Sin puntos, con guion)
     if (!validarRut(rutInput)) {
         alert("RUT inválido. Por favor ingresa el formato: 12345678-9 (Sin puntos y con guion).");
         elRut.focus();
         return;
     }
 
-    // 3. Validar Carrito existente
     if (!cartId) {
         alert("Tu carrito parece haber expirado. Agrega un producto de nuevo.");
         return;
     }
 
-    // 4. Construir la nota
     let notaFinal = `Documento: ${tipo.toUpperCase()} | RUT: ${rutInput}`;
     
     if (tipo === 'factura') {
@@ -532,7 +528,6 @@ async function prepararCheckout() {
         notaFinal += ` | Razón: ${rs} | Giro: ${giro}`;
     }
 
-    // 5. Proceso de envío a Shopify
     const query = `
         mutation cartUpdate($cartId: ID!, $note: String) {
             cartUpdate(cartId: $cartId, note: $note) {
@@ -545,34 +540,38 @@ async function prepararCheckout() {
     const btn = document.querySelector('.btn-checkout');
     const originalText = btn ? btn.innerText : "Finalizar Compra";
 
+    // CONSTRUCCIÓN MANUAL DE URL Y HEADERS PARA EL FETCH
+    const apiUrl = `https://${shopifyConfig.domain}/api/${shopifyConfig.apiVersion}/graphql.json`;
+    const apiHeaders = {
+        'X-Shopify-Storefront-Access-Token': shopifyConfig.accessToken,
+        'Content-Type': 'application/json'
+    };
+
     try {
         if (btn) {
             btn.innerText = "Procesando...";
             btn.disabled = true;
         }
 
-        // DEBUG: Verifica en consola qué estás enviando
-        console.log("Enviando a:", shopifyConfig.url);
+        console.log("Enviando petición a:", apiUrl);
 
-        const response = await fetch(shopifyConfig.url, {
+        const response = await fetch(apiUrl, {
             method: 'POST',
-            headers: shopifyConfig.headers,
+            headers: apiHeaders,
             body: JSON.stringify({ 
                 query, 
                 variables: { cartId: cartId, note: notaFinal } 
             })
         });
 
-        // VALIDACIÓN DE RESPUESTA: Si no es JSON (es HTML), esto lo atrapará
         if (!response.ok) {
             const errorText = await response.text();
-            console.error("Respuesta no exitosa de Shopify:", errorText);
-            throw new Error(`Servidor respondió con código ${response.status}. Revisa la URL y el Token.`);
+            console.error("Respuesta de error:", errorText);
+            throw new Error(`Servidor respondió con código ${response.status}.`);
         }
 
         const result = await response.json();
 
-        // Revisar si Shopify devolvió errores específicos de usuario
         if (result.errors || (result.data?.cartUpdate?.userErrors?.length > 0)) {
             const errorMsg = result.data?.cartUpdate?.userErrors?.[0]?.message || result.errors?.[0]?.message || "Error de validación";
             throw new Error(errorMsg);
@@ -587,13 +586,7 @@ async function prepararCheckout() {
 
     } catch (e) {
         console.error("Error técnico detallado:", e);
-        
-        // Si el error es el de JSON, damos un mensaje más claro
-        if (e.message.includes("is not valid JSON")) {
-            alert("Error: La tienda respondió con un formato incorrecto (HTML). Revisa que la URL de Shopify sea correcta.");
-        } else {
-            alert("Error: " + e.message);
-        }
+        alert("Error: " + e.message);
         
         if (btn) {
             btn.innerText = originalText;
