@@ -609,3 +609,51 @@ body {
 #carrito-overlay.visible {
     display: block;
 }
+/* Contenedor inferior del carrito */
+.carrito-footer {
+    padding: 20px;
+    border-top: 2px solid #eee;
+    background-color: #f9f9f9; /* Un tono gris muy suave para diferenciarlo */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra los elementos horizontalmente */
+    gap: 15px;
+}
+
+/* El contenedor del precio Total */
+.total-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+/* EL BOTÓN DE FINALIZAR COMPRA (Grande y Centrado) */
+.btn-checkout {
+    width: 100%; /* Ocupa todo el ancho del lateral */
+    max-width: 350px; /* Evita que sea excesivamente largo en pantallas grandes */
+    padding: 18px 0; /* Más alto para que sea fácil de presionar */
+    background-color: #e63946; /* Rojo vibrante de ferretería */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(230, 57, 70, 0.3);
+}
+
+.btn-checkout:hover {
+    background-color: #333; /* Cambia a negro al pasar el mouse */
+    transform: translateY(-2px); /* Efecto de elevación */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-checkout:active {
+    transform: translateY(0);
+}
