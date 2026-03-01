@@ -110,46 +110,41 @@ function inicializarBusquedaUniversal() {
     }
 }
 
-// Función definitiva con MutationObserver para ganar a Shopify
 function ejecutarFiltroEnTienda(termino) {
-    const contenedor = document.getElementById('shopify-products-load');
     const term = termino.toLowerCase().trim();
-
+    
     // 1. Cargamos la colección global
     cargarColeccionDesdeBusqueda('todo.js', `Resultados para: "${term}"`);
 
-    // 2. Creamos el Vigilante (MutationObserver)
-    const observer = new MutationObserver((mutations) => {
+    // 2. Función de limpieza profunda
+    const aplicarFiltroReal = () => {
         const productos = document.querySelectorAll('.shopify-buy__product');
         
         if (productos.length > 0) {
-            let encontrados = 0;
-
             productos.forEach(prod => {
-                const tituloProd = prod.querySelector('.shopify-buy__product-title');
+                const tituloElemento = prod.querySelector('.shopify-buy__product-title');
                 
-                if (tituloProd && tituloProd.textContent !== "") {
-                    const nombre = tituloProd.textContent.toLowerCase();
+                if (tituloElemento) {
+                    const nombre = tituloElemento.textContent.toLowerCase();
                     
                     if (nombre.includes(term)) {
-                        prod.style.setProperty('display', 'flex', 'important');
-                        encontrados++;
+                        // FUERZA BRUTA: Aplicamos estilos directamente al elemento
+                        prod.setAttribute('style', 'display: flex !important;');
                     } else {
-                        prod.style.setProperty('display', 'none', 'important');
+                        // FUERZA BRUTA: Lo sacamos del flujo
+                        prod.setAttribute('style', 'display: none !important; position: absolute !important;');
                     }
                 }
             });
-
-            // Si ya encontramos y filtramos productos, podemos desconectar el observador tras 5s
-            // para no consumir recursos innecesarios
-            setTimeout(() => observer.disconnect(), 5000);
         }
+    };
+
+    // 3. Ejecutamos la limpieza varias veces para ganarle a la carga lenta de Shopify
+    // Ejecuta de inmediato, a los 1s, 2s, 3s y 5s.
+    [0, 1000, 2000, 3000, 5000].forEach(delay => {
+        setTimeout(aplicarFiltroReal, delay);
     });
-
-    // 3. Activamos la vigilancia sobre el contenedor de productos
-    observer.observe(contenedor, { childList: true, subtree: true });
 }
-
 // Función auxiliar para carga de scripts
 function cargarColeccionDesdeBusqueda(archivo, tituloTexto) {
     const contenedor = document.getElementById('shopify-products-load');
