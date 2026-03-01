@@ -488,7 +488,7 @@ function toggleCamposFactura() {
 }
 
 /* ==========================================================================
-    FUNCIÓN: prepararCheckout (Versión Corregida con cartNoteUpdate)
+    FUNCIÓN: prepararCheckout (Versión Final Corregida)
    ========================================================================== */
 
 async function prepararCheckout() {
@@ -518,7 +518,7 @@ async function prepararCheckout() {
         return;
     }
 
-    // 4. Construir la nota
+    // 4. Construir la nota (Asegurando que no sea un string vacío)
     let notaFinal = `Documento: ${tipo.toUpperCase()} | RUT: ${rutInput}`;
     
     if (tipo === 'factura') {
@@ -532,9 +532,9 @@ async function prepararCheckout() {
         notaFinal += ` | Razón: ${rs} | Giro: ${giro}`;
     }
 
-    // 5. Proceso de envío a Shopify (ACTUALIZADO A cartNoteUpdate)
+    // 5. Proceso de envío a Shopify (CORRECCIÓN DE TIPADO String!)
     const query = `
-        mutation cartNoteUpdate($cartId: ID!, $note: String) {
+        mutation cartNoteUpdate($cartId: ID!, $note: String!) {
             cartNoteUpdate(cartId: $cartId, note: $note) {
                 cart { 
                     checkoutUrl 
@@ -570,7 +570,10 @@ async function prepararCheckout() {
             headers: apiHeaders,
             body: JSON.stringify({ 
                 query, 
-                variables: { cartId: cartId, note: notaFinal } 
+                variables: { 
+                    cartId: cartId, 
+                    note: notaFinal // El valor ya está validado como String no nulo
+                } 
             })
         });
 
@@ -582,7 +585,7 @@ async function prepararCheckout() {
 
         const result = await response.json();
 
-        // 6. Revisar errores usando el nuevo nombre de la mutación
+        // 6. Revisar errores usando el esquema correcto
         if (result.errors || (result.data?.cartNoteUpdate?.userErrors?.length > 0)) {
             const errorMsg = result.data?.cartNoteUpdate?.userErrors?.[0]?.message || result.errors?.[0]?.message || "Error de validación";
             throw new Error(errorMsg);
@@ -591,7 +594,7 @@ async function prepararCheckout() {
         const checkoutUrl = result.data?.cartNoteUpdate?.cart?.checkoutUrl;
         
         if (checkoutUrl) {
-            // ÉXITO: Redirigir al checkout oficial de Shopify con el RUT ya guardado
+            // ÉXITO: Redirigir al checkout oficial de Shopify
             window.location.href = checkoutUrl;
         } else {
             throw new Error("No se pudo generar la URL de pago.");
