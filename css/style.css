@@ -516,3 +516,60 @@ body {
 #carrito-overlay.visible {
     display: block;
 }
+/* 1. Contenedor del Carrito (Escondido por defecto) */
+.carrito-sidebar {
+    position: fixed;
+    top: 0;
+    right: -450px; /* Fuera de la pantalla a la derecha */
+    width: 400px;
+    max-width: 85vw;
+    height: 100vh;
+    background: white;
+    z-index: 9999;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+    transition: right 0.3s ease-in-out; /* La animación */
+    display: flex;
+    flex-direction: column;
+}
+
+/* 2. Clase que activa el movimiento (Se añade con JS) */
+.carrito-sidebar.open {
+    right: 0; /* Entra a la pantalla */
+}
+
+/* 3. Fondo oscuro (Overlay) */
+#carrito-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 9998;
+}
+
+#carrito-overlay.visible {
+    display: block;
+}
+
+/* Estilos internos rápidos para que se vea bien */
+.carrito-header {
+    padding: 20px;
+    background: #333;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#cart-items-list {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.carrito-footer {
+    padding: 20px;
+    border-top: 1px solid #eee;
+}
