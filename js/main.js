@@ -110,52 +110,44 @@ function inicializarBusquedaUniversal() {
     }
 }
 
-// Función auxiliar para filtrar (solo corre en productos.html)
+// Función definitiva con MutationObserver para ganar a Shopify
 function ejecutarFiltroEnTienda(termino) {
-    // 1. Cargamos la colección "todo.js"
-    cargarColeccionDesdeBusqueda('todo.js', `Resultados para: "${termino}"`);
+    const contenedor = document.getElementById('shopify-products-load');
+    const term = termino.toLowerCase().trim();
 
-    let intentos = 0;
-    const intervaloBusqueda = setInterval(() => {
-        // Buscamos las tarjetas de producto
+    // 1. Cargamos la colección global
+    cargarColeccionDesdeBusqueda('todo.js', `Resultados para: "${term}"`);
+
+    // 2. Creamos el Vigilante (MutationObserver)
+    const observer = new MutationObserver((mutations) => {
         const productos = document.querySelectorAll('.shopify-buy__product');
-        intentos++;
-
+        
         if (productos.length > 0) {
             let encontrados = 0;
 
             productos.forEach(prod => {
-                // Buscamos el título dentro de la tarjeta
                 const tituloProd = prod.querySelector('.shopify-buy__product-title');
                 
-                if (tituloProd) {
+                if (tituloProd && tituloProd.textContent !== "") {
                     const nombre = tituloProd.textContent.toLowerCase();
                     
-                    if (nombre.includes(termino.toLowerCase())) {
-                        // Si coincide, lo mostramos como flex
+                    if (nombre.includes(term)) {
                         prod.style.setProperty('display', 'flex', 'important');
                         encontrados++;
                     } else {
-                        // Si NO coincide, lo ocultamos totalmente
                         prod.style.setProperty('display', 'none', 'important');
                     }
                 }
             });
 
-            // Si ya procesamos los productos, detenemos el reloj
-            if (intentos > 5) { 
-                clearInterval(intervaloBusqueda); 
-                // Si no hubo coincidencias, avisamos al usuario
-                if (encontrados === 0) {
-                    document.getElementById('shopify-products-load').innerHTML = 
-                        `<p style="grid-column: 1/-1; text-align: center;">No se encontraron productos que coincidan con "${termino}".</p>`;
-                }
-            }
+            // Si ya encontramos y filtramos productos, podemos desconectar el observador tras 5s
+            // para no consumir recursos innecesarios
+            setTimeout(() => observer.disconnect(), 5000);
         }
+    });
 
-        // Timer de seguridad: si en 10 segundos no carga nada, paramos
-        if (intentos > 20) clearInterval(intervaloBusqueda);
-    }, 600); // Aumentamos ligeramente el tiempo de espera para el renderizado
+    // 3. Activamos la vigilancia sobre el contenedor de productos
+    observer.observe(contenedor, { childList: true, subtree: true });
 }
 
 // Función auxiliar para carga de scripts
