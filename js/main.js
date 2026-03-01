@@ -1,6 +1,13 @@
-// 1. Función para cargar componentes estáticos (Header/Footer) - ACTUALIZADA
+// 1. Configuración de Shopify Storefront API
+const shopifyConfig = {
+    domain: 'zidiwr-ax.myshopify.com',
+    accessToken: '715840bf165817aa2713937962be8670',
+    apiVersion: '2024-01'
+};
+
+// Función para cargar componentes estáticos (Header/Footer)
 function loadComponent(id, file) {
-    return fetch(file) // Devolvemos el fetch para manejar la asincronía
+    return fetch(file)
         .then(response => {
             if (!response.ok) throw new Error("Error al cargar " + file);
             return response.text();
@@ -12,153 +19,157 @@ function loadComponent(id, file) {
         .catch(error => console.error(error));
 }
 
+// 2. Función Maestra para consultas GraphQL
+async function queryShopify(query) {
+    try {
+        const response = await fetch(`https://${shopifyConfig.domain}/api/${shopifyConfig.apiVersion}/graphql.json`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Shopify-Storefront-Access-Token': shopifyConfig.accessToken,
+            },
+            body: JSON.stringify({ query })
+        });
+        return await response.json();
+    } catch (error) {
+        console.error("Error en la petición API:", error);
+    }
+}
+
+// 3. Plantilla Dinámica (El HTML de tus tarjetas)
+function templateProducto(prod) {
+    const precio = Math.round(prod.variants.edges[0].node.price.amount);
+    const imagen = prod.images.edges[0]?.node.url || 'img/placeholder.jpg';
+    const link = prod.onlineStoreUrl;
+
+    return `
+        <div class="shopify-buy__product">
+            <div class="shopify-buy__product-img-wrapper">
+                <img src="${imagen}" class="shopify-buy__product-img" alt="${prod.title}">
+            </div>
+            <h3 class="shopify-buy__product-title">${prod.title}</h3>
+            <div class="shopify-buy__product-price-size">$${precio.toLocaleString('es-CL')}</div>
+            <button class="shopify-buy__btn" onclick="window.open('${link}', '_blank')">
+                Ver Producto
+            </button>
+        </div>
+    `;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
-    // Carga de componentes iniciales con Promesa para activar el buscador después
     Promise.all([
         loadComponent('header-placeholder', 'componentes/header.html'),
         loadComponent('footer-placeholder', 'componentes/footer.html')
     ]).then(() => {
-        // Ejecutamos la búsqueda solo cuando el Header ya existe en el DOM
         inicializarBusquedaUniversal();
     });
 
-    // 2. Lógica para las Colecciones de Shopify
+    // 4. Lógica para Categorías (Sin archivos .js externos)
     const enlaces = document.querySelectorAll('.btn-categoria');
-    const contenedor = document.getElementById('shopify-products-load');
-    const titulo = document.getElementById('titulo-coleccion');
-
     enlaces.forEach(enlace => {
         enlace.addEventListener('click', (e) => {
             e.preventDefault();
-            
-            const nombreArchivo = enlace.getAttribute('data-archivo');
+            const categoria = enlace.getAttribute('data-categoria'); // Cambiado de data-archivo
             const nombreCategoria = enlace.textContent;
-
-            if (titulo) titulo.textContent = nombreCategoria;
-            contenedor.innerHTML = `<p>Cargando productos de ${nombreCategoria}...</p>`;
-
-            const scriptViejo = document.getElementById('script-dinamico-shopify');
-            if (scriptViejo) { scriptViejo.remove(); }
-
-            const nuevoScript = document.createElement('script'); 
             
-            nuevoScript.id = 'script-dinamico-shopify';
-            nuevoScript.src = 'js/colecciones/' + nombreArchivo;
-            nuevoScript.async = true;
-
-            nuevoScript.onerror = () => {
-                contenedor.innerHTML = '<p>Error: No se pudo cargar la colección de ' + nombreCategoria + '</p>';
-            };
-
-            document.body.appendChild(nuevoScript);
-
+            ejecutarCargaPorCategoria(categoria, nombreCategoria);
+            
             enlaces.forEach(el => el.classList.remove('active'));
             enlace.classList.add('active');
         });
     });
 
-    // 3. Lógica para detectar categoría O búsqueda desde la URL
+    // 5. Detectar parámetros URL
     const urlParams = new URLSearchParams(window.location.search);
-    const categoriaURL = urlParams.get('cat');
-    const busquedaURL = urlParams.get('q'); // Captura parámetro de búsqueda global
+    const busquedaURL = urlParams.get('q');
 
-    if (categoriaURL) {
-        const botonAClickear = document.querySelector(`.btn-categoria[data-archivo="${categoriaURL}"]`);
-        if (botonAClickear) {
-            setTimeout(() => {
-                botonAClickear.click();
-                const target = document.getElementById('shopify-products-load');
-                if(target) target.scrollIntoView({ behavior: 'smooth' });
-            }, 300);
-        }
-    } else if (busquedaURL) {
-        // Si venimos desde otra página con una búsqueda
+    if (busquedaURL) {
         setTimeout(() => {
             const inputInterno = document.getElementById('search-input');
-            if (inputInterno) {
-                inputInterno.value = decodeURIComponent(busquedaURL);
-                ejecutarFiltroEnTienda(decodeURIComponent(busquedaURL));
-            }
+            if (inputInterno) inputInterno.value = decodeURIComponent(busquedaURL);
+            ejecutarBusquedaAPI(decodeURIComponent(busquedaURL));
         }, 500);
     }
 });
 
-// 4. Lógica de Búsqueda Global "Albyon Search" Universal
+// 6. Buscador Universal con Storefront API
 function inicializarBusquedaUniversal() {
     const inputBuscar = document.getElementById('search-input');
     const btnBuscar = document.getElementById('search-btn');
 
     if (btnBuscar && inputBuscar) {
-        btnBuscar.addEventListener('click', () => {
+        const realizarBusqueda = () => {
             const termino = inputBuscar.value.toLowerCase().trim();
             if (termino === "") return;
 
-            // Verificamos si estamos en la página de productos
-            const esPaginaProductos = window.location.pathname.includes('productos.html');
-
-            if (esPaginaProductos) {
-                ejecutarFiltroEnTienda(termino);
+            if (window.location.pathname.includes('productos.html')) {
+                ejecutarBusquedaAPI(termino);
             } else {
-                // Redirigimos a productos con el parámetro de búsqueda
                 window.location.href = `productos.html?q=${encodeURIComponent(termino)}`;
             }
-        });
+        };
 
-        inputBuscar.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') btnBuscar.click();
-        });
+        btnBuscar.addEventListener('click', realizarBusqueda);
+        inputBuscar.addEventListener('keypress', (e) => { if (e.key === 'Enter') realizarBusqueda(); });
     }
 }
 
-function ejecutarFiltroEnTienda(termino) {
-    const term = termino.toLowerCase().trim();
-    const contenedor = document.getElementById('shopify-products-load');
-    
-    // 1. Limpiamos y cargamos la colección global
-    cargarColeccionDesdeBusqueda('todo.js', `Resultados para: "${term}"`);
-
-    // 2. Creamos el "Guardia" (Observer)
-    const guardia = new MutationObserver((mutations) => {
-        const productos = document.querySelectorAll('.shopify-buy__product');
-        
-        if (productos.length > 0) {
-            productos.forEach(prod => {
-                // Buscamos el título dentro del producto
-                const tituloElemento = prod.querySelector('.shopify-buy__product-title');
-                
-                if (tituloElemento && tituloElemento.textContent !== "") {
-                    const nombre = tituloElemento.textContent.toLowerCase();
-                    
-                    if (nombre.includes(term)) {
-                        prod.style.setProperty('display', 'flex', 'important');
-                    } else {
-                        prod.style.setProperty('display', 'none', 'important');
-                    }
-                }
-            });
-        }
-    });
-
-    // 3. Le decimos al guardia que vigile el contenedor de productos
-    guardia.observe(contenedor, { childList: true, subtree: true });
-
-    // 4. Por seguridad, dejamos de vigilar después de 10 segundos para no gastar batería
-    setTimeout(() => guardia.disconnect(), 10000);
-}
-// Función auxiliar para carga de scripts
-function cargarColeccionDesdeBusqueda(archivo, tituloTexto) {
+async function ejecutarBusquedaAPI(termino) {
     const contenedor = document.getElementById('shopify-products-load');
     const titulo = document.getElementById('titulo-coleccion');
     
-    if (titulo) titulo.textContent = tituloTexto;
-    contenedor.innerHTML = `<p style="grid-column: 1/-1; text-align: center;">Buscando coincidencias...</p>`;
+    if (titulo) titulo.textContent = `Resultados para: "${termino}"`;
+    contenedor.innerHTML = `<p style="grid-column: 1/-1; text-align: center;">Buscando productos...</p>`;
 
-    const scriptViejo = document.getElementById('script-dinamico-shopify');
-    if (scriptViejo) scriptViejo.remove();
+    const query = `
+    {
+      products(first: 50, query: "title:${termino}*") {
+        edges {
+          node {
+            title
+            onlineStoreUrl
+            images(first: 1) { edges { node { url } } }
+            variants(first: 1) { edges { node { price { amount } } } }
+          }
+        }
+      }
+    }`;
 
-    const nuevoScript = document.createElement('script');
-    nuevoScript.id = 'script-dinamico-shopify';
-    nuevoScript.src = 'js/colecciones/' + archivo;
-    nuevoScript.async = true;
-    document.body.appendChild(nuevoScript);
+    const { data } = await queryShopify(query);
+    renderizarProductos(data.products.edges);
+}
+
+// Función para renderizar resultados
+function renderizarProductos(edges) {
+    const contenedor = document.getElementById('shopify-products-load');
+    if (!edges || edges.length === 0) {
+        contenedor.innerHTML = `<p style="grid-column: 1/-1; text-align: center;">No se encontraron productos.</p>`;
+        return;
+    }
+    contenedor.innerHTML = edges.map(edge => templateProducto(edge.node)).join('');
+}
+
+// Función opcional para cargar por etiquetas/categorías
+async function ejecutarCargaPorCategoria(tag, nombre) {
+    const contenedor = document.getElementById('shopify-products-load');
+    const titulo = document.getElementById('titulo-coleccion');
+    if (titulo) titulo.textContent = nombre;
+    contenedor.innerHTML = `<p style="grid-column: 1/-1; text-align: center;">Cargando ${nombre}...</p>`;
+
+    const query = `
+    {
+      products(first: 50, query: "tag:${tag}") {
+        edges {
+          node {
+            title
+            onlineStoreUrl
+            images(first: 1) { edges { node { url } } }
+            variants(first: 1) { edges { node { price { amount } } } }
+          }
+        }
+      }
+    }`;
+
+    const { data } = await queryShopify(query);
+    renderizarProductos(data.products.edges);
 }
