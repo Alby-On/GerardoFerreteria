@@ -488,46 +488,97 @@ function toggleCamposFactura() {
     camposExtras.style.display = (tipo === 'factura') ? 'block' : 'none';
 }
 
-// Función que prepara el carrito con el RUT antes de pagar
+/* ==========================================================================
+    FUNCIÓN: prepararCheckout (Con Validación de RUT y Facturación)
+   ========================================================================== */
+
 async function prepararCheckout() {
     const tipo = document.getElementById('tipo-documento').value;
-    const rut = document.getElementById('rut-cliente').value;
+    const rutInput = document.getElementById('rut-cliente').value;
     const cartId = localStorage.getItem('shopify_cart_id');
 
-    if (!rut) {
-        alert("Por favor, ingresa un RUT válido.");
-        return;
+    // 1. Validar el RUT antes de cualquier otra cosa
+    if (!validarRut(rutInput)) {
+        alert("Por favor, ingresa un RUT válido (ej: 12.345.678-9 o 12345678-9).");
+        document.getElementById('rut-cliente').focus();
+        return; // Detiene la ejecución
     }
 
-    // Construimos la nota que verás en el panel de Shopify
-    let notaFinal = `Documento: ${tipo.toUpperCase()} | RUT: ${rut}`;
+    // 2. Construimos la nota base
+    let notaFinal = `Documento: ${tipo.toUpperCase()} | RUT: ${rutInput}`;
     
+    // 3. Si es Factura, validar campos adicionales
     if (tipo === 'factura') {
-        const rs = document.getElementById('razon-social').value;
-        const giro = document.getElementById('giro-empresa').value;
+        const rs = document.getElementById('razon-social').value.trim();
+        const giro = document.getElementById('giro-empresa').value.trim();
+
+        if (!rs || !giro) {
+            alert("Para Factura, la Razón Social y el Giro son obligatorios.");
+            return; // Detiene la ejecución
+        }
+        
         notaFinal += ` | Razón: ${rs} | Giro: ${giro}`;
     }
 
-    // Actualizamos el carrito en Shopify con la nota
+    // 4. Actualizamos el carrito en Shopify con la nota tributaria
     const query = `
         mutation cartUpdate($cartId: ID!, $note: String) {
             cartUpdate(cartId: $cartId, note: $note) {
-                cart { checkoutUrl }
+                cart {
+                    checkoutUrl
+                }
+                userErrors {
+                    field
+                    message
+                }
             }
         }
     `;
 
     try {
+        // Mostramos un mensaje de carga (opcional pero profesional)
+        const btn = document.querySelector('.btn-checkout');
+        const originalText = btn.innerText;
+        btn.innerText = "Procesando...";
+        btn.disabled = true;
+
         const response = await fetch(shopifyConfig.url, {
             method: 'POST',
             headers: shopifyConfig.headers,
             body: JSON.stringify({ query, variables: { cartId, note: notaFinal } })
         });
+
         const result = await response.json();
         
-        // Redirigimos al checkout con los datos ya vinculados
+        if (result.errors || result.data.cartUpdate.userErrors.length > 0) {
+            throw new Error("Error en la respuesta de Shopify");
+        }
+
+        // 5. Redirigimos al checkout con los datos ya vinculados en la "Nota" del pedido
         window.location.href = result.data.cartUpdate.cart.checkoutUrl;
+
     } catch (e) {
         console.error("Error al vincular el RUT", e);
+        alert("Hubo un problema al conectar con el checkout. Inténtalo de nuevo.");
+        
+        // Restaurar botón en caso de error
+        const btn = document.querySelector('.btn-checkout');
+        btn.innerText = "Finalizar Compra";
+        btn.disabled = false;
     }
+}
+/* ==========================================================================
+    FUNCIONES DE VALIDACIÓN
+   ========================================================================== */
+
+function validarRut(rut) {
+    // 1. Limpiar puntos, guiones y espacios
+    const valor = rut.replace(/\./g, '').replace(/-/g, '').trim().toUpperCase();
+    
+    // 2. Validación básica de longitud (8 a 9 caracteres para Chile)
+    if (valor.length < 8 || valor.length > 9) return false;
+    
+    // 3. Validación de formato (solo números y la letra K al final)
+    const regex = /^[0-9]+[0-9K]$/;
+    return regex.test(valor);
 }
