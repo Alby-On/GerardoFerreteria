@@ -19,6 +19,22 @@ function loadComponent(id, file) {
         .catch(error => console.error(error));
 }
 
+// NUEVA FUNCIÓN: Control visual del carrito lateral
+window.toggleCarrito = function() {
+    const sidebar = document.getElementById('carrito-lateral');
+    const overlay = document.getElementById('carrito-overlay');
+    
+    if (sidebar && overlay) {
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('visible');
+        
+        // Si se abre, actualizamos el contenido desde Shopify
+        if (sidebar.classList.contains('open')) {
+            actualizarVisualizacionCarro();
+        }
+    }
+};
+
 // 2. Función Maestra para consultas GraphQL
 async function queryShopify(query) {
     try {
@@ -62,10 +78,19 @@ document.addEventListener("DOMContentLoaded", () => {
         loadComponent('header-placeholder', 'components/header.html'),
         loadComponent('footer-placeholder', 'components/footer.html'),
         loadComponent('whatsapp-placeholder', 'components/whatsapp.html'),
-        loadComponent('carrito-placeholder', 'carro_compras.html')
+        loadComponent('carrito-placeholder', 'components/carro_compras.html') // Asegúrate que la ruta sea correcta
     ]).then(() => {
         inicializarBusquedaUniversal();
         
+        // --- ACTIVAR EVENTOS DEL CARRITO ---
+        const btnAbrir = document.getElementById('cart-button'); // ID del botón en tu header.html
+        if (btnAbrir) {
+            btnAbrir.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleCarrito();
+            });
+        }
+
         // ACTIVAR CLICS EN CATEGORÍAS
         const menuCat = document.getElementById('menu-categorias');
         if (menuCat) {
@@ -79,27 +104,26 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
             });
         }
+
         // ACTIVAR CATEGORÍA DESDE URL (?cat=algo)
-const urlParams = new URLSearchParams(window.location.search);
-const categoriaSolicitada = urlParams.get('cat');
+        const urlParams = new URLSearchParams(window.location.search);
+        const categoriaSolicitada = urlParams.get('cat');
 
-if (categoriaSolicitada) {
-    const botones = document.querySelectorAll('.btn-categoria');
+        if (categoriaSolicitada) {
+            const botones = document.querySelectorAll('.btn-categoria');
+            let botonFiltrar = null;
+            botones.forEach(boton => {
+                const dataCat = boton.getAttribute('data-categoria');
+                if (dataCat && dataCat.toLowerCase() === categoriaSolicitada.toLowerCase()) {
+                    botonFiltrar = boton;
+                }
+            });
 
-let botonFiltrar = null;
-
-botones.forEach(boton => {
-    const dataCat = boton.getAttribute('data-categoria');
-    if (dataCat && dataCat.toLowerCase() === categoriaSolicitada.toLowerCase()) {
-        botonFiltrar = boton;
-    }
-});
-
-    if (botonFiltrar) {
-        botonFiltrar.click();
-        botonFiltrar.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-}
+            if (botonFiltrar) {
+                botonFiltrar.click();
+                botonFiltrar.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
     });
 
     // CARGA AUTOMÁTICA DE OFERTAS (Si estamos en el index)
@@ -124,7 +148,6 @@ async function ejecutarCargaOfertasInicio() {
     const contenedor = document.getElementById('carrusel-ofertas');
     if (!contenedor) return;
 
-    // Query que busca productos con cualquiera de tus 3 tags de descuento
     const query = `
     {
       products(first: 10, query: "tag:descuento1 OR tag:descuento2 OR tag:descuento3") {
@@ -179,7 +202,6 @@ async function ejecutarBusquedaAPI(termino) {
     if (titulo) titulo.textContent = `Resultados para: "${termino}"`;
     contenedor.innerHTML = `<p style="grid-column: 1/-1; text-align: center;">Buscando productos...</p>`;
 
-    // SE AGREGA EL CAMPO "id" EN EL QUERY
     const query = `
     {
       products(first: 50, query: "title:${termino}*") {
@@ -206,7 +228,6 @@ async function ejecutarCargaPorCategoria(tag, nombre) {
     if (titulo) titulo.textContent = nombre;
     contenedor.innerHTML = `<p style="grid-column: 1/-1; text-align: center;">Cargando ${nombre}...</p>`;
 
-    // SE AGREGA EL CAMPO "id" EN EL QUERY
     const query = `
     {
       products(first: 50, query: "tag:${tag}") {
@@ -234,20 +255,9 @@ function renderizarProductos(edges) {
     }
     contenedor.innerHTML = edges.map(edge => templateProducto(edge.node)).join('');
 }
-// --- FUNCIONES PARA EL HEADER ---
 
-// 1. Mostrar/Ocultar el mini carrito
-window.toggleMiniCart = function() {
-    const miniCart = document.getElementById('mini-cart');
-    if (miniCart.style.display === 'none') {
-        miniCart.style.display = 'block';
-        actualizarVisualizacionCarro(); // Actualizar al abrir
-    } else {
-        miniCart.style.display = 'none';
-    }
-}
+// --- FUNCIONES PARA EL CARRITO ---
 
-// 2. Redirigir al checkout de Shopify
 window.irAPagar = function() {
     const url = localStorage.getItem('shopify_checkout_url');
     if (url) {
@@ -257,7 +267,6 @@ window.irAPagar = function() {
     }
 }
 
-// 3. Consultar Shopify y actualizar el HTML del header
 async function actualizarVisualizacionCarro() {
     const cartId = localStorage.getItem('shopify_cart_id');
     if (!cartId) return;
@@ -287,35 +296,36 @@ async function actualizarVisualizacionCarro() {
     const cart = response.data?.cart;
 
     if (cart) {
-        // Actualizar contador del botón
-        document.getElementById('cart-count').textContent = cart.totalQuantity;
-        
-        // Actualizar total
-        document.getElementById('cart-total').textContent = `Total: $${Math.round(cart.cost.totalAmount.amount).toLocaleString('es-CL')}`;
-
-        // Renderizar lista de productos
+        const countEl = document.getElementById('cart-count');
+        const totalEl = document.getElementById('cart-total');
         const listContainer = document.getElementById('cart-items-list');
-        listContainer.innerHTML = ''; // Limpiar previo
 
-        cart.lines.edges.forEach(item => {
-            const prod = item.node.merchandise;
-            const div = document.createElement('div');
-            div.style.display = 'flex';
-            div.style.marginBottom = '10px';
-            div.style.alignItems = 'center';
-            div.innerHTML = `
-                <img src="${prod.image.url}" style="width: 50px; height: 50px; margin-right: 10px; object-fit: cover;">
-                <div style="font-size: 14px;">
-                    <div><strong>${prod.product.title}</strong></div>
-                    <div>Cant: ${item.node.quantity} - $${Math.round(prod.price.amount).toLocaleString('es-CL')}</div>
-                </div>
-            `;
-            listContainer.appendChild(div);
-        });
+        if (countEl) countEl.textContent = cart.totalQuantity;
+        if (totalEl) totalEl.textContent = `Total: $${Math.round(cart.cost.totalAmount.amount).toLocaleString('es-CL')}`;
+
+        if (listContainer) {
+            listContainer.innerHTML = ''; 
+            cart.lines.edges.forEach(item => {
+                const prod = item.node.merchandise;
+                const div = document.createElement('div');
+                div.className = 'item-carrito-lateral';
+                div.style.display = 'flex';
+                div.style.marginBottom = '15px';
+                div.style.alignItems = 'center';
+                div.innerHTML = `
+                    <img src="${prod.image.url}" style="width: 60px; height: 60px; margin-right: 15px; object-fit: cover; border-radius: 4px;">
+                    <div style="flex-grow: 1;">
+                        <div style="font-weight: bold; font-size: 14px;">${prod.product.title}</div>
+                        <div style="font-size: 13px; color: #666;">Cant: ${item.node.quantity} x $${Math.round(prod.price.amount).toLocaleString('es-CL')}</div>
+                    </div>
+                `;
+                listContainer.appendChild(div);
+            });
+        }
     }
 }
 
-// Llamar a actualizar al cargar la página para que el contador no empiece en 0
+// Carga inicial del contador
 if (localStorage.getItem('shopify_cart_id')) {
     setTimeout(actualizarVisualizacionCarro, 1000); 
 }
