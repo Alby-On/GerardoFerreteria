@@ -1,7 +1,7 @@
 // 1. Configuración de Shopify Storefront API
 const shopifyConfig = {
     domain: 'zidiwr-ax.myshopify.com',
-    accessToken: '715840bf165817aa2713937962be8670',
+    accessToken: '22259948ae8b45daf91294ada0ff44b4',
     apiVersion: '2024-01'
 };
 
