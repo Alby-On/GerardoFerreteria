@@ -403,3 +403,20 @@ body {
     #shopify-products-load { grid-template-columns: 1fr !important; }
     .shopify-buy__product-img-wrapper { height: 180px !important; }
 }
+/* Estilo para el botón de Paginación de Shopify */
+.shopify-buy__collection-pagination-button {
+    display: block !important;
+    margin: 30px auto !important;
+    padding: 15px 40px !important;
+    background-color: #333 !important; /* Gris oscuro como tu navbar */
+    color: white !important;
+    border: none !important;
+    border-radius: 5px !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+    transition: background 0.3s !important;
+}
+
+.shopify-buy__collection-pagination-button:hover {
+    background-color: #d9534f !important; /* Rojo al pasar el mouse */
+}
