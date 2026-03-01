@@ -1,4 +1,3 @@
-/*<![CDATA[*/
 (function () {
   var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
   if (window.ShopifyBuy) {
@@ -36,6 +35,18 @@
           "margin-left": "20px",
           "margin-bottom": "50px",
           "width": "calc(25% - 20px)"
+        },
+        "img": {
+          "height": "calc(100% - 15px)",
+          "position": "absolute",
+          "left": "0",
+          "right": "0",
+          "top": "0"
+        },
+        "imgWrapper": {
+          "padding-top": "calc(75% + 15px)",
+          "position": "relative",
+          "height": "0"
         }
       },
       "title": {
@@ -194,4 +205,3 @@
     });
   }
 })();
-/*]]>*/
