@@ -11,8 +11,22 @@
     <header id="header-placeholder" class="main-header"></header>
 
     <main style="min-height: 500px; padding: 20px; text-align: center;">
-        <h2>Bienvenidos a Gerardo Ferretería</h2>
-        <p>Tu aliado en construcción y hogar.</p>
+    <h2>Bienvenidos a Gerardo Ferretería</h2>
+    <p>Tu aliado en construcción y hogar.</p>
+
+    <div class="ofertas-carousel">
+        {% assign productos_oferta = collections.all.products %}
+        {% for product in productos_oferta %}
+            {% if product.tags contains 'descuento1' or product.tags contains 'descuento2' %}
+                <div class="product-card">
+                    <img src="{{ product.featured_image | img_url: '300x300', crop: 'center' }}" alt="{{ product.title }}">
+                    <h3>{{ product.title }}</h3>
+                    <p class="price">{{ product.price | money }}</p>
+                    <a href="{{ product.url }}" class="btn-detalles">Ver Detalles</a>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
     </main>
 
     <footer id="footer-placeholder" class="main-footer"></footer>
