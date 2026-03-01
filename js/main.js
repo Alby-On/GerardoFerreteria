@@ -233,3 +233,88 @@ function renderizarProductos(edges) {
     }
     contenedor.innerHTML = edges.map(edge => templateProducto(edge.node)).join('');
 }
+// --- FUNCIONES PARA EL HEADER ---
+
+// 1. Mostrar/Ocultar el mini carrito
+window.toggleMiniCart = function() {
+    const miniCart = document.getElementById('mini-cart');
+    if (miniCart.style.display === 'none') {
+        miniCart.style.display = 'block';
+        actualizarVisualizacionCarro(); // Actualizar al abrir
+    } else {
+        miniCart.style.display = 'none';
+    }
+}
+
+// 2. Redirigir al checkout de Shopify
+window.irAPagar = function() {
+    const url = localStorage.getItem('shopify_checkout_url');
+    if (url) {
+        window.location.href = url;
+    } else {
+        alert("El carrito está vacío.");
+    }
+}
+
+// 3. Consultar Shopify y actualizar el HTML del header
+async function actualizarVisualizacionCarro() {
+    const cartId = localStorage.getItem('shopify_cart_id');
+    if (!cartId) return;
+
+    const query = `{
+      cart(id: "${cartId}") {
+        totalQuantity
+        cost { totalAmount { amount currencyCode } }
+        lines(first: 10) {
+          edges {
+            node {
+              quantity
+              merchandise {
+                ... on ProductVariant {
+                  product { title }
+                  image { url }
+                  price { amount }
+                }
+              }
+            }
+          }
+        }
+      }
+    }`;
+
+    const response = await queryShopify(query);
+    const cart = response.data?.cart;
+
+    if (cart) {
+        // Actualizar contador del botón
+        document.getElementById('cart-count').textContent = cart.totalQuantity;
+        
+        // Actualizar total
+        document.getElementById('cart-total').textContent = `Total: $${Math.round(cart.cost.totalAmount.amount).toLocaleString('es-CL')}`;
+
+        // Renderizar lista de productos
+        const listContainer = document.getElementById('cart-items-list');
+        listContainer.innerHTML = ''; // Limpiar previo
+
+        cart.lines.edges.forEach(item => {
+            const prod = item.node.merchandise;
+            const div = document.createElement('div');
+            div.style.display = 'flex';
+            div.style.marginBottom = '10px';
+            div.style.alignItems = 'center';
+            div.innerHTML = `
+                <img src="${prod.image.url}" style="width: 50px; height: 50px; margin-right: 10px; object-fit: cover;">
+                <div style="font-size: 14px;">
+                    <div><strong>${prod.product.title}</strong></div>
+                    <div>Cant: ${item.node.quantity} - $${Math.round(prod.price.amount).toLocaleString('es-CL')}</div>
+                </div>
+            `;
+            listContainer.appendChild(div);
+        });
+    }
+}
+
+// Llamar a actualizar al cargar la página para que el contador no empiece en 0
+if (localStorage.getItem('shopify_cart_id')) {
+    setTimeout(actualizarVisualizacionCarro, 1000); 
+}
