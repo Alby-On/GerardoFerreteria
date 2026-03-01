@@ -36,22 +36,20 @@ async function queryShopify(query) {
     }
 }
 
-// 3. Plantilla de Producto (Usa el ID codificado para detalles.html)
+// 3. Plantilla de Producto mejorada para el inicio
 function templateProducto(prod) {
     const precio = Math.round(prod.variants.edges[0].node.price.amount);
     const imagen = prod.images.edges[0]?.node.url || 'img/placeholder.jpg';
-    
-    // btoa convierte el ID de Shopify a Base64 para una URL limpia
     const idProducto = btoa(prod.id); 
 
     return `
-        <div class="shopify-buy__product">
-            <div class="shopify-buy__product-img-wrapper">
-                <img src="${imagen}" class="shopify-buy__product-img" alt="${prod.title}">
+        <div class="tarjeta-oferta">
+            <div class="img-container" style="height: 180px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                <img src="${imagen}" alt="${prod.title}" style="max-width: 100%; max-height: 100%; object-fit: contain;">
             </div>
-            <h3 class="shopify-buy__product-title">${prod.title}</h3>
-            <div class="shopify-buy__product-price-size">$${precio.toLocaleString('es-CL')}</div>
-            <a href="detalles.html?id=${idProducto}" class="shopify-buy__btn" style="text-decoration:none; text-align:center;">
+            <h3 style="font-size: 1.1rem; margin: 10px 0;">${prod.title}</h3>
+            <div style="color: #e63946; font-weight: bold; font-size: 1.4rem;">$${precio.toLocaleString('es-CL')}</div>
+            <a href="detalles.html?id=${idProducto}" class="btn-detalles" style="display: block; background: #333; color: white; padding: 10px; border-radius: 6px; text-decoration: none; margin-top: 10px;">
                 Ver Detalles
             </a>
         </div>
@@ -59,14 +57,14 @@ function templateProducto(prod) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. Carga componentes siempre (Header/Footer)
+    // Carga Header y Footer
     Promise.all([
         loadComponent('header-placeholder', 'components/header.html'),
         loadComponent('footer-placeholder', 'components/footer.html')
     ]).then(() => {
         inicializarBusquedaUniversal();
         
-        // 2. SOLO si existe el menú de categorías, activamos los clics
+        // ACTIVAR CLICS EN CATEGORÍAS
         const menuCat = document.getElementById('menu-categorias');
         if (menuCat) {
             const enlaces = document.querySelectorAll('.btn-categoria');
@@ -81,7 +79,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // 3. SOLO si existe el contenedor de productos, buscamos por URL
+    // CARGA AUTOMÁTICA DE OFERTAS (Si estamos en el index)
+    const contenedorOfertas = document.getElementById('carrusel-ofertas');
+    if (contenedorOfertas) {
+        ejecutarCargaOfertasInicio();
+    }
+
+    // Buscador por URL
     const contenedorProductos = document.getElementById('shopify-products-load');
     if (contenedorProductos) {
         const urlParams = new URLSearchParams(window.location.search);
@@ -91,6 +95,37 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 });
+
+// 4. Carga específica para el Inicio (Tags descuento1, 2, 3)
+async function ejecutarCargaOfertasInicio() {
+    const contenedor = document.getElementById('carrusel-ofertas');
+    if (!contenedor) return;
+
+    // Query que busca productos con cualquiera de tus 3 tags de descuento
+    const query = `
+    {
+      products(first: 10, query: "tag:descuento1 OR tag:descuento2 OR tag:descuento3") {
+        edges {
+          node {
+            id
+            title
+            images(first: 1) { edges { node { url } } }
+            variants(first: 1) { edges { node { price { amount } } } }
+          }
+        }
+      }
+    }`;
+
+    const { data } = await queryShopify(query);
+    const edges = data?.products?.edges;
+
+    if (!edges || edges.length === 0) {
+        contenedor.innerHTML = `<p>No hay ofertas disponibles en este momento.</p>`;
+        return;
+    }
+    contenedor.innerHTML = edges.map(edge => templateProducto(edge.node)).join('');
+}
+
 // 4. Buscador Universal
 function inicializarBusquedaUniversal() {
     const inputBuscar = document.getElementById('search-input');
