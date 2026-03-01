@@ -386,3 +386,9 @@ body {
     /* Esto hace que el grid no deje huecos vacíos al ocultar items */
     grid-auto-flow: row dense !important; 
 }
+#shopify-products-load .shopify-buy__product-set {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    grid-auto-rows: min-content !important; /* Ajusta la altura al contenido */
+    gap: 20px !important;
+}
