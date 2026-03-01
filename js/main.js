@@ -88,7 +88,6 @@ document.addEventListener("DOMContentLoaded", () => {
         inicializarBusquedaUniversal();
 
         // --- LLAMADA AUTOMÁTICA DEL CARRITO ---
-        // Esto hace que el número aparezca sin hacer clic
         if (localStorage.getItem('shopify_cart_id')) {
             actualizarVisualizacionCarro();
         }
@@ -97,7 +96,6 @@ document.addEventListener("DOMContentLoaded", () => {
         // EVENTOS DEL CARRITO
         // ================================
 
-        // Botón para ABRIR (está en header.html)
         const btnAbrir = document.getElementById('cart-button'); 
         if (btnAbrir) {
             btnAbrir.addEventListener('click', (e) => {
@@ -106,7 +104,6 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
-        // Evento para CERRAR al hacer clic en el fondo oscuro (overlay)
         const overlay = document.getElementById('carrito-overlay');
         if (overlay) {
             overlay.addEventListener('click', toggleCarrito);
@@ -129,25 +126,34 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
-        // --- ACTIVAR CATEGORÍA DESDE URL (?cat=algo) ---
+        // --- LÓGICA DE ACTIVACIÓN (URL) ---
         const urlParams = new URLSearchParams(window.location.search);
         const categoriaSolicitada = urlParams.get('cat');
 
         if (categoriaSolicitada) {
-            const botones = document.querySelectorAll('.btn-categoria');
-            let botonFiltrar = null;
+            if (categoriaSolicitada.toLowerCase() === 'all') {
+                // ADICIONAL: Carga total si el parámetro es "all"
+                ejecutarCargaTodosLosProductos();
+            } else {
+                // Mantener filtrado por categorías original
+                const botones = document.querySelectorAll('.btn-categoria');
+                let botonFiltrar = null;
 
-            botones.forEach(boton => {
-                const dataCat = boton.getAttribute('data-categoria');
-                if (dataCat && dataCat.toLowerCase() === categoriaSolicitada.toLowerCase()) {
-                    botonFiltrar = boton;
+                botones.forEach(boton => {
+                    const dataCat = boton.getAttribute('data-categoria');
+                    if (dataCat && dataCat.toLowerCase() === categoriaSolicitada.toLowerCase()) {
+                        botonFiltrar = boton;
+                    }
+                });
+
+                if (botonFiltrar) {
+                    botonFiltrar.click();
+                    botonFiltrar.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
-            });
-
-            if (botonFiltrar) {
-                botonFiltrar.click();
-                botonFiltrar.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
+        } else if (window.location.pathname.includes('productos.html') && !urlParams.get('q')) {
+            // ADICIONAL: Si entra a productos sin parámetros, carga todo por defecto
+            ejecutarCargaTodosLosProductos();
         }
     });
 
@@ -444,3 +450,35 @@ window.quitarProducto = async function(lineId) {
     await queryShopify(mutation);
     actualizarVisualizacionCarro();
 };
+async function ejecutarCargaTodosLosProductos() {
+    const contenedor = document.getElementById('shopify-products-load');
+    const titulo = document.getElementById('titulo-coleccion');
+    
+    if (titulo) titulo.textContent = "Catálogo Completo";
+    if (contenedor) {
+        contenedor.innerHTML = `<p style="grid-column: 1/-1; text-align: center;">Cargando todos los productos...</p>`;
+    }
+
+    // Esta query pide productos de forma general, sin filtros de TAG
+    const query = `
+    {
+      products(first: 50) {
+        edges {
+          node {
+            id
+            title
+            images(first: 1) { edges { node { url } } }
+            variants(first: 1) { edges { node { price { amount } } } }
+          }
+        }
+      }
+    }`;
+
+    try {
+        const { data } = await queryShopify(query);
+        // Usamos tu función renderizarProductos que ya tienes creada
+        renderizarProductos(data?.products?.edges);
+    } catch (error) {
+        console.error("Error en carga total:", error);
+    }
+}
