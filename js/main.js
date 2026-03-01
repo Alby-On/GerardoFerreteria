@@ -488,10 +488,11 @@ function toggleCamposFactura() {
 }
 
 /* ==========================================================================
-    FUNCIÓN: prepararCheckout (Con Validación de RUT y Facturación)
+    FUNCIÓN: prepararCheckout (Versión Corregida con cartNoteUpdate)
    ========================================================================== */
 
 async function prepararCheckout() {
+    // 1. Capturar elementos y validar que existan en el DOM
     const elTipo = document.getElementById('tipo-documento');
     const elRut = document.getElementById('rut-cliente');
     const cartId = localStorage.getItem('shopify_cart_id');
@@ -504,17 +505,20 @@ async function prepararCheckout() {
     const tipo = elTipo.value;
     const rutInput = elRut.value.trim();
 
+    // 2. Validar el RUT (Sin puntos, con guion)
     if (!validarRut(rutInput)) {
         alert("RUT inválido. Por favor ingresa el formato: 12345678-9 (Sin puntos y con guion).");
         elRut.focus();
         return;
     }
 
+    // 3. Validar Carrito existente
     if (!cartId) {
         alert("Tu carrito parece haber expirado. Agrega un producto de nuevo.");
         return;
     }
 
+    // 4. Construir la nota
     let notaFinal = `Documento: ${tipo.toUpperCase()} | RUT: ${rutInput}`;
     
     if (tipo === 'factura') {
@@ -528,11 +532,17 @@ async function prepararCheckout() {
         notaFinal += ` | Razón: ${rs} | Giro: ${giro}`;
     }
 
+    // 5. Proceso de envío a Shopify (ACTUALIZADO A cartNoteUpdate)
     const query = `
-        mutation cartUpdate($cartId: ID!, $note: String) {
-            cartUpdate(cartId: $cartId, note: $note) {
-                cart { checkoutUrl }
-                userErrors { field message }
+        mutation cartNoteUpdate($cartId: ID!, $note: String) {
+            cartNoteUpdate(cartId: $cartId, note: $note) {
+                cart { 
+                    checkoutUrl 
+                }
+                userErrors { 
+                    field 
+                    message 
+                }
             }
         }
     `;
@@ -540,7 +550,7 @@ async function prepararCheckout() {
     const btn = document.querySelector('.btn-checkout');
     const originalText = btn ? btn.innerText : "Finalizar Compra";
 
-    // CONSTRUCCIÓN MANUAL DE URL Y HEADERS PARA EL FETCH
+    // URL y Headers usando tu configuración
     const apiUrl = `https://${shopifyConfig.domain}/api/${shopifyConfig.apiVersion}/graphql.json`;
     const apiHeaders = {
         'X-Shopify-Storefront-Access-Token': shopifyConfig.accessToken,
@@ -553,7 +563,7 @@ async function prepararCheckout() {
             btn.disabled = true;
         }
 
-        console.log("Enviando petición a:", apiUrl);
+        console.log("Actualizando nota del carrito en:", apiUrl);
 
         const response = await fetch(apiUrl, {
             method: 'POST',
@@ -572,13 +582,16 @@ async function prepararCheckout() {
 
         const result = await response.json();
 
-        if (result.errors || (result.data?.cartUpdate?.userErrors?.length > 0)) {
-            const errorMsg = result.data?.cartUpdate?.userErrors?.[0]?.message || result.errors?.[0]?.message || "Error de validación";
+        // 6. Revisar errores usando el nuevo nombre de la mutación
+        if (result.errors || (result.data?.cartNoteUpdate?.userErrors?.length > 0)) {
+            const errorMsg = result.data?.cartNoteUpdate?.userErrors?.[0]?.message || result.errors?.[0]?.message || "Error de validación";
             throw new Error(errorMsg);
         }
 
-        const checkoutUrl = result.data?.cartUpdate?.cart?.checkoutUrl;
+        const checkoutUrl = result.data?.cartNoteUpdate?.cart?.checkoutUrl;
+        
         if (checkoutUrl) {
+            // ÉXITO: Redirigir al checkout oficial de Shopify con el RUT ya guardado
             window.location.href = checkoutUrl;
         } else {
             throw new Error("No se pudo generar la URL de pago.");
