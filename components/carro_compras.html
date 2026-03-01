@@ -1,16 +1,20 @@
-<div class="cart-container" style="position: relative; cursor: pointer;">
-    <button id="btn-ver-carro" onclick="toggleMiniCart()">
-        🛒 Carrito (<span id="cart-count">0</span>)
-    </button>
-    
-    <div id="mini-cart" style="display: none; position: absolute; right: 0; background: white; border: 1px solid #ccc; width: 300px; padding: 15px; z-index: 1000; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-        <h4>Tus Productos</h4>
-        <div id="cart-items-list">
-            </div>
-        <hr>
-        <div id="cart-total" style="font-weight: bold; margin-bottom: 10px;">Total: $0</div>
-        <button id="btn-checkout" onclick="irAPagar()" style="width: 100%; background: #28a745; color: white; border: none; padding: 10px;">
-            Ir a Pagar
-        </button>
+<div id="carrito-overlay" onclick="toggleCarrito()"></div>
+
+<aside id="carrito-lateral" class="carrito-sidebar">
+    <div class="carrito-header">
+        <h3>Tu Carrito</h3>
+        <button id="btn-cerrar-carrito" onclick="toggleCarrito()">&times;</button>
     </div>
-</div>
+
+    <div id="carrito-items-lista">
+        <p class="carrito-vacio">Tu carrito está vacío</p>
+    </div>
+
+    <div class="carrito-footer">
+        <div class="total-container">
+            <span>Total:</span>
+            <span id="carrito-total-monto">$0.00</span>
+        </div>
+        <button class="btn-checkout">Finalizar Compra</button>
+    </div>
+</aside>
