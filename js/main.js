@@ -52,7 +52,6 @@ async function queryShopify(query) {
     }
 }
 
-// 3. Plantilla de Producto mejorada para el inicio
 function templateProducto(prod) {
     const precio = Math.round(prod.variants.edges[0].node.price.amount);
     const imagen = prod.images.edges[0]?.node.url || 'img/placeholder.jpg';
@@ -60,12 +59,12 @@ function templateProducto(prod) {
 
     return `
         <div class="tarjeta-oferta">
-            <div class="img-container" style="height: 180px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
-                <img src="${imagen}" alt="${prod.title}" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+            <div class="img-container">
+                <img src="${imagen}" alt="${prod.title}">
             </div>
-            <h3 style="font-size: 1.1rem; margin: 10px 0;">${prod.title}</h3>
-            <div style="color: #e63946; font-weight: bold; font-size: 1.4rem;">$${precio.toLocaleString('es-CL')}</div>
-            <a href="detalles.html?id=${idProducto}" class="btn-detalles" style="display: block; background: #333; color: white; padding: 10px; border-radius: 6px; text-decoration: none; margin-top: 10px;">
+            <h3 class="producto-titulo">${prod.title}</h3>
+            <div class="precio-monto">$${precio.toLocaleString('es-CL')}</div>
+            <a href="detalles.html?id=${idProducto}" class="btn-detalles">
                 Ver Detalles
             </a>
         </div>
