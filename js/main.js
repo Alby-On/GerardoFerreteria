@@ -112,21 +112,50 @@ function inicializarBusquedaUniversal() {
 
 // Función auxiliar para filtrar (solo corre en productos.html)
 function ejecutarFiltroEnTienda(termino) {
+    // 1. Cargamos la colección "todo.js"
     cargarColeccionDesdeBusqueda('todo.js', `Resultados para: "${termino}"`);
 
+    let intentos = 0;
     const intervaloBusqueda = setInterval(() => {
+        // Buscamos las tarjetas de producto
         const productos = document.querySelectorAll('.shopify-buy__product');
+        intentos++;
+
         if (productos.length > 0) {
+            let encontrados = 0;
+
             productos.forEach(prod => {
+                // Buscamos el título dentro de la tarjeta
                 const tituloProd = prod.querySelector('.shopify-buy__product-title');
+                
                 if (tituloProd) {
                     const nombre = tituloProd.textContent.toLowerCase();
-                    prod.style.setProperty('display', nombre.includes(termino) ? 'flex' : 'none', 'important');
+                    
+                    if (nombre.includes(termino.toLowerCase())) {
+                        // Si coincide, lo mostramos como flex
+                        prod.style.setProperty('display', 'flex', 'important');
+                        encontrados++;
+                    } else {
+                        // Si NO coincide, lo ocultamos totalmente
+                        prod.style.setProperty('display', 'none', 'important');
+                    }
                 }
             });
-            clearInterval(intervaloBusqueda);
+
+            // Si ya procesamos los productos, detenemos el reloj
+            if (intentos > 5) { 
+                clearInterval(intervaloBusqueda); 
+                // Si no hubo coincidencias, avisamos al usuario
+                if (encontrados === 0) {
+                    document.getElementById('shopify-products-load').innerHTML = 
+                        `<p style="grid-column: 1/-1; text-align: center;">No se encontraron productos que coincidan con "${termino}".</p>`;
+                }
+            }
         }
-    }, 500);
+
+        // Timer de seguridad: si en 10 segundos no carga nada, paramos
+        if (intentos > 20) clearInterval(intervaloBusqueda);
+    }, 600); // Aumentamos ligeramente el tiempo de espera para el renderizado
 }
 
 // Función auxiliar para carga de scripts
