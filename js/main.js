@@ -60,7 +60,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Carga Header y Footer
     Promise.all([
         loadComponent('header-placeholder', 'components/header.html'),
-        loadComponent('footer-placeholder', 'components/footer.html')
+        loadComponent('footer-placeholder', 'components/footer.html'),
+        loadComponent('whatsapp-placeholder', 'components/whatsapp.html')
     ]).then(() => {
         inicializarBusquedaUniversal();
         
