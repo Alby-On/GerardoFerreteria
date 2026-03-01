@@ -7,16 +7,20 @@ body {
     padding: 0; 
     background-color: #f4f4f4;
 }
-
 /* ==========================================================================
-    2. HEADER TOP (Logo y Buscador - Global)
+    2. HEADER TOP (Logo a la izquierda, Buscador Centrado)
    ========================================================================== */
 .header-top {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     padding: 20px 5%;
     background: white;
+    /* Eliminamos space-between para controlar la posición manualmente */
+}
+
+.logo {
+    /* Esto asegura que el logo mantenga su espacio a la izquierda */
+    flex: 0 1 auto; 
 }
 
 .logo h1 {
@@ -29,40 +33,20 @@ body {
 
 .search-container {
     display: flex;
-    gap: 0; 
+    gap: 0;
+    /* TRUCO: Margen izquierdo automático y margen derecho automático centra el elemento 
+       dentro del espacio disponible en el flexbox */
+    margin: 0 auto; 
 }
 
-.search-container select, 
-.search-container input {
-    padding: 12px;
-    border: 1px solid #ddd;
-    outline: none;
-}
-
-.search-container select {
-    border-radius: 4px 0 0 4px;
-    background: #f9f9f9;
-    cursor: pointer;
-}
-
-.search-container input {
-    width: 300px;
-    border-left: none;
-}
-
-.search-container button {
-    padding: 12px 25px;
-    background: #d9534f;
-    color: white;
-    border: none;
-    border-radius: 0 4px 4px 0;
-    cursor: pointer;
-    font-weight: bold;
-    transition: 0.3s;
-}
-
-.search-container button:hover {
-    background: #c9302c;
+/* Opcional: Si quieres que el centrado sea perfecto respecto a la pantalla 
+   y no respecto al espacio restante, añade este pseudo-elemento al final del HTML 
+   o usa este selector para equilibrar el espacio del logo:
+*/
+.header-top::after {
+    content: "";
+    flex: 0 1 200px; /* Ajusta este valor al ancho aproximado de tu logo */
+    visibility: hidden;
 }
 /* ==========================================================================
     3. NAVBAR PRINCIPAL (Corregido para centrado total)
