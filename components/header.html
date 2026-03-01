@@ -1,50 +1,47 @@
 <header class="main-header">
-        <div class="header-top">
-            <div class="logo">
-                <h1>Gerardo Ferretería</h1> </div>
-            
-            <div class="search-container">
-                <select id="cat-selector">
-                    <option value="todas">Todas las categorías</option>
-                    <option value="herramientas">Herramientas</option>
-                    <option value="electricidad">Electricidad</option>
-                    <option value="pinturas">Pinturas</option>
-                </select>
-                <input type="text" id="search-input" placeholder="¿Qué buscas?">
-                <button id="search-btn">BUSCAR</button>
+    <div class="header-top">
+        <div class="logo">
+            <h1>Gerardo Ferretería</h1>
+        </div>
+        
+        <div class="search-container">
+            <select id="cat-selector">
+                <option value="todas">Todas las categorías</option>
+                <option value="herramientas">Herramientas</option>
+                <option value="electricidad">Electricidad</option>
+                <option value="pinturas">Pinturas</option>
+            </select>
+            <input type="text" id="search-input" placeholder="¿Qué buscas?">
+            <button id="search-btn">BUSCAR</button>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left"> 
+                <div class="dropdown">
+                    <button class="dropbtn-cat">
+                        <span class="icon">☰</span> CATEGORÍAS
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="productos.html?cat=herramientas.js">Herramientas</a>
+                        <a href="productos.html?cat=electricidad.js">Electricidad</a>
+                        <a href="productos.html?cat=pinturas.js">Pinturas</a>
+                        <a href="productos.html?cat=seguridad.js">Seguridad</a>
+                        <a href="productos.html?cat=pisosrevestimientos.js">Pisos y Revestimientos</a>
+                        <a href="productos.html?cat=ferreteriagasfiteria.js">Ferretería y Gasfitería</a>
+                        <a href="productos.html?cat=maderastableros.js">Maderas y Tableros</a>
+                        <a href="productos.html?cat=materialesconstruccion.js">Materiales de Construcción</a>
+                    </div>
+                </div>
+
+                <ul class="nav-links">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="productos.html" class="btn-shopify">Productos</a></li>
+                    <li><a href="nosotros.html">Nosotros</a></li>
+                    <li><a href="contactanos.html">Contáctanos</a></li>
+                </ul>
             </div>
         </div>
-
-       <nav class="navbar">
-    <div class="nav-container">
-        
-<div class="nav-left">
-    <div class="dropdown">
-        <button class="category-block-btn">
-            <span class="icon">☰</span> CATEGORÍAS
-        </button>
-        <div class="dropdown-content">
-            <a href="productos.html?cat=herramientas.js">Herramientas</a>
-            <a href="productos.html?cat=electricidad.js">Electricidad</a>
-            <a href="productos.html?cat=pinturas.js">Pinturas</a>
-            <a href="productos.html?cat=seguridad.js">Seguridad</a>
-            <a href="productos.html?cat=pisosrevestimientos.js">Pisos y Revestimientos</a>
-            <a href="productos.html?cat=ferreteriagasfiteria.js">Ferretería y Gasfitería</a>
-            <a href="productos.html?cat=maderastableros.js">Maderas y Tableros</a>
-            <a href="productos.html?cat=materialesconstruccion.js">Materiales de Construcción</a>
-        </div>
-    </div>
-</div>
-
-        <div class="nav-right">
-            <ul class="nav-links">
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="productos.html" class="btn-shopify">Productos</a></li>
-                <li><a href="nosotros.html">Nosotros</a></li>
-                <li><a href="contactanos.html">Contáctanos</a></li>
-            </ul>
-        </div>
-        
-    </div>
-</nav>
-    </header>
+    </nav>
+</header>
