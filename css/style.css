@@ -162,8 +162,12 @@ body {
     display: block;
     position: absolute;
     top: 100%;
-    /* CAMBIO: Un valor negativo lo mueve hacia la izquierda del botón */
-    left: -20px; 
+    
+    /* AJUSTE: 'left: 0' lo alinea exacto al borde izquierdo del botón. 
+       Si quieres que se desplace más allá del botón hacia la izquierda, 
+       puedes usar un valor negativo como el que tenías (-50px, etc.) */
+    left: 0; 
+    
     background-color: white;
     min-width: 280px;
     box-shadow: 0px 10px 20px rgba(0,0,0,0.1);
@@ -175,7 +179,13 @@ body {
     border-top: 2px solid #d9534f;
 }
 
-/* El resto del código se mantiene igual */
+/* Para asegurar que no se corte en pantallas pequeñas */
+@media (max-width: 768px) {
+    .dropdown-content {
+        left: -10px; /* Un ajuste ligero para móviles */
+    }
+}
+
 .dropdown:hover .dropdown-content {
     visibility: visible;
     opacity: 1;
