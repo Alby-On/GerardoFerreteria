@@ -429,7 +429,7 @@ body {
 }
 
 /* ==========================================================================
-    OFERTAS Y CARRUSEL DE OFERTAS
+    BOTON WHATSAPP
    ========================================================================== */
 
 .whatsapp-btn {
@@ -475,4 +475,44 @@ body {
     background-color: #128c7e;
     animation: none; /* Detiene el pulso cuando el usuario interactúa */
     transform: scale(1.1);
+}
+
+/* ==========================================================================
+    CARRO DE COMPRAS
+   ========================================================================== */
+
+/* Sidebar */
+.carrito-sidebar {
+    position: fixed;
+    top: 0;
+    right: -400px; /* Escondido a la derecha */
+    width: 380px;
+    height: 100%;
+    background: white;
+    z-index: 2000;
+    transition: 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+}
+
+/* Clase para abrir el carrito */
+.carrito-sidebar.open {
+    right: 0;
+}
+
+/* Fondo oscuro (Overlay) */
+#carrito-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1999;
+}
+
+#carrito-overlay.visible {
+    display: block;
 }
