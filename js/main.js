@@ -73,17 +73,19 @@ function templateProducto(prod) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    // Carga Header y Footer
+    // 1. Carga de componentes dinámicos
     Promise.all([
         loadComponent('header-placeholder', 'components/header.html'),
         loadComponent('footer-placeholder', 'components/footer.html'),
         loadComponent('whatsapp-placeholder', 'components/whatsapp.html'),
-        loadComponent('carrito-placeholder', 'components/carro_compras.html') // Asegúrate que la ruta sea correcta
+        loadComponent('carrito-placeholder', 'components/carro_compras.html') 
     ]).then(() => {
+        // Una vez cargados los HTML, inicializamos sus funciones
         inicializarBusquedaUniversal();
         
         // --- ACTIVAR EVENTOS DEL CARRITO ---
-        const btnAbrir = document.getElementById('cart-button'); // ID del botón en tu header.html
+        // Botón para ABRIR (está en header.html)
+        const btnAbrir = document.getElementById('cart-button'); 
         if (btnAbrir) {
             btnAbrir.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -91,7 +93,13 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
-        // ACTIVAR CLICS EN CATEGORÍAS
+        // Evento para CERRAR al hacer clic en el fondo oscuro (overlay)
+        const overlay = document.getElementById('carrito-overlay');
+        if (overlay) {
+            overlay.addEventListener('click', toggleCarrito);
+        }
+
+        // --- ACTIVAR CLICS EN CATEGORÍAS ---
         const menuCat = document.getElementById('menu-categorias');
         if (menuCat) {
             const enlaces = document.querySelectorAll('.btn-categoria');
@@ -105,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
-        // ACTIVAR CATEGORÍA DESDE URL (?cat=algo)
+        // --- ACTIVAR CATEGORÍA DESDE URL (?cat=algo) ---
         const urlParams = new URLSearchParams(window.location.search);
         const categoriaSolicitada = urlParams.get('cat');
 
@@ -126,13 +134,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // CARGA AUTOMÁTICA DE OFERTAS (Si estamos en el index)
+    // 2. Lógica de carga de productos (Index y Buscador)
     const contenedorOfertas = document.getElementById('carrusel-ofertas');
     if (contenedorOfertas) {
         ejecutarCargaOfertasInicio();
     }
 
-    // Buscador por URL
     const contenedorProductos = document.getElementById('shopify-products-load');
     if (contenedorProductos) {
         const urlParams = new URLSearchParams(window.location.search);
