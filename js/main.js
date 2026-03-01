@@ -78,12 +78,25 @@ document.addEventListener("DOMContentLoaded", () => {
         loadComponent('header-placeholder', 'components/header.html'),
         loadComponent('footer-placeholder', 'components/footer.html'),
         loadComponent('whatsapp-placeholder', 'components/whatsapp.html'),
-        loadComponent('carrito-placeholder', 'components/carro_compras.html') 
+        loadComponent('carrito-placeholder', 'components/carro_compras.html')
     ]).then(() => {
-        // Una vez cargados los HTML, inicializamos sus funciones
+
+        // ================================
+        // INICIALIZACIONES GENERALES
+        // ================================
+
         inicializarBusquedaUniversal();
-        
-        // --- ACTIVAR EVENTOS DEL CARRITO ---
+
+        // --- LLAMADA AUTOMÁTICA DEL CARRITO ---
+        // Esto hace que el número aparezca sin hacer clic
+        if (localStorage.getItem('shopify_cart_id')) {
+            actualizarVisualizacionCarro();
+        }
+
+        // ================================
+        // EVENTOS DEL CARRITO
+        // ================================
+
         // Botón para ABRIR (está en header.html)
         const btnAbrir = document.getElementById('cart-button'); 
         if (btnAbrir) {
@@ -99,7 +112,10 @@ document.addEventListener("DOMContentLoaded", () => {
             overlay.addEventListener('click', toggleCarrito);
         }
 
-        // --- ACTIVAR CLICS EN CATEGORÍAS ---
+        // ================================
+        // CATEGORÍAS
+        // ================================
+
         const menuCat = document.getElementById('menu-categorias');
         if (menuCat) {
             const enlaces = document.querySelectorAll('.btn-categoria');
@@ -120,6 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (categoriaSolicitada) {
             const botones = document.querySelectorAll('.btn-categoria');
             let botonFiltrar = null;
+
             botones.forEach(boton => {
                 const dataCat = boton.getAttribute('data-categoria');
                 if (dataCat && dataCat.toLowerCase() === categoriaSolicitada.toLowerCase()) {
@@ -134,7 +151,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // 2. Lógica de carga de productos (Index y Buscador)
+    // ========================================
+    // 2. LÓGICA DE CARGA DE PRODUCTOS
+    // ========================================
+
     const contenedorOfertas = document.getElementById('carrusel-ofertas');
     if (contenedorOfertas) {
         ejecutarCargaOfertasInicio();
