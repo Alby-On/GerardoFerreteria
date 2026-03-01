@@ -481,3 +481,53 @@ async function ejecutarCargaTodosLosProductos() {
         console.error("Error en carga total:", error);
     }
 }
+// Función para mostrar/ocultar campos extras si es Factura
+function toggleCamposFactura() {
+    const tipo = document.getElementById('tipo-documento').value;
+    const camposExtras = document.getElementById('campos-factura');
+    camposExtras.style.display = (tipo === 'factura') ? 'block' : 'none';
+}
+
+// Función que prepara el carrito con el RUT antes de pagar
+async function prepararCheckout() {
+    const tipo = document.getElementById('tipo-documento').value;
+    const rut = document.getElementById('rut-cliente').value;
+    const cartId = localStorage.getItem('shopify_cart_id');
+
+    if (!rut) {
+        alert("Por favor, ingresa un RUT válido.");
+        return;
+    }
+
+    // Construimos la nota que verás en el panel de Shopify
+    let notaFinal = `Documento: ${tipo.toUpperCase()} | RUT: ${rut}`;
+    
+    if (tipo === 'factura') {
+        const rs = document.getElementById('razon-social').value;
+        const giro = document.getElementById('giro-empresa').value;
+        notaFinal += ` | Razón: ${rs} | Giro: ${giro}`;
+    }
+
+    // Actualizamos el carrito en Shopify con la nota
+    const query = `
+        mutation cartUpdate($cartId: ID!, $note: String) {
+            cartUpdate(cartId: $cartId, note: $note) {
+                cart { checkoutUrl }
+            }
+        }
+    `;
+
+    try {
+        const response = await fetch(shopifyConfig.url, {
+            method: 'POST',
+            headers: shopifyConfig.headers,
+            body: JSON.stringify({ query, variables: { cartId, note: notaFinal } })
+        });
+        const result = await response.json();
+        
+        // Redirigimos al checkout con los datos ya vinculados
+        window.location.href = result.data.cartUpdate.cart.checkoutUrl;
+    } catch (e) {
+        console.error("Error al vincular el RUT", e);
+    }
+}
