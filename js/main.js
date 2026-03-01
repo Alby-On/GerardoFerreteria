@@ -83,9 +83,16 @@ const urlParams = new URLSearchParams(window.location.search);
 const categoriaSolicitada = urlParams.get('cat');
 
 if (categoriaSolicitada) {
-    const botonFiltrar = document.querySelector(
-        `.btn-categoria[data-categoria="${categoriaSolicitada}"]`
-    );
+    const botones = document.querySelectorAll('.btn-categoria');
+
+let botonFiltrar = null;
+
+botones.forEach(boton => {
+    const dataCat = boton.getAttribute('data-categoria');
+    if (dataCat && dataCat.toLowerCase() === categoriaSolicitada.toLowerCase()) {
+        botonFiltrar = boton;
+    }
+});
 
     if (botonFiltrar) {
         botonFiltrar.click();
