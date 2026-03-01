@@ -4,36 +4,97 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contáctanos | Gerardo Ferretería</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <header id="header-placeholder" class="main-header"></header>
+    <header id="header-placeholder" class="main-header">
+        GERARDO FERRETERÍA
+    </header>
 
     <main class="content-wrapper">
-        <section class="contact-form-section">
-            <h2>Envíanos tu consulta</h2>
-            <p>¿Necesitas un presupuesto especial o tienes dudas sobre un producto? Escríbenos.</p>
-            
-            <form id="contact-form" class="form-style">
-                <div class="form-group">
-                    <label>Nombre Completo</label>
-                    <input type="text" name="nombre" required>
+        <div class="page-title">
+            <h1>Contáctanos</h1>
+            <p>Estamos listos para asesorarte en tus proyectos de construcción y hogar.</p>
+        </div>
+
+        <section class="contact-grid">
+            <div class="contact-info-column">
+                <div class="contact-card info-card">
+                    <h2>Datos de Contacto</h2>
+                    <div class="info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <p><strong>Dirección:</strong> Av. Libertad 450, Chillán, Ñuble.</p>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-phone-alt"></i>
+                        <p><strong>Teléfono:</strong> +56 42 222 3344</p>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-envelope"></i>
+                        <p><strong>Email:</strong> ventas@gerardoferreteria.cl</p>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-clock"></i>
+                        <p><strong>Horario:</strong> Lun-Vie: 9:00 - 18:30 | Sáb: 9:00 - 14:00</p>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Correo Electrónico</label>
-                    <input type="email" name="email" required>
+
+                <div class="map-container">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3203.444738487!2d-72.105!3d-36.606!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzbCsDM2JzIxLjYiUyA3MsKwMDYnMTguMCJX!5e0!3m2!1ses!2scl!4v1614560000000!5m2!1ses!2scl" 
+                        width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy">
+                    </iframe>
                 </div>
-                <div class="form-group">
-                    <label>Mensaje</label>
-                    <textarea name="mensaje" rows="5" required></textarea>
-                </div>
-                <button type="submit" class="category-block-btn" style="width: 100%; border-radius: 4px;">Enviar Mensaje</button>
-            </form>
+            </div>
+
+            <div class="contact-card">
+                <h2>Envíanos un mensaje</h2>
+                <form id="contact-form">
+                    <div class="form-group">
+                        <label>Nombre Completo</label>
+                        <i class="fas fa-user"></i>
+                        <input type="text" name="nombre" class="form-input" placeholder="Ej: Pedro González" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Correo Electrónico</label>
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" name="email" class="form-input" placeholder="correo@ejemplo.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Asunto</label>
+                        <i class="fas fa-tag"></i>
+                        <select name="asunto" class="form-input" style="padding-left: 40px;">
+                            <option value="presupuesto">Solicitar Presupuesto</option>
+                            <option value="stock">Consulta de Stock</option>
+                            <option value="reclamo">Reclamo o Sugerencia</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tu Mensaje</label>
+                        <textarea name="mensaje" class="form-input" placeholder="Escribe aquí los detalles de tu consulta..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        <span>Enviar Mensaje</span>
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
         </section>
     </main>
 
-    <footer id="footer-placeholder" class="main-footer"></footer>
+    <footer id="footer-placeholder" class="main-footer">
+        &copy; 2026 Gerardo Ferretería - Todo para la construcción.
+    </footer>
 
     <script src="js/main.js"></script>
 </body>
