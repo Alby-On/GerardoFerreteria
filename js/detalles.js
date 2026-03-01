@@ -1,18 +1,15 @@
 /* ==========================================================================
-   ALBYON DIGITAL - MOTOR DE DETALLE DINÁMICO
+   ALBYON DIGITAL - MOTOR DE DETALLE Y COMPRA (STOREFRONT API)
    ========================================================================== */
 
 (function() {
-    // 1. Configuración de Shopify Storefront API
     const shopifyConfig = {
         domain: 'zidiwr-ax.myshopify.com',
         accessToken: '715840bf165817aa2713937962be8670',
         apiVersion: '2024-01'
     };
 
-    console.log("🚀 Motor de detalles iniciado...");
-
-    // 2. Función interna de consulta
+    // 1. Función Maestra de Consulta
     async function queryShopify(query) {
         const response = await fetch(`https://${shopifyConfig.domain}/api/${shopifyConfig.apiVersion}/graphql.json`, {
             method: 'POST',
@@ -25,90 +22,102 @@
         return await response.json();
     }
 
-    // 3. Lógica principal de carga
+    // 2. Lógica de Carga de Producto
     async function cargarDetalleProducto() {
         const urlParams = new URLSearchParams(window.location.search);
         const idCodificado = urlParams.get('id');
 
-        if (!idCodificado) {
-            console.error("❌ Error: No hay ID en la URL.");
-            return;
-        }
+        if (!idCodificado) return;
 
         try {
-            // Decodificamos el ID de Base64
             const productId = atob(idCodificado);
-            console.log("🔍 Buscando datos para el producto:", productId);
-
+            
+            // Pedimos el ID de la variante además de los datos visuales
             const query = `
             {
               node(id: "${productId}") {
                 ... on Product {
                   title
                   descriptionHtml
-                  images(first: 1) {
-                    edges {
-                      node {
-                        url
-                      }
-                    }
-                  }
-                  variants(first: 1) {
-                    edges {
-                      node {
-                        price {
-                          amount
-                        }
-                      }
-                    }
+                  images(first: 1) { edges { node { url } } }
+                  variants(first: 1) { 
+                    edges { 
+                      node { 
+                        id 
+                        price { amount } 
+                      } 
+                    } 
                   }
                 }
               }
             }`;
 
-            const { data, errors } = await queryShopify(query);
-
-            if (errors) {
-                console.error("❌ Errores de Shopify API:", errors);
-                return;
-            }
-
+            const { data } = await queryShopify(query);
             const prod = data.node;
 
             if (prod) {
-                // Inyectamos los datos en el HTML de detalles.html
-                const imgUrl = prod.images.edges[0]?.node.url || 'img/placeholder.jpg';
-                const precio = Math.round(prod.variants.edges[0]?.node.price.amount || 0);
+                // Inyectar datos en el HTML
+                document.getElementById('prod-title').textContent = prod.title;
+                document.getElementById('prod-price').textContent = `$${Math.round(prod.variants.edges[0].node.price.amount).toLocaleString('es-CL')}`;
+                document.getElementById('prod-description').innerHTML = prod.descriptionHtml;
+                document.getElementById('main-img').src = prod.images.edges[0].node.url;
 
-                // Aseguramos que los elementos existan antes de escribir
-                const elTitle = document.getElementById('prod-title');
-                const elPrice = document.getElementById('prod-price');
-                const elDesc = document.getElementById('prod-description');
-                const elImg = document.getElementById('main-img');
+                // CONFIGURAR BOTÓN DE COMPRA
+                const variantId = prod.variants.edges[0].node.id;
+                const btnAddCart = document.getElementById('btn-add-cart');
 
-                if (elTitle) elTitle.textContent = prod.title;
-                if (elPrice) elPrice.textContent = `$${precio.toLocaleString('es-CL')}`;
-                if (elDesc) elDesc.innerHTML = prod.descriptionHtml;
-                if (elImg) {
-                    elImg.src = imgUrl;
-                    elImg.alt = prod.title;
-                }
-                
-                console.log("✅ Producto inyectado correctamente: " + prod.title);
-                document.title = `${prod.title} - Albyon Digital`;
-            } else {
-                console.warn("⚠️ Shopify no encontró el producto para este ID.");
-                if (document.getElementById('prod-title')) {
-                    document.getElementById('prod-title').textContent = "Producto no encontrado";
+                if (btnAddCart) {
+                    btnAddCart.addEventListener('click', () => {
+                        crearCheckout(variantId);
+                    });
                 }
             }
-
         } catch (e) {
-            console.error("❌ Error crítico en detalles.js:", e);
+            console.error("Error cargando producto:", e);
         }
     }
 
-    // 4. Ejecución segura
+    // 3. Función para Crear el Checkout y Redirigir
+    async function crearCheckout(variantId) {
+        const btn = document.getElementById('btn-add-cart');
+        btn.innerText = "Procesando...";
+        btn.disabled = true;
+
+        const mutation = `
+        mutation {
+          checkoutCreate(input: {
+            lineItems: [{ variantId: "${variantId}", quantity: 1 }]
+          }) {
+            checkout {
+              webUrl
+            }
+            checkoutUserErrors {
+              message
+            }
+          }
+        }`;
+
+        try {
+            const { data } = await queryShopify(mutation);
+            const checkout = data.checkoutCreate.checkout;
+
+            if (checkout) {
+                // Redirigir a la pantalla de pago de Shopify
+                window.location.href = checkout.webUrl;
+            } else {
+                const error = data.checkoutCreate.checkoutUserErrors[0].message;
+                alert("Error: " + error);
+                btn.innerText = "Añadir al Carro";
+                btn.disabled = false;
+            }
+        } catch (e) {
+            console.error("Error en checkout:", e);
+            btn.innerText = "Añadir al Carro";
+            btn.disabled = false;
+        }
+    }
+
+    // Ejecución inicial
     if (document.readyState === 'complete') {
         cargarDetalleProducto();
     } else {
