@@ -1,4 +1,58 @@
 /* ==========================================================================
+    ESTRUCTURA PRINCIPAL (Sidebar + Catálogo)
+   ========================================================================== */
+.tienda-layout {
+    display: flex;
+    gap: 30px;
+    max-width: 1300px;
+    margin: 40px auto;
+    padding: 0 20px;
+    align-items: flex-start;
+}
+
+.sidebar-filtros {
+    flex: 0 0 260px;
+    background: #f9f9f9;
+    padding: 25px;
+    border-radius: 8px;
+    position: sticky;
+    top: 20px;
+    border: 1px solid #eee;
+}
+
+.catalogo-container {
+    flex: 1;
+}
+
+.filtro-lista {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.filtro-lista li {
+    margin-bottom: 12px;
+}
+
+.btn-categoria {
+    text-decoration: none;
+    color: #333;
+    display: block;
+    padding: 12px 15px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.btn-categoria:hover {
+    background: #333;
+    color: #fff !important;
+    transform: translateX(5px);
+}
+
+/* ==========================================================================
     6. GRID DE PRODUCTOS (Catálogo / Listado)
    ========================================================================== */
 #shopify-products-load .shopify-buy__product-set, 
@@ -20,6 +74,7 @@
     padding: 15px !important;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     height: 100% !important;
+    justify-content: space-between; /* Alinea contenido y botón */
 }
 
 .shopify-buy__product:hover {
@@ -33,6 +88,7 @@
     align-items: center !important;
     justify-content: center !important;
     overflow: hidden !important;
+    margin-bottom: 10px;
 }
 
 .shopify-buy__product-img {
@@ -44,30 +100,67 @@
     font-size: 15px !important;
     margin: 10px 0 !important;
     min-height: 40px !important;
+    font-weight: 600 !important;
+    color: #222;
 }
 
 .shopify-buy__product-price-size {
     margin-top: auto !important;
     color: #d9534f;
     font-weight: bold;
+    margin-bottom: 15px !important;
 }
 
 .shopify-buy__btn {
     width: 100% !important;
     background: #333 !important;
     color: white !important;
-    padding: 10px !important;
+    padding: 12px !important;
     border: none !important;
     cursor: pointer !important;
     font-weight: bold !important;
+    transition: background 0.3s;
 }
 
-/* REGLA DE ORO PARA EL BUSCADOR (Ocultar items sin dejar huecos) */
+.shopify-buy__btn:hover {
+    background: #d9534f !important;
+}
+
+/* REGLA DE ORO PARA EL BUSCADOR */
 #shopify-products-load [style*="display: none"] {
     display: none !important;
     position: absolute !important;
 }
 
+/* ==========================================================================
+    RESPONSIVE
+   ========================================================================== */
+@media (max-width: 1024px) {
+    #shopify-products-load {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .tienda-layout {
+        flex-direction: column;
+    }
+    .sidebar-filtros {
+        flex: none;
+        width: 100%;
+        position: static;
+        margin-bottom: 30px;
+    }
+    #shopify-products-load {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+@media (max-width: 480px) {
+    #shopify-products-load {
+        grid-template-columns: repeat(1, 1fr) !important;
+    }
+}
 /* ==========================================================================
     7. PÁGINA DE DETALLE DINÁMICA (PDP)
    ========================================================================== */
