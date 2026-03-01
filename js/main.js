@@ -26,28 +26,32 @@ document.addEventListener("DOMContentLoaded", () => {
         enlace.addEventListener('click', (e) => {
             e.preventDefault();
             
-            const archivo = enlace.getAttribute('data-archivo');
+            const nombreArchivo = enlace.getAttribute('data-archivo');
             const nombreCategoria = enlace.textContent;
 
             // Actualizar interfaz
             if (titulo) titulo.textContent = nombreCategoria;
+            // Limpiamos el contenedor (Shopify inyectará el contenido aquí)
             contenedor.innerHTML = `<p>Cargando productos de ${nombreCategoria}...</p>`;
 
-            // Remover script de colección anterior si existe
+            // Remover script de colección anterior si existe para evitar conflictos
             const scriptViejo = document.getElementById('script-dinamico-shopify');
-            if (scriptViejo) { scriptViejo.remove(); }
+            if (scriptViejo) { 
+                scriptViejo.remove(); 
+            }
 
-            // Crear y cargar el nuevo script de la colección
-            const nombreArchivo = enlace.getAttribute('data-archivo');
+            // --- CORRECCIÓN AQUÍ: Crear el elemento script ---
+            const nuevoScript = document.createElement('script');
             nuevoScript.id = 'script-dinamico-shopify';
             nuevoScript.src = 'js/colecciones/' + nombreArchivo;
             nuevoScript.async = true;
 
-            // Manejo de error si el archivo .js no existe
+            // Manejo de error si el archivo .js no existe o la ruta está mal
             nuevoScript.onerror = () => {
-                contenedor.innerHTML = '<p>Error: No se pudo cargar la colección de ' + nombreCategoria + '</p>';
+                contenedor.innerHTML = `<p>Error: No se encontró el archivo js/colecciones/${nombreArchivo}</p>`;
             };
 
+            // Ejecutar el script agregándolo al body
             document.body.appendChild(nuevoScript);
 
             // Estilo visual del menú (opcional)
