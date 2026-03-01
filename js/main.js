@@ -341,7 +341,20 @@ async function actualizarVisualizacionCarro() {
     const response = await queryShopify(query);
     const cart = response.data?.cart;
 
-    if (!cart) return;
+    // ================================
+    // SI SHOPIFY DEVUELVE NULL
+    // ================================
+    if (!cart) {
+        localStorage.removeItem('shopify_cart_id');
+
+        const countEl = document.getElementById('cart-count');
+        if (countEl) {
+            countEl.textContent = '0';
+            countEl.style.display = 'none';
+        }
+
+        return;
+    }
 
     // ================================
     // GUARDAR CHECKOUT URL
