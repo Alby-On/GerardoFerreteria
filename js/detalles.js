@@ -72,46 +72,50 @@
         }
     }
 
-    // 4. Creación del Checkout y Redirección
-    async function crearCheckout(variantId) {
-        const btn = document.getElementById('btn-add-cart');
-        btn.innerText = "Procesando...";
-        btn.disabled = true;
+  async function crearCheckout(variantId) {
+    const btn = document.getElementById('btn-add-cart');
+    btn.innerText = "Procesando...";
+    btn.disabled = true;
 
-        const mutation = `
-        mutation {
-          checkoutCreate(input: {
-            lineItems: [{ variantId: "${variantId}", quantity: 1 }]
-          }) {
-            checkout { webUrl }
-            checkoutUserErrors { message field }
-          }
-        }`;
+    // Usamos cartCreate en lugar de checkoutCreate (Es el estándar actual de Headless)
+    const mutation = `
+    mutation {
+      cartCreate(input: {
+        lines: [{ merchandiseId: "${variantId}", quantity: 1 }]
+      }) {
+        cart {
+          checkoutUrl
+        }
+        userErrors {
+          message
+        }
+      }
+    }`;
 
-        try {
-            console.log("📡 Solicitando Checkout a Shopify...");
-            const response = await queryShopify(mutation);
-            
-            // Verificación de respuesta exitosa
-            if (response.data && response.data.checkoutCreate.checkout) {
-                const urlCheckout = response.data.checkoutCreate.checkout.webUrl;
-                console.log("🚀 Redirigiendo a Shopify Checkout:", urlCheckout);
-                window.location.href = urlCheckout;
-            } else {
-                // Manejo de errores de Shopify
-                const errors = response.data?.checkoutCreate?.checkoutUserErrors;
-                console.error("❌ Error de Shopify:", errors || response.errors);
-                alert("No se pudo iniciar el pago: " + (errors?.[0]?.message || "Error de permisos"));
-                
-                btn.innerText = "Añadir al Carro";
-                btn.disabled = false;
-            }
-        } catch (e) {
-            console.error("❌ Error crítico en el proceso de compra:", e);
+    try {
+        console.log("📡 Intentando crear carrito con ID:", variantId);
+        const response = await queryShopify(mutation);
+        console.log("📥 Respuesta de Shopify:", response);
+
+        const cartData = response.data?.cartCreate;
+
+        if (cartData && cartData.cart) {
+            console.log("🚀 Éxito, redirigiendo al checkout...");
+            window.location.href = cartData.cart.checkoutUrl;
+        } else {
+            // Si aquí sale error, es que faltan permisos de "Cart" en el panel
+            const errorMsg = cartData?.userErrors?.[0]?.message || "Faltan permisos de Carrito en Shopify";
+            console.error("❌ Error de permisos:", errorMsg);
+            alert("Atención: " + errorMsg);
             btn.innerText = "Añadir al Carro";
             btn.disabled = false;
         }
+    } catch (e) {
+        console.error("❌ Error en la petición:", e);
+        btn.innerText = "Añadir al Carro";
+        btn.disabled = false;
     }
+}
 
     // Inicialización segura
     if (document.readyState === 'complete') {
