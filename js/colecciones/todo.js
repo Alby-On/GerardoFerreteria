@@ -28,25 +28,14 @@
         moneyFormat: '%24%7B%7Bamount_no_decimals%7D%7D',
         options: {
   "product": {
+    "iframe": false, // <--- CAMBIO CLAVE PARA EL BUSCADOR
     "styles": {
       "product": {
         "@media (min-width: 601px)": {
-          "max-width": "calc(25% - 20px)",
-          "margin-left": "20px",
+          "max-width": "100%",
+          "margin-left": "0px",
           "margin-bottom": "50px",
-          "width": "calc(25% - 20px)"
-        },
-        "img": {
-          "height": "calc(100% - 15px)",
-          "position": "absolute",
-          "left": "0",
-          "right": "0",
-          "top": "0"
-        },
-        "imgWrapper": {
-          "padding-top": "calc(75% + 15px)",
-          "position": "relative",
-          "height": "0"
+          "width": "100%"
         }
       },
       "title": {
@@ -66,13 +55,18 @@
     }
   },
   "productSet": {
+    "iframe": false, // <--- CAMBIO CLAVE PARA EL BUSCADOR
     "styles": {
       "products": {
         "@media (min-width: 601px)": {
-          "margin-left": "-20px"
+          "margin-left": "0px"
         }
       }
-    }
+    },
+    "contents": {
+      "pagination": true 
+    },
+    "pageSize": 100 // <--- Aumentado para que la búsqueda sea global
   },
   "modalProduct": {
     "contents": {
@@ -101,54 +95,28 @@
       }
     },
     "text": {
-      "button": "Add to cart"
+      "button": "Añadir al carro"
     }
   },
   "option": {},
   "cart": {
     "styles": {
-      "title": {
-        "color": "#121010"
-      },
-      "header": {
-        "color": "#121010"
-      },
-      "lineItems": {
-        "color": "#121010"
-      },
-      "subtotalText": {
-        "color": "#121010"
-      },
-      "subtotal": {
-        "color": "#121010"
-      },
-      "notice": {
-        "color": "#121010"
-      },
-      "currency": {
-        "color": "#121010"
-      },
+      "title": { "color": "#121010" },
+      "header": { "color": "#121010" },
+      "lineItems": { "color": "#121010" },
+      "subtotalText": { "color": "#121010" },
+      "subtotal": { "color": "#121010" },
+      "notice": { "color": "#121010" },
+      "currency": { "color": "#121010" },
       "close": {
         "color": "#121010",
-        ":hover": {
-          "color": "#121010"
-        }
+        ":hover": { "color": "#121010" }
       },
-      "empty": {
-        "color": "#121010"
-      },
-      "noteDescription": {
-        "color": "#121010"
-      },
-      "discountText": {
-        "color": "#121010"
-      },
-      "discountIcon": {
-        "fill": "#121010"
-      },
-      "discountAmount": {
-        "color": "#121010"
-      }
+      "empty": { "color": "#121010" },
+      "noteDescription": { "color": "#121010" },
+      "discountText": { "color": "#121010" },
+      "discountIcon": { "fill": "#121010" },
+      "discountAmount": { "color": "#121010" }
     },
     "text": {
       "title": "Carro de compras",
@@ -165,39 +133,16 @@
   "toggle": {},
   "lineItem": {
     "styles": {
-      "variantTitle": {
-        "color": "#121010"
-      },
-      "title": {
-        "color": "#121010"
-      },
-      "price": {
-        "color": "#121010"
-      },
-      "fullPrice": {
-        "color": "#121010"
-      },
-      "discount": {
-        "color": "#121010"
-      },
-      "discountIcon": {
-        "fill": "#121010"
-      },
-      "quantity": {
-        "color": "#121010"
-      },
-      "quantityIncrement": {
-        "color": "#121010",
-        "border-color": "#121010"
-      },
-      "quantityDecrement": {
-        "color": "#121010",
-        "border-color": "#121010"
-      },
-      "quantityInput": {
-        "color": "#121010",
-        "border-color": "#121010"
-      }
+      "variantTitle": { "color": "#121010" },
+      "title": { "color": "#121010" },
+      "price": { "color": "#121010" },
+      "fullPrice": { "color": "#121010" },
+      "discount": { "color": "#121010" },
+      "discountIcon": { "fill": "#121010" },
+      "quantity": { "color": "#121010" },
+      "quantityIncrement": { "color": "#121010", "border-color": "#121010" },
+      "quantityDecrement": { "color": "#121010", "border-color": "#121010" },
+      "quantityInput": { "color": "#121010", "border-color": "#121010" }
     }
   }
 },
