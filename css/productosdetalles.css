@@ -52,8 +52,9 @@
     transform: translateX(5px);
 }
 /* ==========================================================================
-    6. GRID DE PRODUCTOS (Catálogo / Listado)
+    6. GRID DE PRODUCTOS (Centrado y Optimizado)
    ========================================================================== */
+
 #shopify-products-load .shopify-buy__product-set, 
 #shopify-products-load .shopify-buy__product-set--parent,
 #shopify-products-load {
@@ -68,13 +69,15 @@
 .shopify-buy__product {
     display: flex !important;
     flex-direction: column !important;
-    align-items: center !important; /* <--- CENTRA TODO HORIZONTALMENTE */
-    text-align: center !important;  /* <--- CENTRA EL TEXTO (Títulos/Precios) */
+    align-items: center !important;    /* Centra hijos horizontalmente */
+    justify-content: flex-start !important;
+    text-align: center !important;     /* Centra el texto interno */
     background: #fff !important;
     border: 1px solid #eee !important;
-    padding: 20px !important;       /* Un poco más de aire interno */
+    padding: 20px !important;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     height: 100% !important;
+    box-sizing: border-box !important;
 }
 
 .shopify-buy__product:hover {
@@ -82,41 +85,57 @@
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
+/* --- CENTRADO DE IMAGEN --- */
 .shopify-buy__product-img-wrapper {
     height: 200px !important;
     width: 100% !important;
     display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+    align-items: center !important;    /* Centrado vertical de la imagen */
+    justify-content: center !important; /* Centrado horizontal de la imagen */
     overflow: hidden !important;
-    margin-bottom: 15px;
+    margin-bottom: 15px !important;
 }
 
 .shopify-buy__product-img {
     max-height: 100% !important;
     max-width: 100% !important;
     object-fit: contain !important;
+    margin: 0 auto !important;         /* Refuerzo de centrado */
 }
 
+/* --- CENTRADO DE TÍTULO --- */
 .shopify-buy__product-title {
     font-size: 15px !important;
     margin: 10px 0 !important;
-    min-height: 45px !important; /* Ajustado para consistencia */
+    min-height: 45px !important; 
     font-weight: 600 !important;
     color: #222;
     width: 100% !important;
+    display: block !important;         /* Asegura que ocupe el ancho para centrar texto */
+    text-align: center !important;
 }
 
+/* --- CENTRADO DE PRECIO --- */
 .shopify-buy__product-price-size {
-    margin-top: auto !important; /* Empuja el precio hacia abajo si hay poco texto */
+    margin-top: auto !important;       /* Empuja hacia abajo para alineación uniforme */
     color: #d9534f;
     font-weight: bold;
     font-size: 18px !important;
     margin-bottom: 15px !important;
+    width: 100% !important;            /* Ocupa el ancho total */
+    display: block !important;         /* Permite que el text-align funcione */
+    text-align: center !important;
+}
+
+/* --- BOTÓN --- */
+.shopify-buy__btn-wrapper {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important; /* Centra el botón si es más pequeño que el contenedor */
 }
 
 .shopify-buy__btn {
-    width: 90% !important; /* Un poco más angosto para que no toque los bordes al centrar */
+    width: 90% !important; 
     background: #333 !important;
     color: white !important;
     padding: 12px !important;
@@ -136,7 +155,6 @@
     display: none !important;
     position: absolute !important;
 }
-
 /* ==========================================================================
     RESPONSIVE
    ========================================================================== */
