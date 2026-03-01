@@ -15,12 +15,13 @@ body {
     align-items: center;
     padding: 20px 5%;
     background: white;
-    /* Eliminamos space-between para controlar la posición manualmente */
 }
 
+/* 1. Envolvemos el logo en un contenedor con flex: 1 */
 .logo {
-    /* Esto asegura que el logo mantenga su espacio a la izquierda */
-    flex: 0 1 auto; 
+    flex: 1; 
+    display: flex;
+    justify-content: flex-start;
 }
 
 .logo h1 {
@@ -29,24 +30,54 @@ body {
     font-size: 24px;
     text-transform: uppercase;
     letter-spacing: 1px;
+    white-space: nowrap; /* Evita que el logo se rompa en dos líneas */
 }
 
+/* 2. El buscador se mantiene intacto, pero sin márgenes automáticos */
 .search-container {
     display: flex;
     gap: 0;
-    /* TRUCO: Margen izquierdo automático y margen derecho automático centra el elemento 
-       dentro del espacio disponible en el flexbox */
-    margin: 0 auto; 
+    flex: 0 0 auto; /* No crece ni se encoge, mantiene su diseño original */
 }
 
-/* Opcional: Si quieres que el centrado sea perfecto respecto a la pantalla 
-   y no respecto al espacio restante, añade este pseudo-elemento al final del HTML 
-   o usa este selector para equilibrar el espacio del logo:
-*/
+/* 3. Creamos un espacio vacío a la derecha para equilibrar el flex: 1 del logo */
 .header-top::after {
     content: "";
-    flex: 0 1 200px; /* Ajusta este valor al ancho aproximado de tu logo */
-    visibility: hidden;
+    flex: 1;
+}
+
+/* --- Mantenemos tu diseño original de los elementos internos --- */
+.search-container select, 
+.search-container input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    outline: none;
+}
+
+.search-container select {
+    border-radius: 4px 0 0 4px;
+    background: #f9f9f9;
+    cursor: pointer;
+}
+
+.search-container input {
+    width: 300px;
+    border-left: none;
+}
+
+.search-container button {
+    padding: 12px 25px;
+    background: #d9534f;
+    color: white;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.search-container button:hover {
+    background: #c9302c;
 }
 /* ==========================================================================
     3. NAVBAR PRINCIPAL (Corregido para centrado total)
