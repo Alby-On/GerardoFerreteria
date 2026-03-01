@@ -380,3 +380,9 @@ body {
 @media (max-width: 576px) {
     #shopify-products-load .shopify-buy__product-set { grid-template-columns: 1fr !important; }
 }
+#shopify-products-load .shopify-buy__product-set {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    /* Esto hace que el grid no deje huecos vacíos al ocultar items */
+    grid-auto-flow: row dense !important; 
+}
