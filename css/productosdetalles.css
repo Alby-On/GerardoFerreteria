@@ -251,3 +251,78 @@
     }
     .btn-comprar-ahora { flex: 1; }
 }
+/* ==========================================================================
+    DISEÑO ESPECIAL: CAMPOS DE FACTURACIÓN EN CARRITO
+   ========================================================================== */
+
+.carrito-facturacion {
+    padding: 20px;
+    background: #fdfdfd;
+    border-top: 2px solid #eee;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.carrito-facturacion label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #444;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: -5px;
+}
+
+/* Estilo para los inputs y el select */
+.carrito-facturacion input, 
+.carrito-facturacion select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: #333;
+    background-color: #fff;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    outline: none;
+}
+
+/* Efecto Focus: Cuando el usuario hace clic */
+.carrito-facturacion input:focus, 
+.carrito-facturacion select:focus {
+    border-color: #333; /* Color oscuro como tu botón */
+    box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.05);
+    background-color: #fff;
+}
+
+/* Estilo especial para cuando hay un error (opcional para JS) */
+.carrito-facturacion input.error {
+    border-color: #d9534f;
+    background-color: #fff8f8;
+}
+
+/* Animación de entrada para los campos de Factura */
+#campos-factura {
+    display: none;
+    flex-direction: column;
+    gap: 12px;
+    animation: fadeInSlide 0.4s ease forwards;
+}
+
+@keyframes fadeInSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Placeholder más elegante */
+.carrito-facturacion input::placeholder {
+    color: #aaa;
+    font-size: 0.85rem;
+}
