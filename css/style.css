@@ -93,7 +93,6 @@ body {
 
 .nav-container {
     display: flex;
-    /* Cambiado de space-between a center */
     justify-content: center; 
     align-items: center;
     max-width: 1400px;
@@ -104,13 +103,14 @@ body {
 
 .nav-left {
     display: flex;
-    align-items: center; /* Cambiado de stretch para evitar distorsión de texto */
-    gap: 40px; /* Espacio entre el botón de categorías y los links */
+    align-items: center;
+    /* CAMBIO: Aumentamos el espacio para despegar el botón de Categorías de los links */
+    gap: 60px; 
 }
 
 .dropbtn-cat {
-    background-color: #d9534f;
-    color: white;
+    background-color: #f9f9f9; /* Cambiado a blanco/gris claro según tu imagen */
+    color: #333;               /* Texto oscuro para resaltar sobre el botón claro */
     padding: 0 30px;
     font-size: 15px;
     font-weight: bold;
@@ -119,12 +119,12 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-    height: 55px; /* Altura fija para igualar a la navbar */
+    height: 55px;
     transition: background 0.3s;
 }
 
 .dropbtn-cat:hover {
-    background-color: #c9302c;
+    background-color: #eeeeee;
 }
 
 .nav-links {
@@ -142,7 +142,6 @@ body {
     font-size: 15px;
     font-weight: 500;
     transition: 0.3s;
-    /* Un pequeño ajuste para asegurar que el área de clic sea cómoda */
     padding: 10px 5px;
 }
 
