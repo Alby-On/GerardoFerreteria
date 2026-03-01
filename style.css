@@ -315,46 +315,50 @@ body {
     }
 }
 /* ==========================================================================
-    8. CORRECCIÓN DEFINITIVA GRID SHOPIFY (4 COLUMNAS)
+    8. GRID DE PRODUCTOS UNIVERSAL (PARA TODAS LAS CATEGORÍAS)
    ========================================================================== */
 
-/* Esto fuerza al contenedor a permitir que los hijos fluyan en grid */
-#shopify-products-load iframe {
-    width: 100% !important;
-    grid-column: 1 / -1; /* Ocupa todo el ancho si hay iframe */
-}
-
-/* Forzamos el grid en la clase que genera el SDK */
-.shopify-buy-frame, .shopify-buy__product-set {
+/* Forzamos el contenedor interno de Shopify a ser un Grid */
+.shopify-buy__product-set, 
+.shopify-buy__product-set--parent {
     display: grid !important;
     grid-template-columns: repeat(4, 1fr) !important;
     gap: 20px !important;
     width: 100% !important;
+    max-width: 100% !important;
 }
 
-/* Ajuste de tarjetas para que no se amontonen */
+/* Forzamos a que cada producto ignore los anchos internos de Shopify */
 .shopify-buy__product {
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 !important;
     display: flex !important;
     flex-direction: column !important;
-    height: 100% !important;
+    height: 100% !important; /* Mismo tamaño para todos */
     background: #fff;
     border: 1px solid #eee;
     padding: 15px !important;
     box-sizing: border-box !important;
 }
 
-/* Mantenemos tus alturas uniformes */
+/* Tamaño fijo de imagen para que los títulos queden alineados */
 .shopify-buy__product-img-wrapper {
     height: 200px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+    margin-bottom: 10px !important;
 }
 
-/* RESPONSIVE: Vital para tu S22 Ultra */
+/* Ajuste de precios y botones al fondo */
+.shopify-buy__product-price-size {
+    margin-top: auto !important;
+    color: #d9534f;
+    font-weight: bold;
+}
+
+/* RESPONSIVE UNIVERSAL (S22 Ultra y otros) */
 @media (max-width: 1100px) {
     .shopify-buy__product-set { grid-template-columns: repeat(3, 1fr) !important; }
 }
