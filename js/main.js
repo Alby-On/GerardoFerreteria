@@ -36,10 +36,10 @@ async function queryShopify(query) {
     }
 }
 
-// 3. Plantilla Dinámica (El HTML de tus tarjetas)
+// 3. Plantilla Dinámica (HTML Nativo - Sin Iframes)
 function templateProducto(prod) {
     const precio = Math.round(prod.variants.edges[0].node.price.amount);
-    const imagen = prod.images.edges[0]?.node.url || 'img/placeholder.jpg';
+    const imagen = prod.images.edges[0]?.node.url || 'https://via.placeholder.com/300x300?text=Sin+Imagen';
     const link = prod.onlineStoreUrl;
 
     return `
@@ -57,29 +57,32 @@ function templateProducto(prod) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    // Carga inicial de Header y Footer
     Promise.all([
         loadComponent('header-placeholder', 'componentes/header.html'),
         loadComponent('footer-placeholder', 'componentes/footer.html')
     ]).then(() => {
+        // Inicializar buscador después de que el Header cargue
         inicializarBusquedaUniversal();
-    });
-
-    // 4. Lógica para Categorías (Sin archivos .js externos)
-    const enlaces = document.querySelectorAll('.btn-categoria');
-    enlaces.forEach(enlace => {
-        enlace.addEventListener('click', (e) => {
-            e.preventDefault();
-            const categoria = enlace.getAttribute('data-categoria'); // Cambiado de data-archivo
-            const nombreCategoria = enlace.textContent;
-            
-            ejecutarCargaPorCategoria(categoria, nombreCategoria);
-            
-            enlaces.forEach(el => el.classList.remove('active'));
-            enlace.classList.add('active');
+        
+        // Activar clics en categorías (ahora dinámico)
+        const enlaces = document.querySelectorAll('.btn-categoria');
+        enlaces.forEach(enlace => {
+            enlace.addEventListener('click', (e) => {
+                e.preventDefault();
+                const categoria = enlace.getAttribute('data-categoria');
+                const nombreCategoria = enlace.textContent;
+                
+                if (categoria) {
+                    ejecutarCargaPorCategoria(categoria, nombreCategoria);
+                    enlaces.forEach(el => el.classList.remove('active'));
+                    enlace.classList.add('active');
+                }
+            });
         });
     });
 
-    // 5. Detectar parámetros URL
+    // 5. Detectar parámetros URL (Búsqueda externa)
     const urlParams = new URLSearchParams(window.location.search);
     const busquedaURL = urlParams.get('q');
 
@@ -92,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// 6. Buscador Universal con Storefront API
+// 6. Buscador Universal
 function inicializarBusquedaUniversal() {
     const inputBuscar = document.getElementById('search-input');
     const btnBuscar = document.getElementById('search-btn');
@@ -136,10 +139,10 @@ async function ejecutarBusquedaAPI(termino) {
     }`;
 
     const { data } = await queryShopify(query);
-    renderizarProductos(data.products.edges);
+    renderizarProductos(data?.products?.edges);
 }
 
-// Función para renderizar resultados
+// Función para renderizar resultados en el Grid
 function renderizarProductos(edges) {
     const contenedor = document.getElementById('shopify-products-load');
     if (!edges || edges.length === 0) {
@@ -149,10 +152,11 @@ function renderizarProductos(edges) {
     contenedor.innerHTML = edges.map(edge => templateProducto(edge.node)).join('');
 }
 
-// Función opcional para cargar por etiquetas/categorías
+// Carga por TAG de Shopify
 async function ejecutarCargaPorCategoria(tag, nombre) {
     const contenedor = document.getElementById('shopify-products-load');
     const titulo = document.getElementById('titulo-coleccion');
+    
     if (titulo) titulo.textContent = nombre;
     contenedor.innerHTML = `<p style="grid-column: 1/-1; text-align: center;">Cargando ${nombre}...</p>`;
 
@@ -171,5 +175,5 @@ async function ejecutarCargaPorCategoria(tag, nombre) {
     }`;
 
     const { data } = await queryShopify(query);
-    renderizarProductos(data.products.edges);
+    renderizarProductos(data?.products?.edges);
 }
