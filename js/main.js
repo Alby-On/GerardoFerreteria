@@ -176,34 +176,3 @@ function renderizarProductos(edges) {
     }
     contenedor.innerHTML = edges.map(edge => templateProducto(edge.node)).join('');
 }
-// Esperar a que todo el HTML esté listo
-document.addEventListener('DOMContentLoaded', () => {
-    
-    // 1. Seleccionamos los botones de tu lista <li> y las tarjetas del carrusel
-    const botones = document.querySelectorAll('.btn-categoria');
-    const productos = document.querySelectorAll('.tarjeta-oferta');
-
-    // 2. Escuchamos el clic en cada botón
-    botones.forEach(boton => {
-        boton.addEventListener('click', (e) => {
-            e.preventDefault(); // Evita que la página recargue o salte al inicio
-            
-            // Obtenemos la categoría del botón (ej: "Herramientas")
-            const filtro = boton.getAttribute('data-categoria');
-
-            // 3. Filtramos los productos
-            productos.forEach(prod => {
-                const categoriaProducto = prod.getAttribute('data-categoria');
-
-                if (categoriaProducto === filtro) {
-                    // Si coinciden, lo mostramos
-                    prod.style.display = "block";
-                    prod.style.opacity = "1";
-                } else {
-                    // Si no coinciden, lo ocultamos
-                    prod.style.display = "none";
-                }
-            });
-        });
-    });
-});
