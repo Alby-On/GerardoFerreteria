@@ -414,19 +414,39 @@ body {
     #shopify-products-load { grid-template-columns: 1fr !important; }
     .precio-grande { font-size: 1.8rem; }
 }
-/* Espaciado para el bloque de compra */
+/* Espaciado del contenedor del botón */
 .acciones-compra {
-    margin: 20px 0;
-}
-
-/* Estilo para el separador */
-hr {
-    border: 0;
-    border-top: 1px solid #eee;
     margin: 25px 0;
 }
 
-/* Aseguramos que la descripción no quede muy pegada al HR */
+/* El botón de compra resaltado */
+.btn-comprar-ahora {
+    background: #333;
+    color: white;
+    padding: 18px 30px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%; /* Ancho completo para facilitar el clic en móviles */
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    transition: background 0.3s ease;
+}
+
+.btn-comprar-ahora:hover {
+    background: #d9534f; /* Rojo Albyon al pasar el mouse */
+}
+
+/* Línea divisora */
+hr {
+    border: 0;
+    border-top: 1px solid #eee;
+    margin: 30px 0;
+}
+
+/* Estilo de la descripción debajo del botón */
 .descripcion-texto {
-    margin-top: 10px;
+    line-height: 1.8;
+    color: #444;
+    font-size: 1.05rem;
 }
