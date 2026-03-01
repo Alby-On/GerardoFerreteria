@@ -314,58 +314,92 @@ body {
         box-sizing: border-box;
     }
 }
-/* Layout General */
-.tienda-layout {
-    display: flex;
-    gap: 30px;
-    padding: 20px;
-}
+/* 8. ESTILO DINÁMICO DE PRODUCTOS (GRID Y UNIFORMIDAD) */
 
-.sidebar-filtros {
-    width: 250px;
-    flex-shrink: 0;
-}
-
-.catalogo-container {
-    flex-grow: 1;
-}
-
-/* Estilo para los botones activos en el menú */
-.btn-categoria.active {
-    color: #007bff; /* O el color corporativo de la ferretería */
-    font-weight: bold;
-    text-decoration: underline;
-}
-
-/* Espaciado para el componente de Shopify */
-#shopify-products-load {
-    min-height: 400px; /* Evita que el footer salte mientras carga */
-}
-/* Contenedor principal de Shopify */
+/* Contenedor principal: Fuerza 4 columnas y evita saltos del footer */
 #shopify-products-load {
     display: grid !important;
-    /* Crea 4 columnas de igual tamaño */
-    grid-template-columns: repeat(4, 1fr); 
-    gap: 20px; /* Espacio entre productos */
-    padding: 20px 0;
+    grid-template-columns: repeat(4, 1fr) !important; 
+    gap: 20px !important; 
+    padding: 20px 0 !important;
+    min-height: 500px; 
+    align-items: stretch !important; /* Hace que todas las tarjetas midan lo mismo en la misma fila */
 }
 
-/* Ajuste para tablets (2 columnas) */
-@media (max-width: 992px) {
-    #shopify-products-load {
-        grid-template-columns: repeat(2, 1fr);
-    }
+/* Tarjeta de Producto: Diseño uniforme */
+.shopify-buy__product {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    background: #fff !important;
+    border: 1px solid #eee !important;
+    border-radius: 8px !important;
+    padding: 15px !important;
+    box-sizing: border-box !important;
+    transition: box-shadow 0.3s ease !important;
 }
 
-/* Ajuste para celulares (1 columna - ideal para tu S22 Ultra) */
-@media (max-width: 576px) {
-    #shopify-products-load {
-        grid-template-columns: 1fr;
-    }
+.shopify-buy__product:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important;
 }
 
-/* Ajuste de las imágenes para que no se deformen */
+/* Imagen: Tamaño fijo para que todo se alinee */
 .shopify-buy__product-img-wrapper {
-    max-height: 250px;
-    object-fit: contain;
+    height: 220px !important; /* Espacio igual para todas las fotos */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+    margin-bottom: 15px !important;
+}
+
+.shopify-buy__product-img {
+    max-height: 100% !important;
+    object-fit: contain !important; /* No deforma las fotos de materiales */
+}
+
+/* Títulos: Altura fija para que los precios queden alineados */
+.shopify-buy__product-title {
+    font-size: 15px !important;
+    height: 42px !important; 
+    overflow: hidden !important;
+    margin-bottom: 10px !important;
+    line-height: 1.4 !important;
+}
+
+/* Precio y Botón: Los empuja siempre al fondo de la tarjeta */
+.shopify-buy__product-price-size {
+    margin-top: auto !important; 
+    font-weight: bold !important;
+    color: #d9534f !important; /* Rojo a juego con tu buscador */
+    padding-bottom: 10px;
+}
+
+.shopify-buy__btn {
+    width: 100% !important;
+    border-radius: 4px !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+}
+
+/* Botones del menú lateral activos */
+.btn-categoria.active {
+    color: #d9534f !important;
+    font-weight: bold !important;
+    border-left: 3px solid #d9534f;
+    padding-left: 8px;
+}
+
+/* RESPONSIVE: Adaptación para tablets y tu S22 Ultra */
+@media (max-width: 1100px) {
+    #shopify-products-load { grid-template-columns: repeat(3, 1fr) !important; }
+}
+
+@media (max-width: 900px) {
+    #shopify-products-load { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+@media (max-width: 576px) {
+    #shopify-products-load { grid-template-columns: 1fr !important; }
+    .shopify-buy__product-img-wrapper { height: 180px !important; }
 }
