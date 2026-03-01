@@ -314,38 +314,44 @@ body {
         box-sizing: border-box;
     }
 }
-/* 8. ESTILO DINÁMICO DE PRODUCTOS (GRID Y UNIFORMIDAD) */
+/* ==========================================================================
+   8. ESTILO DINÁMICO DE PRODUCTOS (GRID 4x4 Y UNIFORMIDAD)
+   ========================================================================== */
 
-/* Contenedor principal: Fuerza 4 columnas y evita saltos del footer */
+/* Contenedor principal: Fuerza las 4 columnas */
 #shopify-products-load {
     display: grid !important;
+    /* Forzamos 4 columnas de igual tamaño */
     grid-template-columns: repeat(4, 1fr) !important; 
-    gap: 20px !important; 
-    padding: 20px 0 !important;
+    gap: 25px !important; 
+    padding: 30px 0 !important;
     min-height: 500px; 
-    align-items: stretch !important; /* Hace que todas las tarjetas midan lo mismo en la misma fila */
+    align-items: stretch !important;
 }
 
-/* Tarjeta de Producto: Diseño uniforme */
+/* Forzamos que el componente interno de Shopify no rompa el grid */
+#shopify-products-load .shopify-buy__product-set {
+    display: contents !important; /* Hace que el contenedor de Shopify sea invisible para el grid */
+}
+
+/* Tarjeta de Producto: Altura uniforme */
 .shopify-buy__product {
     display: flex !important;
     flex-direction: column !important;
     height: 100% !important;
+    width: 100% !important; /* Ocupa todo el espacio de su columna */
+    max-width: 100% !important;
     background: #fff !important;
     border: 1px solid #eee !important;
     border-radius: 8px !important;
     padding: 15px !important;
+    margin: 0 !important; /* Quitamos márgenes que pone Shopify por defecto */
     box-sizing: border-box !important;
-    transition: box-shadow 0.3s ease !important;
 }
 
-.shopify-buy__product:hover {
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important;
-}
-
-/* Imagen: Tamaño fijo para que todo se alinee */
+/* Imagen: Tamaño fijo para alinear todo */
 .shopify-buy__product-img-wrapper {
-    height: 220px !important; /* Espacio igual para todas las fotos */
+    height: 200px !important; 
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -355,53 +361,61 @@ body {
 
 .shopify-buy__product-img {
     max-height: 100% !important;
-    object-fit: contain !important; /* No deforma las fotos de materiales */
+    width: auto !important;
+    object-fit: contain !important;
 }
 
-/* Títulos: Altura fija para que los precios queden alineados */
+/* Títulos: Forzar 2 líneas máximo para mantener alineación */
 .shopify-buy__product-title {
     font-size: 15px !important;
     height: 42px !important; 
     overflow: hidden !important;
     margin-bottom: 10px !important;
     line-height: 1.4 !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 
-/* Precio y Botón: Los empuja siempre al fondo de la tarjeta */
+/* Precio y Botón: Siempre al fondo */
 .shopify-buy__product-price-size {
     margin-top: auto !important; 
     font-weight: bold !important;
-    color: #d9534f !important; /* Rojo a juego con tu buscador */
-    padding-bottom: 10px;
+    color: #d9534f !important;
+    padding-bottom: 5px;
+}
+
+.shopify-buy__btn-wrapper {
+    margin-top: 10px !important;
 }
 
 .shopify-buy__btn {
     width: 100% !important;
-    border-radius: 4px !important;
+    padding: 12px !important;
     font-weight: bold !important;
     cursor: pointer !important;
 }
 
-/* Botones del menú lateral activos */
-.btn-categoria.active {
-    color: #d9534f !important;
-    font-weight: bold !important;
-    border-left: 3px solid #d9534f;
-    padding-left: 8px;
-}
-
-/* RESPONSIVE: Adaptación para tablets y tu S22 Ultra */
+/* RESPONSIVE: Adaptación para tu S22 Ultra */
 @media (max-width: 1100px) {
-    #shopify-products-load { grid-template-columns: repeat(3, 1fr) !important; }
+    #shopify-products-load { 
+        grid-template-columns: repeat(3, 1fr) !important; 
+    }
 }
 
 @media (max-width: 900px) {
-    #shopify-products-load { grid-template-columns: repeat(2, 1fr) !important; }
+    #shopify-products-load { 
+        grid-template-columns: repeat(2, 1fr) !important; 
+    }
 }
 
-@media (max-width: 576px) {
-    #shopify-products-load { grid-template-columns: 1fr !important; }
-    .shopify-buy__product-img-wrapper { height: 180px !important; }
+@media (max-width: 600px) {
+    #shopify-products-load { 
+        grid-template-columns: 1fr !important; 
+    }
+    .shopify-buy__product-img-wrapper { 
+        height: 180px !important; 
+    }
 }
 /* Estilo para el botón de Paginación de Shopify */
 .shopify-buy__collection-pagination-button {
