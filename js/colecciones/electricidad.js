@@ -1,6 +1,3 @@
-<div id='collection-component-1772326285363'></div>
-<script type="text/javascript">
-/*<![CDATA[*/
 (function () {
   var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
   if (window.ShopifyBuy) {
@@ -27,7 +24,7 @@
     ShopifyBuy.UI.onReady(client).then(function (ui) {
       ui.createComponent('collection', {
         id: '482436350177',
-        node: document.getElementById('collection-component-1772326285363'),
+        node: document.getElementById('shopify-products-load'),
         moneyFormat: '%24%7B%7Bamount_no_decimals%7D%7D',
         options: {
   "product": {
@@ -208,5 +205,4 @@
     });
   }
 })();
-/*]]>*/
-</script>
+
