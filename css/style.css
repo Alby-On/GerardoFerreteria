@@ -182,99 +182,97 @@ body {
     color: #d9534f !important;
 }
 /* ==========================================================================
-    8. FOOTER PRINCIPAL (Diseño Moderno)
+    8. FOOTER PRINCIPAL (Minimalista con Iconos de Pago)
    ========================================================================== */
 .main-footer {
-    background: #1a1a1a; /* Un negro más profundo */
-    color: #ccc;
-    padding: 60px 10% 20px;
+    background: #111; /* Un tono casi negro para elegancia */
+    color: #999;
+    padding: 60px 10% 30px;
     margin-top: 50px;
-    border-top: 4px solid #d9534f; /* Línea de acento superior */
+    border-top: 1px solid #333; /* Línea sutil, no roja */
 }
 
 .footer-content {
     display: grid;
-    /* Creamos 3 columnas equilibradas */
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 40px;
     align-items: start;
 }
 
-/* Estilo para los títulos de las columnas */
 .footer-section h3 {
-    color: white;
-    font-size: 18px;
-    margin-bottom: 20px;
-    position: relative;
+    color: #eee;
+    font-size: 16px;
+    margin-bottom: 25px;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
+    font-weight: 600;
 }
 
-/* Pequeño detalle: línea roja debajo de cada título */
-.footer-section h3::after {
-    content: '';
-    display: block;
-    width: 40px;
-    height: 2px;
-    background: #d9534f;
-    margin-top: 8px;
-}
-
-/* Lista de enlaces rápidos */
+/* Enlaces Minimalistas */
 .footer-links {
     list-style: none;
     padding: 0;
-    margin: 0;
 }
 
 .footer-links li {
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
 .footer-links a {
-    color: #aaa;
+    color: #888;
     text-decoration: none;
-    transition: 0.3s;
     font-size: 14px;
+    transition: color 0.3s ease;
 }
 
 .footer-links a:hover {
-    color: #ffcc00;
-    padding-left: 5px; /* Efecto de desplazamiento al pasar el mouse */
+    color: #fff; /* Cambio a blanco puro en hover */
 }
 
-/* Sección de redes sociales o contacto */
-.social-links {
+/* Contenedor de Iconos (Pagos y Redes) */
+.icon-group {
     display: flex;
+    flex-wrap: wrap;
     gap: 15px;
-    margin-top: 15px;
-}
-
-.social-icon {
-    width: 35px;
-    height: 35px;
-    background: #333;
-    display: flex;
     align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    color: white;
+}
+
+/* Estilo para los logos de pago (Webpay, Redcompra, etc.) */
+.payment-icon {
+    height: 30px; /* Tamaño controlado */
+    filter: grayscale(100%); /* Efecto minimalista */
+    opacity: 0.6;
+    transition: all 0.3s ease;
+}
+
+.payment-icon:hover {
+    filter: grayscale(0%); /* Recupera color original */
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+/* Iconos de Redes Sociales */
+.social-icon-min {
+    color: #888;
+    font-size: 20px;
     transition: 0.3s;
+    text-decoration: none;
 }
 
-.social-icon:hover {
-    background: #d9534f;
-    transform: translateY(-3px);
+.social-icon-min:hover {
+    color: #fff;
+    transform: translateY(-2px);
 }
 
-/* Copyright inferior */
+/* Copyright y Pie Final */
 .footer-bottom {
     text-align: center;
-    margin-top: 50px;
+    margin-top: 60px;
     padding-top: 20px;
-    border-top: 1px solid #333;
-    font-size: 13px;
-    color: #666;
+    border-top: 1px solid #222;
+    font-size: 12px;
+    color: #555;
+    letter-spacing: 0.5px;
 }
 /* ==========================================================================
     RESPONSIVE BÁSICO (Para Header y Footer)
