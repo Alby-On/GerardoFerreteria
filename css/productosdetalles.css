@@ -51,7 +51,6 @@
     color: #fff !important;
     transform: translateX(5px);
 }
-
 /* ==========================================================================
     6. GRID DE PRODUCTOS (Catálogo / Listado)
    ========================================================================== */
@@ -69,12 +68,13 @@
 .shopify-buy__product {
     display: flex !important;
     flex-direction: column !important;
+    align-items: center !important; /* <--- CENTRA TODO HORIZONTALMENTE */
+    text-align: center !important;  /* <--- CENTRA EL TEXTO (Títulos/Precios) */
     background: #fff !important;
     border: 1px solid #eee !important;
-    padding: 15px !important;
+    padding: 20px !important;       /* Un poco más de aire interno */
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     height: 100% !important;
-    justify-content: space-between; /* Alinea contenido y botón */
 }
 
 .shopify-buy__product:hover {
@@ -84,41 +84,46 @@
 
 .shopify-buy__product-img-wrapper {
     height: 200px !important;
+    width: 100% !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     overflow: hidden !important;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
 .shopify-buy__product-img {
     max-height: 100% !important;
+    max-width: 100% !important;
     object-fit: contain !important;
 }
 
 .shopify-buy__product-title {
     font-size: 15px !important;
     margin: 10px 0 !important;
-    min-height: 40px !important;
+    min-height: 45px !important; /* Ajustado para consistencia */
     font-weight: 600 !important;
     color: #222;
+    width: 100% !important;
 }
 
 .shopify-buy__product-price-size {
-    margin-top: auto !important;
+    margin-top: auto !important; /* Empuja el precio hacia abajo si hay poco texto */
     color: #d9534f;
     font-weight: bold;
+    font-size: 18px !important;
     margin-bottom: 15px !important;
 }
 
 .shopify-buy__btn {
-    width: 100% !important;
+    width: 90% !important; /* Un poco más angosto para que no toque los bordes al centrar */
     background: #333 !important;
     color: white !important;
     padding: 12px !important;
     border: none !important;
     cursor: pointer !important;
     font-weight: bold !important;
+    border-radius: 4px !important;
     transition: background 0.3s;
 }
 
