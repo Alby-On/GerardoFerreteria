@@ -1,11 +1,9 @@
-// 1. Configuración de conexión (Igual que en main.js)
 const shopifyConfig = {
     domain: 'zidiwr-ax.myshopify.com',
     accessToken: '715840bf165817aa2713937962be8670',
     apiVersion: '2024-01'
 };
 
-// 2. Función para consultar a Shopify
 async function queryShopify(query) {
     const response = await fetch(`https://${shopifyConfig.domain}/api/${shopifyConfig.apiVersion}/graphql.json`, {
         method: 'POST',
@@ -18,48 +16,78 @@ async function queryShopify(query) {
     return await response.json();
 }
 
-// 3. Capturar el ID de la URL
-const urlParams = new URLSearchParams(window.location.search);
-const idCodificado = urlParams.get('id');
-
 async function cargarDetalleProducto() {
-    if (!idCodificado) {
-        console.error("No se encontró el ID en la URL");
-        return;
-    }
+    const urlParams = new URLSearchParams(window.location.search);
+    const idCodificado = urlParams.get('id');
+
+    if (!idCodificado) return;
 
     try {
-        // Decodificamos el ID que viene del catálogo
-        const productId = atob(idCodificado); 
-        
+        // Decodificamos el ID
+        const productId = atob(idCodificado);
+        console.log("Cargando ID:", productId); // Esto aparecerá en tu consola (F12)
+
         const query = `
         {
           node(id: "${productId}") {
             ... on Product {
               title
               descriptionHtml
-              images(first: 1) { edges { node { url } } }
-              variants(first: 1) { edges { node { price { amount } } } }
+              images(first: 1) {
+                edges {
+                  node {
+                    url
+                  }
+                }
+              }
+              variants(first: 1) {
+                edges {
+                  node {
+                    price {
+                      amount
+                      currencyCode
+                    }
+                  }
+                }
+              }
             }
           }
         }`;
 
-        const { data } = await queryShopify(query);
+        const { data, errors } = await queryShopify(query);
+
+        if (errors) {
+            console.error("Errores de Shopify:", errors);
+            return;
+        }
+
         const prod = data.node;
 
         if (prod) {
-            // Inyectamos los datos en el HTML
+            // Llenar datos con seguridad (opcional: manejo de errores si falta imagen)
+            const imgUrl = prod.images.edges[0]?.node.url || 'img/placeholder.jpg';
+            const precio = Math.round(prod.variants.edges[0]?.node.price.amount || 0);
+
             document.getElementById('prod-title').textContent = prod.title;
-            document.getElementById('prod-price').textContent = `$${Math.round(prod.variants.edges[0].node.price.amount).toLocaleString('es-CL')}`;
+            document.getElementById('prod-price').textContent = `$${precio.toLocaleString('es-CL')}`;
             document.getElementById('prod-description').innerHTML = prod.descriptionHtml;
-            document.getElementById('main-img').src = prod.images.edges[0].node.url;
-            document.title = `${prod.title} - Albyon Digital`; // Cambia el título de la pestaña
+            document.getElementById('main-img').src = imgUrl;
+            document.getElementById('main-img').alt = prod.title;
+            
+            // Quitar clase de carga si la usas
+            console.log("Producto cargado con éxito");
+        } else {
+            document.getElementById('prod-title').textContent = "Producto no encontrado";
         }
-    } catch (error) {
-        console.error("Error cargando el producto:", error);
-        document.getElementById('prod-title').textContent = "Error al cargar el producto";
+
+    } catch (e) {
+        console.error("Error crítico:", e);
     }
 }
 
-// Ejecutar al cargar la página
-document.addEventListener('DOMContentLoaded', cargarDetalleProducto);
+// Asegurarnos de que el DOM esté listo
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', cargarDetalleProducto);
+} else {
+    cargarDetalleProducto();
+}
