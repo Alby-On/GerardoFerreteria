@@ -64,9 +64,8 @@ body {
 .search-container button:hover {
     background: #c9302c;
 }
-
 /* ==========================================================================
-    3. NAVBAR PRINCIPAL (Sticky - Global)
+    3. NAVBAR PRINCIPAL (Corregido para centrado total)
    ========================================================================== */
 .navbar {
     background: #333;
@@ -79,8 +78,9 @@ body {
 
 .nav-container {
     display: flex;
-    justify-content: space-between;
-    align-items: stretch;
+    /* Cambiado de space-between a center */
+    justify-content: center; 
+    align-items: center;
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 5%;
@@ -89,7 +89,8 @@ body {
 
 .nav-left {
     display: flex;
-    align-items: stretch;
+    align-items: center; /* Cambiado de stretch para evitar distorsión de texto */
+    gap: 40px; /* Espacio entre el botón de categorías y los links */
 }
 
 .dropbtn-cat {
@@ -103,7 +104,7 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-    height: 100%;
+    height: 55px; /* Altura fija para igualar a la navbar */
     transition: background 0.3s;
 }
 
@@ -114,6 +115,7 @@ body {
 .nav-links {
     list-style: none;
     display: flex;
+    align-items: center;
     gap: 30px;
     margin: 0;
     padding: 0;
@@ -125,12 +127,13 @@ body {
     font-size: 15px;
     font-weight: 500;
     transition: 0.3s;
+    /* Un pequeño ajuste para asegurar que el área de clic sea cómoda */
+    padding: 10px 5px;
 }
 
 .nav-links a:hover {
     color: #ffcc00;
 }
-
 /* ==========================================================================
     4. MENÚ DESPLEGABLE (Dropdown - Global)
    ========================================================================== */
