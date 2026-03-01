@@ -104,13 +104,13 @@ body {
 .nav-left {
     display: flex;
     align-items: center;
-    /* CAMBIO: Aumentamos el espacio para despegar el botón de Categorías de los links */
-    gap: 60px; 
+    /* AJUSTE: Aumentamos el espacio para separar Categorías del link Inicio */
+    gap: 100px; 
 }
 
 .dropbtn-cat {
-    background-color: #f9f9f9; /* Cambiado a blanco/gris claro según tu imagen */
-    color: #333;               /* Texto oscuro para resaltar sobre el botón claro */
+    background-color: #f9f9f9; 
+    color: #333;               
     padding: 0 30px;
     font-size: 15px;
     font-weight: bold;
@@ -131,7 +131,7 @@ body {
     list-style: none;
     display: flex;
     align-items: center;
-    gap: 30px;
+    gap: 30px; /* Este mantiene la separación entre Inicio, Productos, etc. */
     margin: 0;
     padding: 0;
 }
