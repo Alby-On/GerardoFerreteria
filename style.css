@@ -1,5 +1,5 @@
 /* ==========================================================================
-    1. CONFIGURACIÓN GENERAL Y RESET
+    1. CONFIGURACIÓN GENERAL Y RESET (Global)
    ========================================================================== */
 body { 
     font-family: 'Segoe UI', Roboto, sans-serif; 
@@ -9,7 +9,7 @@ body {
 }
 
 /* ==========================================================================
-    2. HEADER TOP (Logo y Buscador)
+    2. HEADER TOP (Logo y Buscador - Global)
    ========================================================================== */
 .header-top {
     display: flex;
@@ -66,7 +66,7 @@ body {
 }
 
 /* ==========================================================================
-    3. NAVBAR PRINCIPAL (Sticky)
+    3. NAVBAR PRINCIPAL (Sticky - Global)
    ========================================================================== */
 .navbar {
     background: #333;
@@ -132,7 +132,7 @@ body {
 }
 
 /* ==========================================================================
-    4. MENÚ DESPLEGABLE (Dropdown)
+    4. MENÚ DESPLEGABLE (Dropdown - Global)
    ========================================================================== */
 .dropdown {
     position: relative;
@@ -178,201 +178,7 @@ body {
 }
 
 /* ==========================================================================
-    5. DISEÑO DE TIENDA (Layout y Sidebar)
-   ========================================================================== */
-.tienda-layout {
-    display: flex;
-    gap: 40px;
-    max-width: 1400px;
-    margin: 40px auto;
-    padding: 0 20px;
-    align-items: flex-start;
-}
-
-.sidebar-filtros {
-    width: 280px;
-    flex-shrink: 0;
-    background: #fff;
-    padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-}
-
-.sidebar-filtros h3 {
-    font-size: 1.1rem;
-    margin-bottom: 15px;
-    color: #333;
-    text-transform: uppercase;
-    border-bottom: 2px solid #d9534f;
-    display: inline-block;
-}
-
-.filtro-lista {
-    list-style: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-}
-
-.filtro-lista li {
-    margin-bottom: 12px;
-}
-
-.filtro-lista a {
-    text-decoration: none;
-    color: #555;
-    font-size: 15px;
-    transition: 0.2s;
-}
-
-.filtro-lista a:hover {
-    color: #d9534f;
-    padding-left: 5px;
-}
-
-.catalogo-container {
-    flex-grow: 1;
-    min-width: 0;
-}
-
-.section-title {
-    font-size: 2rem;
-    margin-bottom: 30px;
-    color: #222;
-}
-
-/* ==========================================================================
-    6. GRID DE PRODUCTOS (4 Columnas - Nativo)
-   ========================================================================== */
-#shopify-products-load .shopify-buy__product-set, 
-#shopify-products-load .shopify-buy__product-set--parent,
-#shopify-products-load {
-    display: grid !important;
-    grid-template-columns: repeat(4, 1fr) !important;
-    gap: 20px !important;
-    width: 100% !important;
-    grid-auto-flow: row dense !important; 
-    grid-auto-rows: min-content !important;
-}
-
-.shopify-buy__product {
-    display: flex !important;
-    flex-direction: column !important;
-    background: #fff !important;
-    border: 1px solid #eee !important;
-    padding: 15px !important;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    height: 100% !important;
-}
-
-.shopify-buy__product:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-.shopify-buy__product-img-wrapper {
-    height: 200px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    overflow: hidden !important;
-}
-
-.shopify-buy__product-img {
-    max-height: 100% !important;
-    object-fit: contain !important;
-}
-
-.shopify-buy__product-title {
-    font-size: 15px !important;
-    margin: 10px 0 !important;
-    min-height: 40px !important;
-}
-
-.shopify-buy__product-price-size {
-    margin-top: auto !important;
-    color: #d9534f;
-    font-weight: bold;
-}
-
-.shopify-buy__btn {
-    width: 100% !important;
-    background: #333 !important;
-    color: white !important;
-    padding: 10px !important;
-    border: none !important;
-    cursor: pointer !important;
-    font-weight: bold !important;
-}
-
-/* REGLA DE ORO PARA EL BUSCADOR (Ocultar items sin dejar huecos) */
-#shopify-products-load [style*="display: none"] {
-    display: none !important;
-    position: absolute !important;
-}
-
-/* ==========================================================================
-    7. PÁGINA DE DETALLE DINÁMICA (PDP)
-   ========================================================================== */
-.detalle-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Imagen izquierda | Info derecha */
-    gap: 40px;
-    margin-top: 50px;
-    padding: 20px;
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.detalle-imagen img {
-    width: 100%;
-    max-height: 500px;
-    object-fit: contain;
-    border-radius: 8px;
-    background: #fff;
-    border: 1px solid #eee;
-}
-
-.precio-grande {
-    font-size: 2.5rem;
-    color: #d9534f; 
-    font-weight: bold;
-    margin: 15px 0;
-}
-
-.descripcion-texto {
-    line-height: 1.8;
-    color: #555;
-    margin-bottom: 25px;
-    font-size: 1.1rem;
-}
-
-.btn-comprar-ahora {
-    background: #333;
-    color: white;
-    padding: 18px 30px;
-    border: none;
-    font-weight: bold;
-    cursor: pointer;
-    width: 100%;
-    font-size: 1.2rem;
-    transition: 0.3s ease;
-    text-transform: uppercase;
-}
-
-.btn-comprar-ahora:hover {
-    background: #d9534f;
-}
-
-.btn-volver {
-    display: inline-block;
-    margin-top: 25px;
-    color: #777;
-    text-decoration: none;
-}
-
-/* ==========================================================================
-    8. FOOTER PRINCIPAL
+    8. FOOTER PRINCIPAL (Global)
    ========================================================================== */
 .main-footer {
     background: #222;
@@ -394,92 +200,19 @@ body {
 }
 
 /* ==========================================================================
-    9. RESPONSIVE (S22 Ultra y Tablets)
+    RESPONSIVE BÁSICO (Para Header y Footer)
    ========================================================================== */
-@media (max-width: 1100px) {
-    #shopify-products-load .shopify-buy__product-set, 
-    #shopify-products-load { grid-template-columns: repeat(3, 1fr) !important; }
-}
-
 @media (max-width: 900px) {
-    .tienda-layout, .detalle-grid { 
-        flex-direction: column; 
-        grid-template-columns: 1fr !important; 
+    .header-top {
+        flex-direction: column;
+        gap: 15px;
     }
-    .sidebar-filtros { width: 100%; }
-    #shopify-products-load { grid-template-columns: repeat(2, 1fr) !important; }
-}
-
-@media (max-width: 520px) {
-    #shopify-products-load { grid-template-columns: 1fr !important; }
-    .precio-grande { font-size: 1.8rem; }
-}
-/* Espaciado del contenedor del botón */
-.acciones-compra {
-    margin: 25px 0;
-}
-
-/* El botón de compra resaltado */
-.btn-comprar-ahora {
-    background: #333;
-    color: white;
-    padding: 18px 30px;
-    border: none;
-    font-weight: bold;
-    cursor: pointer;
-    width: 100%; /* Ancho completo para facilitar el clic en móviles */
-    font-size: 1.2rem;
-    text-transform: uppercase;
-    transition: background 0.3s ease;
-}
-
-.btn-comprar-ahora:hover {
-    background: #d9534f; /* Rojo Albyon al pasar el mouse */
-}
-
-/* Línea divisora */
-hr {
-    border: 0;
-    border-top: 1px solid #eee;
-    margin: 30px 0;
-}
-
-/* Estilo de la descripción debajo del botón */
-.descripcion-texto {
-    line-height: 1.8;
-    color: #444;
-    font-size: 1.05rem;
-}
-.acciones-compra {
-    display: flex;
-    flex-direction: column; /* En móvil uno sobre otro */
-    gap: 15px;
-    margin: 25px 0;
-}
-
-.selector-cantidad {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: bold;
-}
-
-.selector-cantidad input {
-    padding: 10px;
-    width: 70px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1.1rem;
-    text-align: center;
-}
-
-/* En tablets o PC se ven de lado */
-@media (min-width: 768px) {
-    .acciones-compra {
-        flex-direction: row; 
-        align-items: flex-end;
+    .search-container input {
+        width: 100%;
     }
-    .btn-comprar-ahora {
-        flex: 1;
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
     }
 }
