@@ -36,12 +36,13 @@ async function queryShopify(query) {
     }
 }
 
+// 3. Plantilla de Producto (Usa el ID codificado para detalles.html)
 function templateProducto(prod) {
     const precio = Math.round(prod.variants.edges[0].node.price.amount);
     const imagen = prod.images.edges[0]?.node.url || 'img/placeholder.jpg';
     
-    // CAMBIO CLAVE: Usamos el ID de Shopify para ir a nuestra propia página
-    const idProducto = btoa(prod.id); // Codificamos en base64 para que la URL sea limpia
+    // btoa convierte el ID de Shopify a Base64 para una URL limpia
+    const idProducto = btoa(prod.id); 
 
     return `
         <div class="shopify-buy__product">
@@ -63,10 +64,9 @@ document.addEventListener("DOMContentLoaded", () => {
         loadComponent('header-placeholder', 'componentes/header.html'),
         loadComponent('footer-placeholder', 'componentes/footer.html')
     ]).then(() => {
-        // Inicializar buscador después de que el Header cargue
         inicializarBusquedaUniversal();
         
-        // Activar clics en categorías (ahora dinámico)
+        // Delegación de eventos para categorías
         const enlaces = document.querySelectorAll('.btn-categoria');
         enlaces.forEach(enlace => {
             enlace.addEventListener('click', (e) => {
@@ -83,7 +83,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // 5. Detectar parámetros URL (Búsqueda externa)
     const urlParams = new URLSearchParams(window.location.search);
     const busquedaURL = urlParams.get('q');
 
@@ -96,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// 6. Buscador Universal
+// 4. Buscador Universal
 function inicializarBusquedaUniversal() {
     const inputBuscar = document.getElementById('search-input');
     const btnBuscar = document.getElementById('search-btn');
@@ -118,6 +117,7 @@ function inicializarBusquedaUniversal() {
     }
 }
 
+// 5. Consultas con campo ID incluido
 async function ejecutarBusquedaAPI(termino) {
     const contenedor = document.getElementById('shopify-products-load');
     const titulo = document.getElementById('titulo-coleccion');
@@ -125,11 +125,13 @@ async function ejecutarBusquedaAPI(termino) {
     if (titulo) titulo.textContent = `Resultados para: "${termino}"`;
     contenedor.innerHTML = `<p style="grid-column: 1/-1; text-align: center;">Buscando productos...</p>`;
 
+    // SE AGREGA EL CAMPO "id" EN EL QUERY
     const query = `
     {
       products(first: 50, query: "title:${termino}*") {
         edges {
           node {
+            id
             title
             onlineStoreUrl
             images(first: 1) { edges { node { url } } }
@@ -143,17 +145,6 @@ async function ejecutarBusquedaAPI(termino) {
     renderizarProductos(data?.products?.edges);
 }
 
-// Función para renderizar resultados en el Grid
-function renderizarProductos(edges) {
-    const contenedor = document.getElementById('shopify-products-load');
-    if (!edges || edges.length === 0) {
-        contenedor.innerHTML = `<p style="grid-column: 1/-1; text-align: center;">No se encontraron productos.</p>`;
-        return;
-    }
-    contenedor.innerHTML = edges.map(edge => templateProducto(edge.node)).join('');
-}
-
-// Carga por TAG de Shopify
 async function ejecutarCargaPorCategoria(tag, nombre) {
     const contenedor = document.getElementById('shopify-products-load');
     const titulo = document.getElementById('titulo-coleccion');
@@ -161,11 +152,13 @@ async function ejecutarCargaPorCategoria(tag, nombre) {
     if (titulo) titulo.textContent = nombre;
     contenedor.innerHTML = `<p style="grid-column: 1/-1; text-align: center;">Cargando ${nombre}...</p>`;
 
+    // SE AGREGA EL CAMPO "id" EN EL QUERY
     const query = `
     {
       products(first: 50, query: "tag:${tag}") {
         edges {
           node {
+            id
             title
             onlineStoreUrl
             images(first: 1) { edges { node { url } } }
@@ -177,4 +170,13 @@ async function ejecutarCargaPorCategoria(tag, nombre) {
 
     const { data } = await queryShopify(query);
     renderizarProductos(data?.products?.edges);
+}
+
+function renderizarProductos(edges) {
+    const contenedor = document.getElementById('shopify-products-load');
+    if (!edges || edges.length === 0) {
+        contenedor.innerHTML = `<p style="grid-column: 1/-1; text-align: center;">No se encontraron productos.</p>`;
+        return;
+    }
+    contenedor.innerHTML = edges.map(edge => templateProducto(edge.node)).join('');
 }
