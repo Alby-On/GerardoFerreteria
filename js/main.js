@@ -36,11 +36,12 @@ async function queryShopify(query) {
     }
 }
 
-// 3. Plantilla Dinámica (HTML Nativo - Sin Iframes)
 function templateProducto(prod) {
     const precio = Math.round(prod.variants.edges[0].node.price.amount);
-    const imagen = prod.images.edges[0]?.node.url || 'https://via.placeholder.com/300x300?text=Sin+Imagen';
-    const link = prod.onlineStoreUrl;
+    const imagen = prod.images.edges[0]?.node.url || 'img/placeholder.jpg';
+    
+    // CAMBIO CLAVE: Usamos el ID de Shopify para ir a nuestra propia página
+    const idProducto = btoa(prod.id); // Codificamos en base64 para que la URL sea limpia
 
     return `
         <div class="shopify-buy__product">
@@ -49,9 +50,9 @@ function templateProducto(prod) {
             </div>
             <h3 class="shopify-buy__product-title">${prod.title}</h3>
             <div class="shopify-buy__product-price-size">$${precio.toLocaleString('es-CL')}</div>
-            <button class="shopify-buy__btn" onclick="window.open('${link}', '_blank')">
-                Ver Producto
-            </button>
+            <a href="detalles.html?id=${idProducto}" class="shopify-buy__btn" style="text-decoration:none; text-align:center;">
+                Ver Detalles
+            </a>
         </div>
     `;
 }
