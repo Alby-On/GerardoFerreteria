@@ -1004,9 +1004,8 @@ body {
 /* ==========================================================================
     FILTROS DE PRODUCTOS
    ========================================================================== */
-
 /* ==========================================================================
-    FILTROS DE PRODUCTOS - ESTILO MODERNO (Albyon Digital)
+    FILTROS DE PRODUCTOS - DISEÑO MODERNO
    ========================================================================== */
 
 .filtros-container {
@@ -1014,26 +1013,22 @@ body {
     max-width: 1400px;
     margin: 0 auto 30px;
     display: flex;
-    justify-content: flex-end; /* Alineado a la derecha como grandes e-commerce */
+    justify-content: flex-end; /* Alinea a la derecha */
     align-items: center;
     padding: 15px 0;
-    border-bottom: 1px solid #f1f5f9; /* Línea divisoria muy sutil */
+    border-bottom: 1px solid #f1f5f9;
 }
 
 .ordenar-por {
     display: flex;
     align-items: center;
     gap: 15px;
-    background: #f8fafc; /* Fondo gris suave para resaltar el selector */
+    background: #f8fafc; /* Fondo gris suave */
     padding: 8px 20px;
-    border-radius: 50px; /* Estilo cápsula */
+    border-radius: 50px; /* Forma de cápsula */
     border: 1px solid #e2e8f0;
     transition: all 0.3s ease;
-}
-
-.ordenar-por:hover {
-    border-color: #cbd5e1;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    position: relative;
 }
 
 .ordenar-por label {
@@ -1041,7 +1036,7 @@ body {
     font-weight: 700;
     color: #64748b;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    white-space: nowrap;
 }
 
 .ordenar-por select {
@@ -1053,18 +1048,18 @@ body {
     color: #1e293b;
     cursor: pointer;
     font-family: inherit;
-    padding-right: 5px;
-    /* Quitamos el estilo por defecto del sistema */
-    appearance: none; 
+    appearance: none; /* Quita la flecha por defecto del sistema */
     -webkit-appearance: none;
+    padding-right: 20px; /* Espacio para nuestra flecha roja */
 }
 
-/* Agregamos una flechita personalizada vía CSS (Opcional) */
+/* Flecha roja personalizada */
 .ordenar-por::after {
     content: "▼";
     font-size: 10px;
     color: #d9534f; /* Tu rojo de marca */
-    margin-left: -5px;
+    position: absolute;
+    right: 15px;
     pointer-events: none;
 }
 
@@ -1077,8 +1072,8 @@ body {
 /* Ajuste para móviles (S22 Ultra) */
 @media (max-width: 768px) {
     .filtros-container {
-        justify-content: center; /* Centramos en móvil */
-        margin-bottom: 20px;
+        justify-content: center;
+        width: 95%;
     }
     .ordenar-por {
         width: 100%;
