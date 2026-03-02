@@ -73,6 +73,13 @@
 
     async function gestionarCarrito(variantId) {
         const btn = document.getElementById('btn-add-cart');
+        
+        // --- AQUÍ CAPTURAMOS LA CANTIDAD DEL INPUT ---
+        // Asumiendo que tu input tiene el ID 'product-quantity' o similar
+        const inputCantidad = document.getElementById('product-quantity');
+        const cantidad = inputCantidad ? parseInt(inputCantidad.value) : 1; 
+        // --------------------------------------------
+
         btn.innerText = "Añadiendo...";
         btn.disabled = true;
 
@@ -80,14 +87,12 @@
 
         try {
             if (!cartId) {
-                await crearCarritoNuevo(variantId);
+                await crearCarritoNuevo(variantId, cantidad); // Pasamos cantidad
             } else {
-                await añadirProductoAlCarrito(cartId, variantId);
+                await añadirProductoAlCarrito(cartId, variantId, cantidad); // Pasamos cantidad
             }
             
-            // === AQUÍ VA LA LÍNEA ===
             await actualizarVisualizacionCarro(); 
-            // ========================
 
             btn.innerText = "¡Añadido!";
             setTimeout(() => {
@@ -101,11 +106,10 @@
             btn.disabled = false;
         }
     }
-
-    async function crearCarritoNuevo(variantId) {
+    async function crearCarritoNuevo(variantId, cantidad) {
         const mutation = `
         mutation {
-          cartCreate(input: { lines: [{ merchandiseId: "${variantId}", quantity: 1 }] }) {
+          cartCreate(input: { lines: [{ merchandiseId: "${variantId}", quantity: ${cantidad} }] }) {
             cart { id checkoutUrl }
             userErrors { message }
           }
@@ -115,28 +119,27 @@
         if (cart) {
             localStorage.setItem('shopify_cart_id', cart.id);
             localStorage.setItem('shopify_checkout_url', cart.checkoutUrl);
-            console.log("🛒 Nuevo carrito creado y guardado.");
+            console.log(`🛒 Nuevo carrito creado con ${cantidad} unidades.`);
         }
     }
 
-    async function añadirProductoAlCarrito(cartId, variantId) {
+    async function añadirProductoAlCarrito(cartId, variantId, cantidad) {
         const mutation = `
         mutation {
-          cartLinesAdd(cartId: "${cartId}", lines: [{ merchandiseId: "${variantId}", quantity: 1 }]) {
+          cartLinesAdd(cartId: "${cartId}", lines: [{ merchandiseId: "${variantId}", quantity: ${cantidad} }]) {
             cart { id checkoutUrl }
             userErrors { message }
           }
         }`;
         const response = await queryShopify(mutation);
         
-        // Si hay errores (ej. carrito expirado), limpiar y crear uno nuevo
         if (response.data.cartLinesAdd.userErrors.length > 0) {
             console.warn("⚠️ Carrito antiguo no válido, creando uno nuevo...");
             localStorage.removeItem('shopify_cart_id');
-            return crearCarritoNuevo(variantId);
+            return crearCarritoNuevo(variantId, cantidad);
         }
         
-        console.log("➕ Producto sumado al carrito existente.");
+        console.log(`➕ Se sumaron ${cantidad} productos al carrito.`);
     }
 
     // Inicialización segura
