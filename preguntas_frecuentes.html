@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preguntas Frecuentes - Gerardo Ferretería</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <main class="main-content-area">
+        <div class="ofertas-header">
+            <h2>Preguntas Frecuentes</h2>
+            <p>Resolvemos tus dudas para que compres con confianza</p>
+        </div>
+
+        <div class="faq-container">
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    <span>¿Realizan despachos a domicilio en Chillán?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Sí, realizamos despachos a todo Chillán y Chillán Viejo de lunes a sábado. El costo del flete se calcula según la distancia y el volumen de la carga. Para materiales pesados como cemento o fierro, contamos con camión de descarga.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    <span>¿Cómo puedo comprar por la página web?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Es muy simple: navega por nuestras categorías o usa el buscador, añade los productos al carrito, selecciona tu método de pago (Webpay, Mercado Pago o Transferencia) y nosotros procesaremos tu pedido para retiro o despacho.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    <span>¿Tienen precios especiales para maestros y constructoras?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>¡Claro que sí! En Gerardo Ferretería valoramos el trabajo de los especialistas. Si tienes un proyecto grande o eres contratista, contáctanos por WhatsApp para entregarte una cotización con precios preferenciales por volumen.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    <span>¿Qué pasa si un producto llega defectuoso?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Cumplimos estrictamente con la garantía legal. Si un producto presenta fallas de fábrica, puedes solicitar el cambio o devolución presentando tu boleta o factura dentro de los plazos legales.</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <p style="color: #64748b;">¿Aún tienes dudas? <a href="#" style="color: #d9534f; font-weight: bold;">Contáctanos por WhatsApp</a></p>
+        </div>
+    </main>
+
+    <script>
+        function toggleFAQ(element) {
+            const item = element.parentElement;
+            
+            // Cerrar otros al abrir uno (efecto acordeón puro)
+            document.querySelectorAll('.faq-item').forEach(i => {
+                if (i !== item) i.classList.remove('active');
+            });
+
+            item.classList.toggle('active');
+        }
+    </script>
+  
+</body>
+</html>
