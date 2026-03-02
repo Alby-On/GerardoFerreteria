@@ -1,19 +1,20 @@
-/* --- CONTENEDOR PRINCIPAL --- */
-.content-wrapper {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 50px 20px;
-}
+/* ==========================================================================
+    SECCIÓN CONTACTO - ESTILO GERARDO FERRETERÍA
+   ========================================================================== */
 
-.page-title {
-    text-align: center;
-    margin-bottom: 50px;
+.content-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 5%;
 }
 
 .page-title h1 {
-    font-size: 2.5rem;
-    color: #2c3e50; /* Color oscuro profesional */
-    margin-bottom: 10px;
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: #1e293b;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: -1px;
 }
 
 /* --- GRID DE CONTACTO --- */
@@ -21,123 +22,125 @@
     display: grid;
     grid-template-columns: 1fr 1.2fr;
     gap: 40px;
-    align-items: start;
+    margin-top: 40px;
 }
 
-/* Tarjetas */
 .contact-card {
     background: #ffffff;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+    padding: 40px;
+    border-radius: 24px; /* Bordes redondeados modernos */
+    box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+    border: 1px solid #f1f5f9;
 }
 
 .contact-card h2 {
-    margin-bottom: 25px;
-    font-size: 1.4rem;
-    color: #333;
-    border-left: 5px solid #f39c12; /* Detalle color ferretería */
-    padding-left: 15px;
+    margin-bottom: 30px;
+    font-size: 1.6rem;
+    color: #1e293b;
+    border-left: 6px solid #d9534f; /* Rojo de tu marca */
+    padding-left: 20px;
 }
 
-/* --- INFORMACIÓN DE CONTACTO --- */
-.info-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
+/* --- ICONOS DE INFORMACIÓN --- */
 .info-item i {
-    width: 35px;
-    color: #f39c12;
-    font-size: 1.2rem;
-    text-align: center;
-    margin-right: 15px;
+    width: 40px;
+    color: #d9534f; /* Rojo marca */
+    font-size: 1.3rem;
+    transition: transform 0.3s;
 }
 
-.map-container {
-    margin-top: 25px;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid #eee;
+.info-item:hover i {
+    transform: scale(1.2);
 }
 
-/* --- ESTILOS DEL FORMULARIO --- */
+/* --- FORMULARIO ALINEADO --- */
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     position: relative;
+    width: 100%; /* Asegura que ocupe todo el ancho */
 }
 
 .form-group label {
     display: block;
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: #555;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #64748b;
+    text-transform: uppercase;
+    padding-left: 5px;
 }
 
+/* Ajuste de iconos internos */
 .form-group i {
     position: absolute;
-    left: 15px;
-    top: 38px;
-    color: #aaa;
+    left: 18px;
+    top: 42px; /* Alineación vertical perfecta con el input */
+    color: #94a3b8;
+    z-index: 5;
+    pointer-events: none;
 }
 
+/* --- TEXTBOXES (INPUTS) --- */
 .form-input {
     width: 100%;
-    padding: 12px 15px 12px 42px;
-    border: 1.5px solid #e1e1e1;
-    border-radius: 8px;
+    padding: 14px 20px 14px 50px; /* Padding izquierdo constante para alineación */
+    border: 2px solid #e2e8f0;
+    border-radius: 15px; /* Estilo redondeado moderno */
     font-size: 1rem;
+    color: #1e293b;
+    background-color: #f8fafc;
     transition: all 0.3s ease;
+    box-sizing: border-box; /* Crucial para que el width 100% no se pase */
+}
+
+/* Ajuste especial para el Textarea para que el texto NO choque con el icono */
+textarea.form-input {
+    min-height: 150px;
+    padding-top: 15px;
+    resize: vertical;
 }
 
 .form-input:focus {
     outline: none;
-    border-color: #f39c12;
-    box-shadow: 0 0 8px rgba(243, 156, 18, 0.15);
-}
-
-/* Ajuste para el select y textarea */
-select.form-input {
-    cursor: pointer;
-}
-
-textarea.form-input {
-    min-height: 130px;
-    padding-left: 15px; /* Sin icono para más espacio de escritura */
+    border-color: #d9534f; /* Rojo marca */
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgba(217, 83, 79, 0.1);
 }
 
 /* --- BOTÓN DE ENVÍO --- */
 .submit-btn {
     width: 100%;
-    background-color: #f39c12;
+    background-color: #1e293b; /* Color oscuro profesional */
     color: #fff;
-    padding: 15px;
+    padding: 18px;
     border: none;
-    border-radius: 8px;
+    border-radius: 15px;
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 800;
     text-transform: uppercase;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
-    transition: background 0.3s;
+    gap: 12px;
+    transition: all 0.4s ease;
 }
 
 .submit-btn:hover {
-    background-color: #d35400;
+    background-color: #d9534f; /* Cambio al rojo en hover */
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(217, 83, 79, 0.2);
 }
 
-/* --- RESPONSIVE --- */
+/* --- RESPONSIVO --- */
 @media (max-width: 850px) {
     .contact-grid {
         grid-template-columns: 1fr;
     }
-    
     .page-title h1 {
-        font-size: 2rem;
+        font-size: 2.2rem;
+    }
+    .contact-card {
+        padding: 25px;
     }
 }
