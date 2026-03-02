@@ -625,3 +625,24 @@ function validarRut(rut) {
     const regex = /^[0-9]+-[0-9K]$/;
     return regex.test(limpio);
 }
+function ordenarProductos() {
+    const contenedor = document.getElementById('shopify-products-load');
+    const criterio = document.getElementById('sort-price').value;
+    
+    // Obtenemos todas las tarjetas actuales
+    const productos = Array.from(contenedor.getElementsByClassName('tarjeta-oferta'));
+
+    if (criterio === 'default') return;
+
+    productos.sort((a, b) => {
+        // Extraemos el precio limpiando el símbolo $ y puntos de miles
+        const precioA = parseInt(a.querySelector('.precio-oferta').innerText.replace(/[^0-9]/g, ''));
+        const precioB = parseInt(b.querySelector('.precio-oferta').innerText.replace(/[^0-9]/g, ''));
+
+        return criterio === 'low' ? precioA - precioB : precioB - precioA;
+    });
+
+    // Limpiamos y re-inyectamos ordenados
+    contenedor.innerHTML = '';
+    productos.forEach(p => contenedor.appendChild(p));
+}
