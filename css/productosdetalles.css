@@ -631,3 +631,70 @@
         margin-right: auto !important;
     }
 }
+/* ==========================================================================
+   OPTIMIZACIÓN DE CATEGORÍAS Y FILTROS (Móvil)
+   ========================================================================== */
+@media (max-width: 600px) {
+    /* 1. Ordenar las categorías en una fila limpia */
+    .sidebar-filtros h3 {
+        font-size: 0.9rem !important;
+        color: #666;
+        text-transform: uppercase;
+        margin-bottom: 10px !important;
+        text-align: left !important;
+        padding-left: 5%;
+    }
+
+    .filtro-lista {
+        display: flex !important;
+        overflow-x: auto !important;
+        padding: 5px 5% 20px 5% !important; /* Padding lateral para que no peguen al borde */
+        gap: 10px !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .btn-categoria {
+        background: #f1f5f9 !important; /* Gris muy claro */
+        border: 1px solid #e2e8f0 !important;
+        color: #1e293b !important;
+        padding: 10px 20px !important;
+        border-radius: 50px !important; /* Estilo cápsula moderna */
+        font-size: 13px !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
+    }
+
+    /* 2. Optimizar el selector "Ordenar Por" */
+    .filtros-container {
+        width: 100% !important;
+        padding: 10px 5% !important;
+        justify-content: center !important;
+        box-sizing: border-box !important;
+    }
+
+    .ordenar-por {
+        width: 100% !important;
+        background: #fff !important;
+        border: 2px solid #333 !important; /* Borde más fuerte para que parezca botón */
+        border-radius: 8px !important;
+        padding: 12px 15px !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+    }
+
+    .ordenar-por label {
+        font-size: 12px !important;
+        color: #333 !important;
+        font-weight: 800 !important;
+    }
+
+    .ordenar-por select {
+        font-size: 16px !important; /* Evita zoom molesto */
+        font-weight: 600 !important;
+        color: #e63946 !important; /* Rojo para destacar la selección */
+        border: none !important;
+        background: transparent !important;
+        flex-grow: 1;
+        text-align: right;
+    }
+}
