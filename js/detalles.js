@@ -87,34 +87,31 @@
     let cartId = localStorage.getItem('shopify_cart_id');
 
     try {
-        let response; 
+        // --- PUNTO CLAVE: Guardar lo que retornan tus funciones ---
+        let resultado; 
 
         if (!cartId) {
-            response = await crearCarritoNuevo(variantId, cantidad); 
+            resultado = await crearCarritoNuevo(variantId, cantidad); 
         } else {
-            response = await añadirProductoAlCarrito(cartId, variantId, cantidad); 
+            resultado = await añadirProductoAlCarrito(cartId, variantId, cantidad); 
         }
         
-        // --- DEPURACIÓN: Ver qué responde Shopify realmente ---
-        console.log("Respuesta cruda de Shopify:", response);
+        // --- LOG DE SEGURIDAD (Míralo en tu S22 Ultra) ---
+        console.log("Resultado recibido en gestionarCarrito:", resultado);
 
-        // Capturamos userErrors de cualquiera de las dos posibles mutaciones
-        // (cartCreate o cartLinesAdd)
-        const errores = response?.userErrors || [];
-
-        if (errores.length > 0) {
-            const errorMsg = errores[0].message;
-            console.warn("⚠️ Shopify userError:", errorMsg);
+        // --- VALIDACIÓN DE ERRORES ---
+        if (resultado && resultado.userErrors && resultado.userErrors.length > 0) {
+            const errorMsg = resultado.userErrors[0].message;
             
-            // Si el error es de inventario, avisamos con claridad
+            // Si el mensaje dice algo de stock, lo mostramos
             if (errorMsg.toLowerCase().includes('stock') || errorMsg.toLowerCase().includes('available')) {
-                alert(`📦 Gerardo Ferretería: Solo pudimos añadir lo que queda en bodega. (${errorMsg})`);
+                alert(`📦 Gerardo Ferretería: ${errorMsg}. Solo agregamos lo disponible.`);
             } else {
-                alert(`Nota: ${errorMsg}`);
+                alert(`Aviso: ${errorMsg}`);
             }
         }
 
-        // Actualización visual
+        // Refrescar Sidebar
         if (typeof actualizarVisualizacionCarro === "function") {
             await actualizarVisualizacionCarro(); 
         }
