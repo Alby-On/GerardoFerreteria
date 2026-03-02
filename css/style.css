@@ -7,6 +7,10 @@ body {
     padding: 0; 
     background-color: #f4f4f4;
 }
+html, body {
+    overflow-x: hidden; /* Evita el scroll horizontal accidental */
+    width: 100%;
+}
 /* ==========================================================================
     2. HEADER TOP (Logo a la izquierda, Buscador Centrado y Moderno)
    ========================================================================== */
@@ -91,7 +95,18 @@ body {
     content: "";
     flex: 1;
 }
-
+@media (max-width: 900px) {
+    .search-container {
+        padding: 2px; /* Más compacto en los bordes */
+    }
+    .search-container button {
+        padding: 10px 15px; /* Botón más pequeño para que quepa bien el texto */
+        font-size: 12px;
+    }
+    .logo h1 {
+        font-size: 18px; /* Reducimos un poco el logo para que no sature */
+    }
+}
 /* ==========================================================================
     RESPONSIVO (S22 Ultra y Móviles)
    ========================================================================== */
@@ -211,6 +226,39 @@ body {
 .btn-carrito:hover {
     transform: scale(1.1);
 }
+@media (max-width: 768px) {
+    .navbar {
+        height: auto; /* Permite que la barra crezca si los elementos se apilan */
+        padding: 10px 0;
+    }
+    .nav-container {
+        flex-direction: column; /* Apila Categorías arriba y Carrito abajo */
+        gap: 10px;
+    }
+    .nav-left {
+        gap: 15px; /* Eliminamos los 100px que rompen el diseño */
+        flex-direction: column;
+        width: 100%;
+    }
+    .nav-links {
+        gap: 15px;
+        justify-content: center;
+        width: 100%;
+    }
+    .nav-links a {
+        font-size: 13px;
+        padding: 5px;
+    }
+    .nav-right {
+        margin-left: 0; /* Centramos el carrito en móvil */
+    }
+    .dropbtn-cat {
+        width: 100%;
+        justify-content: center;
+        height: 45px;
+        border-radius: 8px;
+    }
+}
 /* ==========================================================================
     4. MENÚ DESPLEGABLE (Ajustado a la izquierda)
    ========================================================================== */
@@ -268,7 +316,18 @@ body {
     padding-left: 30px;
     color: #d9534f !important;
 }
-
+@media (max-width: 768px) {
+    .dropdown-content {
+        width: 90vw; /* Ocupa casi todo el ancho de la pantalla */
+        left: 50% !important;
+        transform: translateX(-50%) translateY(-10px);
+        position: fixed; /* Lo hace más fácil de navegar en móvil */
+        top: 160px; /* Ajusta según la altura de tu header */
+    }
+    .dropdown:hover .dropdown-content {
+        transform: translateX(-50%) translateY(0);
+    }
+}
 /* CARRUSEL MARCAS */
 /* --- COMPONENTE: CARRUSEL INFINITO INTEGRADO (Albyon Digital) --- */
 .galeria-infinita {
@@ -339,6 +398,12 @@ body {
         height: 60px;
     }
 }
+@media (max-width: 768px) {
+    .slide img {
+        max-width: 80px; /* Evita que las marcas se vean gigantes */
+        filter: none; /* Quitamos la sombra para que cargue más rápido en móvil */
+    }
+}
 /* ==========================================================================
     0. TOP BAR (Contacto arriba del Buscador)
    ========================================================================== */
@@ -401,6 +466,14 @@ body {
         padding: 10px 5%;
     }
 }
+@media (max-width: 768px) {
+    .contact-info-left a {
+        font-size: 12px;
+        background: rgba(255,255,255,0.05); /* Un fondo sutil para que parezca botón */
+        padding: 5px 10px;
+        border-radius: 20px;
+    }
+}
 /* ==========================================================================
     8. FOOTER PRINCIPAL (Minimalista con Iconos de Pago)
    ========================================================================== */
@@ -412,11 +485,19 @@ body {
     border-top: 1px solid #333; /* Línea sutil, no roja */
 }
 
+/* Busca .footer-content y reemplázalo por este */
 .footer-content {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    /* En escritorio 4 columnas, en móvil se ajusta solo */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 40px;
     align-items: start;
+}
+
+@media (max-width: 768px) {
+    .main-footer { padding: 40px 5% 20px; }
+    .footer-section { text-align: center; } /* Centrado para mejor lectura en móvil */
+    .icon-group { justify-content: center; }
 }
 
 .footer-section h3 {
@@ -511,6 +592,7 @@ body {
         gap: 20px;
     }
 }
+
 /* ==========================================================================
     OFERTAS DE ALTO IMPACTO - VERSIÓN ULTRA VISUAL (2026)
    ========================================================================== */
@@ -651,15 +733,23 @@ body {
     left: 120%; /* Efecto flash que atraviesa el botón */
 }
 
-/* --- RESPONSIVO --- */
+/* Reemplaza tus @media de la sección de ofertas por este bloque único */
 @media (max-width: 1024px) {
-    .carrusel-container { grid-template-columns: repeat(2, 1fr); }
-    .ofertas-header h2 { font-size: 2.5rem; }
+    .carrusel-container { 
+        grid-template-columns: repeat(2, 1fr); /* 2 columnas en tablets */
+        gap: 20px; 
+    }
+    .ofertas-header h2 { font-size: 2.2rem; }
 }
 
-@media (max-width: 600px) {
-    .carrusel-container { grid-template-columns: 1fr; }
-    .main-content-area { padding: 40px 0; }
+@media (max-width: 500px) {
+    .carrusel-container { 
+        grid-template-columns: repeat(2, 1fr); /* ¡Mantenemos 2 columnas! */
+        gap: 12px; 
+    }
+    .tarjeta-oferta { padding: 15px; border-radius: 15px; }
+    .ofertas-header h2 { font-size: 1.6rem; letter-spacing: -1px; }
+    .btn-detalles { padding: 10px 5px; font-size: 11px; }
 }
 /* ==========================================================================
     BOTON WHATSAPP
@@ -709,115 +799,31 @@ body {
     animation: none; /* Detiene el pulso cuando el usuario interactúa */
     transform: scale(1.1);
 }
-
+@media (max-width: 600px) {
+    .whatsapp-btn {
+        width: 50px;
+        height: 50px;
+        bottom: 15px;
+        right: 15px;
+        font-size: 25px;
+    }
+}
 /* ==========================================================================
-    CARRO DE COMPRAS
+    CARRO DE COMPRAS (Versión Unificada y Optimizada 2026)
    ========================================================================== */
 
-/* Sidebar */
+/* 1. Estructura Principal del Sidebar */
 .carrito-sidebar {
     position: fixed;
     top: 0;
-    right: -400px; /* Escondido a la derecha */
-    width: 380px;
-    height: 100%;
-    background: white;
-    z-index: 2000;
-    transition: 0.3s ease-in-out;
-    display: flex;
-    flex-direction: column;
-    box-shadow: -5px 0 15px rgba(0,0,0,0.2);
-}
-
-/* Clase para abrir el carrito */
-.carrito-sidebar.open {
-    right: 0;
-}
-
-/* Fondo oscuro (Overlay) */
-#carrito-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    z-index: 1999;
-}
-
-#carrito-overlay.visible {
-    display: block;
-}
-/* 1. Contenedor del Carrito (Escondido por defecto) */
-.carrito-sidebar {
-    position: fixed;
-    top: 0;
-    right: -450px; /* Fuera de la pantalla a la derecha */
+    right: -100%; /* Totalmente fuera de pantalla por defecto */
     width: 400px;
-    max-width: 85vw;
+    max-width: 100%; /* Evita desbordamiento en móviles */
     height: 100vh;
     background: white;
     z-index: 9999;
-    box-shadow: -5px 0 15px rgba(0,0,0,0.2);
-    transition: right 0.3s ease-in-out; /* La animación */
-    display: flex;
-    flex-direction: column;
-}
-
-/* 2. Clase que activa el movimiento (Se añade con JS) */
-.carrito-sidebar.open {
-    right: 0; /* Entra a la pantalla */
-}
-
-/* 3. Fondo oscuro (Overlay) */
-#carrito-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    z-index: 9998;
-}
-
-#carrito-overlay.visible {
-    display: block;
-}
-
-/* Estilos internos rápidos para que se vea bien */
-.carrito-header {
-    padding: 20px;
-    background: #333;
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-#cart-items-list {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding: 20px;
-}
-
-.carrito-footer {
-    padding: 20px;
-    border-top: 1px solid #eee;
-}
-/* Sidebar oculto a la derecha */
-.carrito-sidebar {
-    position: fixed;
-    top: 0;
-    right: -100%; /* Escondido */
-    width: 400px;
-    max-width: 90vw;
-    height: 100vh;
-    background: white;
-    z-index: 3000;
     box-shadow: -5px 0 15px rgba(0,0,0,0.3);
-    transition: right 0.4s ease; /* Animación de entrada */
+    transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     display: flex;
     flex-direction: column;
 }
@@ -827,7 +833,7 @@ body {
     right: 0;
 }
 
-/* Fondo oscuro */
+/* 2. Overlay (Fondo oscuro) */
 #carrito-overlay {
     display: none;
     position: fixed;
@@ -835,62 +841,99 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.5);
-    z-index: 2999;
+    background: rgba(0,0,0,0.6);
+    z-index: 9998;
+    backdrop-filter: blur(2px); /* Efecto moderno de desenfoque */
 }
 
 #carrito-overlay.visible {
     display: block;
 }
-/* Contenedor inferior del carrito */
+
+/* 3. Cabecera del Carrito */
+.carrito-header {
+    padding: 20px;
+    background: #1e293b; /* Color oscuro profesional */
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 4. Lista de Productos (Cuerpo con scroll) */
+#cart-items-list {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 20px;
+    -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
+}
+
+/* 5. Pie del Carrito (Footer) */
 .carrito-footer {
     padding: 20px;
-    border-top: 2px solid #eee;
-    background-color: #f9f9f9; /* Un tono gris muy suave para diferenciarlo */
+    border-top: 2px solid #f1f5f9;
+    background-color: #f9f9f9;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centra los elementos horizontalmente */
+    align-items: center;
     gap: 15px;
 }
 
-/* El contenedor del precio Total */
 .total-container {
     width: 100%;
     display: flex;
     justify-content: space-between;
     font-size: 1.2rem;
     font-weight: bold;
-    color: #333;
+    color: #1e293b;
 }
 
-/* EL BOTÓN DE FINALIZAR COMPRA (Grande y Centrado) */
+/* 6. Botón de Finalizar Compra */
 .btn-checkout {
-    width: 100%; /* Ocupa todo el ancho del lateral */
-    max-width: 350px; /* Evita que sea excesivamente largo en pantallas grandes */
-    padding: 18px 0; /* Más alto para que sea fácil de presionar */
-    background-color: #e63946; /* Rojo vibrante de ferretería */
+    width: 100%;
+    max-width: 350px;
+    padding: 18px 0;
+    background-color: #e63946;
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 12px;
     font-size: 1.1rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 1px;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(230, 57, 70, 0.3);
+    box-shadow: 0 4px 12px rgba(230, 57, 70, 0.3);
 }
 
 .btn-checkout:hover {
-    background-color: #333; /* Cambia a negro al pasar el mouse */
-    transform: translateY(-2px); /* Efecto de elevación */
+    background-color: #333;
+    transform: translateY(-2px);
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
-.btn-checkout:active {
-    transform: translateY(0);
-}
+/* ==========================================================================
+    AJUSTES ESPECÍFICOS PARA MÓVILES (S22 Ultra, iPhone, etc.)
+   ========================================================================== */
+@media (max-width: 480px) {
+    .carrito-sidebar {
+        width: 100%; /* Ocupa toda la pantalla para mejor usabilidad */
+    }
 
+    .carrito-header {
+        padding: 15px;
+    }
+
+    .btn-checkout {
+        width: 100%; /* Aprovecha el ancho total táctil */
+        padding: 16px 0;
+        font-size: 1rem;
+    }
+
+    .total-container {
+        font-size: 1.1rem;
+    }
+}
 /* ==========================================================================
     SECCIÓN CATEGORÍAS - DISEÑO DE ALTO IMPACTO (8 ITEMS)
    ========================================================================== */
@@ -1001,6 +1044,20 @@ body {
     }
     .card-categoria { height: 220px; }
     .card-categoria h3 { font-size: 1.2rem; }
+}
+/* Añade esto al final de tu sección de categorías */
+@media (max-width: 600px) {
+    .grid-categorias {
+        grid-template-columns: repeat(2, 1fr); /* Cuadrícula de 2x2 */
+        gap: 10px;
+    }
+    .card-categoria { height: 160px; }
+    /* En móvil, forzamos que el gradiente sea visible siempre ya que no hay hover */
+    .card-categoria::before {
+        background: linear-gradient(to top, rgba(30, 41, 59, 0.9) 20%, transparent 100%);
+    }
+    .card-categoria h3 { font-size: 0.9rem; }
+    .btn-explorar { display: none; } /* Limpiamos ruido visual */
 }
 /* ==========================================================================
     FILTROS DE PRODUCTOS
