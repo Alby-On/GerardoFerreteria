@@ -659,77 +659,72 @@ body {
 }
 
 /* CARRUSEL MARCAS */
-/* --- COMPONENTE: CARRUSEL INFINITO (Albyon Digital) --- */
+/* --- COMPONENTE: CARRUSEL INFINITO INTEGRADO (Albyon Digital) --- */
 .galeria-infinita {
     width: 100%;
     overflow: hidden;
-    background: white; /* Resalta tus PNGs */
-    padding: 15px 0;
+    background: white;
+    padding: 10px 0;
     position: relative;
-    /* Ajuste para que empiece debajo de la Navbar fija */
-    margin-top: 80px; 
-    border-bottom: 1px solid rgba(0,0,0,0.05);
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    /* Eliminamos el margin-top porque ya vive dentro del header */
+    margin-top: 0 !important;
 }
 
 .slider-track {
     display: flex;
-    /* Usamos una variable para el ancho de la imagen para fácil ajuste */
-    --slide-width: 200px; 
-    /* El track mide el ancho de 18 imágenes (9 originales + 9 duplicadas) */
+    /* Forzamos un ancho exacto por imagen */
+    --slide-width: 180px; 
     width: calc(var(--slide-width) * 18); 
-    animation: scroll-infinito 30s linear infinite;
-    will-change: transform; /* Optimización para GPU de móviles */
+    animation: scroll-infinito 35s linear infinite;
+    will-change: transform;
 }
 
-/* Pausa táctil o con mouse */
 .slider-track:hover {
     animation-play-state: paused;
 }
 
 .slide {
+    /* Aquí forzamos que el contenedor sea siempre del mismo tamaño */
     width: var(--slide-width);
-    height: 150px; /* Reducimos altura para que sea una cinta elegante */
+    height: 100px; 
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px;
+    padding: 15px; /* Espacio interno para que no choquen entre sí */
     flex-shrink: 0;
 }
 
 .slide img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.05)); /* Sombra suave para los PNG */
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    /* Forzamos a la imagen a ocupar el máximo del contenedor uniforme */
+    width: 120px;  /* Ancho fijo para todas */
+    height: 80px;  /* Alto fijo para todas */
+    object-fit: contain; /* Mantiene la proporción sin estirar */
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));
+    transition: transform 0.3s ease;
 }
 
 .slide img:hover {
-    transform: scale(1.15);
+    transform: scale(1.1);
 }
 
-/* Keyframes optimizados */
 @keyframes scroll-infinito {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        /* Se mueve exactamente el ancho de las 9 imágenes originales */
-        transform: translateX(calc(var(--slide-width) * -9));
-    }
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(var(--slide-width) * -9)); }
 }
 
-/* Ajuste para móviles (S22 Ultra y similares) */
+/* Ajuste para móviles (S22 Ultra) */
 @media (max-width: 768px) {
-    .galeria-infinita {
-        margin-top: 70px; /* Navbar suele ser un poco más baja en móvil */
-        padding: 10px 0;
-    }
     .slider-track {
-        --slide-width: 150px; /* Imágenes más pequeñas en móvil */
-        animation-duration: 20s; /* Un poco más rápido para mantener dinamismo */
+        --slide-width: 130px; /* Reducimos el paso del carrusel */
+        animation-duration: 25s;
     }
     .slide {
-        height: 100px;
+        height: 80px;
+        padding: 10px;
+    }
+    .slide img {
+        width: 100px; /* Ajuste proporcional para móvil */
+        height: 60px;
     }
 }
