@@ -628,43 +628,51 @@ function validarRut(rut) {
 /**
  * Función para ordenar productos cargados dinámicamente desde Shopify
  */
-function ordenarPorPrecio() {
+function ordenarProductosShopify() {
+    // 1. Buscamos el contenedor donde Shopify mete los productos
     const contenedor = document.getElementById('shopify-products-load');
     const selector = document.getElementById('sort-price');
     const orden = selector.value;
-    
-    // 1. Buscamos las tarjetas que Shopify ya inyectó
-    // Si usas el componente oficial de Shopify, asegúrate de que la clase coincida
-    let productos = Array.from(contenedor.getElementsByClassName('tarjeta-oferta'));
 
-    // Si no encuentra 'tarjeta-oferta', intentamos con 'product-card' (tu clase anterior)
-    if (productos.length === 0) {
-        productos = Array.from(contenedor.getElementsByClassName('product-card'));
-    }
-
-    if (productos.length === 0) {
-        console.warn("Aún no hay productos cargados para ordenar.");
+    if (!contenedor) {
+        console.error("No se encontró el contenedor #shopify-products-load");
         return;
     }
 
-    // 2. Proceso de Ordenamiento
+    // 2. Intentamos capturar los productos. 
+    // Buscamos 'tarjeta-oferta' o cualquier div directo que sea hijo del contenedor
+    let productos = Array.from(contenedor.children);
+
+    if (productos.length === 0) {
+        alert("Espera a que carguen los productos para ordenar.");
+        return;
+    }
+
+    console.log("Productos encontrados para ordenar:", productos.length);
+
+    // 3. Proceso de Ordenamiento
     productos.sort((a, b) => {
-        // Buscamos el precio de oferta (el actual)
-        const elA = a.querySelector('.precio-oferta') || a.querySelector('.price');
-        const elB = b.querySelector('.precio-oferta') || b.querySelector('.price');
+        // Buscamos el precio dentro de .precio-oferta o cualquier clase que contenga 'price'
+        const textoA = a.querySelector('.precio-oferta')?.innerText || a.innerText;
+        const textoB = b.querySelector('.precio-oferta')?.innerText || b.innerText;
 
-        if (!elA || !elB) return 0;
+        // Extraemos solo los números (ej: "$ 45.000" -> 45000)
+        const precioA = parseInt(textoA.replace(/\D/g, "")) || 0;
+        const precioB = parseInt(textoB.replace(/\D/g, "")) || 0;
 
-        // LIMPIEZA EXTREMA: Quitamos $, puntos, comas y espacios
-        // Ejemplo: "$ 64.990" -> "64990"
-        const precioA = parseInt(elA.textContent.replace(/\D/g, ""), 10);
-        const precioB = parseInt(elB.textContent.replace(/\D/g, ""), 10);
-
-        return orden === 'asc' ? precioA - precioB : precioB - precioA;
+        if (orden === 'asc') return precioA - precioB;
+        if (orden === 'desc') return precioB - precioA;
+        return 0;
     });
 
-    // 3. Re-inyectamos los elementos ordenados al contenedor
-    // Esto no duplica, solo cambia el orden físico en el HTML
-    contenedor.innerHTML = ''; 
-    productos.forEach(p => contenedor.appendChild(p));
+    // 4. Re-inyectamos los productos en el nuevo orden
+    // Limpiamos el contenedor
+    contenedor.innerHTML = '';
+    
+    // Los volvemos a meter uno por uno
+    productos.forEach(p => {
+        contenedor.appendChild(p);
+    });
+    
+    console.log("Ordenamiento completado en orden:", orden);
 }
