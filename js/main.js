@@ -76,7 +76,8 @@ document.addEventListener("DOMContentLoaded", () => {
         loadComponent('header-placeholder', 'components/header.html'),
         loadComponent('footer-placeholder', 'components/footer.html'),
         loadComponent('whatsapp-placeholder', 'components/whatsapp.html'),
-        loadComponent('carrito-placeholder', 'components/carro_compras.html')
+        loadComponent('carrito-placeholder', 'components/carro_compras.html'),
+        loadComponent('galeria-infinita', 'components/carrusel_marcas.html')
     ]).then(() => {
 
         // ================================
