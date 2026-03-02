@@ -255,25 +255,44 @@
     }
 }
 /* ==========================================================================
-    RESPONSIVE
+   SOLO PARA MÓVILES (No afecta Web)
    ========================================================================== */
-@media (max-width: 1100px) {
-    #shopify-products-load { grid-template-columns: repeat(3, 1fr) !important; }
-}
-
-@media (max-width: 768px) {
-    .tienda-layout { flex-direction: column; }
+@media (max-width: 900px) {
+    /* 1. Sidebar convertido en menú horizontal */
+    .tienda-layout { flex-direction: column !important; gap: 10px !important; }
+    
     .sidebar-filtros {
-        flex: none;
-        width: 100%;
-        position: static;
-        margin-bottom: 30px;
+        width: 100% !important;
+        position: relative !important;
+        top: 0 !important;
+        padding: 10px 0 !important;
+        background: transparent !important;
+        border: none !important;
     }
-    #shopify-products-load { grid-template-columns: repeat(2, 1fr) !important; }
-}
 
-@media (max-width: 480px) {
-    #shopify-products-load { grid-template-columns: 1fr !important; }
+    .filtro-lista {
+        display: flex !important;
+        overflow-x: auto !important; /* Scroll lateral */
+        gap: 8px !important;
+        padding-bottom: 10px !important;
+    }
+    
+    .filtro-lista li { flex: 0 0 auto !important; }
+    .btn-categoria { white-space: nowrap !important; padding: 10px 15px !important; }
+
+    /* 2. Grid de 2 columnas forzado */
+    #shopify-products-load {
+        grid-template-columns: repeat(2, 1fr) !important; 
+        gap: 10px !important;
+        padding: 5px !important;
+    }
+
+    /* 3. Ajuste de tarjetas para que quepan bien */
+    .tarjeta-oferta { padding: 10px !important; border-radius: 12px !important; }
+    .tarjeta-oferta .img-container { height: 140px !important; }
+    .tarjeta-oferta .producto-titulo { font-size: 13px !important; min-height: 38px !important; }
+    .tarjeta-oferta .precio-monto { font-size: 1.1rem !important; }
+    .tarjeta-oferta .btn-detalles { padding: 10px 5px !important; font-size: 12px !important; }
 }
 
 /* ==========================================================================
