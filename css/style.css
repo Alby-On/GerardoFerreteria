@@ -890,7 +890,6 @@ body {
         padding: 10px 5%;
     }
 }
-
 /* ==========================================================================
     SECCIÓN CATEGORÍAS - DISEÑO DE ALTO IMPACTO (8 ITEMS)
    ========================================================================== */
@@ -905,7 +904,7 @@ body {
 
 .grid-categorias {
     display: grid;
-    /* 4 Columnas Fijas para mantener simetría */
+    /* 4 Columnas Fijas para mantener simetría en escritorio */
     grid-template-columns: repeat(4, 1fr); 
     gap: 20px;
     width: 100%;
@@ -929,7 +928,7 @@ body {
     border: 1px solid rgba(0,0,0,0.05);
 }
 
-/* Oscurecimiento para que el texto resalte */
+/* Capa de oscurecimiento */
 .card-categoria::before {
     content: "";
     position: absolute;
@@ -970,16 +969,15 @@ body {
     transition: all 0.4s ease;
 }
 
-/* --- EFECTOS HOVER (REACCIÓN AL MOUSE) --- */
+/* --- EFECTOS HOVER --- */
 
 .card-categoria:hover {
     transform: translateY(-8px);
     box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-    /* Zoom a la imagen de fondo */
-    background-size: 110%; 
+    background-size: 115%; /* Zoom dinámico a la foto */
 }
 
-/* Al pasar el mouse, el gradiente cambia al rojo de la marca */
+/* El gradiente cambia al rojo de la marca */
 .card-categoria:hover::before {
     background: linear-gradient(to top, rgba(217, 83, 79, 0.9) 0%, rgba(217, 83, 79, 0.4) 100%);
 }
