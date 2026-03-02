@@ -657,3 +657,56 @@ body {
 .btn-checkout:active {
     transform: translateY(0);
 }
+
+/* CARRUSEL MARCAS */
+
+.galeria-infinita {
+    width: 100%;
+    height: auto;
+    margin: 50px 0;
+    overflow: hidden; /* Escondemos lo que sale de la pantalla */
+    background: white;
+    padding: 20px 0;
+    position: relative;
+}
+
+.slider-track {
+    display: flex;
+    width: calc(250px * 18); /* Ancho de imagen * total de imágenes (9+9) */
+    animation: scroll-infinito 40s linear infinite;
+}
+
+/* Pausar cuando el cliente de Chillán pase el mouse para ver un producto */
+.slider-track:hover {
+    animation-play-state: paused;
+}
+
+.slide {
+    width: 250px;
+    height: 250px;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+}
+
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.slide img:hover {
+    transform: scale(1.1);
+}
+
+/* Keyframes para el movimiento */
+@keyframes scroll-infinito {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        /* Se mueve exactamente la mitad del ancho total del track */
+        transform: translateX(calc(-250px * 9));
+    }
+}
