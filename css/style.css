@@ -8,16 +8,16 @@ body {
     background-color: #f4f4f4;
 }
 /* ==========================================================================
-    2. HEADER TOP (Logo a la izquierda, Buscador Centrado)
+    2. HEADER TOP (Logo a la izquierda, Buscador Centrado y Moderno)
    ========================================================================== */
 .header-top {
     display: flex;
     align-items: center;
-    padding: 20px 5%;
+    padding: 15px 5%; /* Un poco más compacto verticalmente */
     background: white;
+    border-bottom: 1px solid #eee;
 }
 
-/* 1. Envolvemos el logo en un contenedor con flex: 1 */
 .logo {
     flex: 1; 
     display: flex;
@@ -26,58 +26,97 @@ body {
 
 .logo h1 {
     margin: 0;
-    color: #333;
-    font-size: 24px;
+    color: #1e293b; /* Un gris azulado más moderno */
+    font-size: 22px;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    white-space: nowrap; /* Evita que el logo se rompa en dos líneas */
+    letter-spacing: -0.5px; /* Estilo tipográfico moderno */
 }
 
-/* 2. El buscador se mantiene intacto, pero sin márgenes automáticos */
+/* --- BUSCADOR MODERNO --- */
 .search-container {
     display: flex;
-    gap: 0;
-    flex: 0 0 auto; /* No crece ni se encoge, mantiene su diseño original */
+    flex: 0 1 600px; /* Permitimos que crezca hasta 600px */
+    background: #f1f5f9; /* Fondo gris muy suave */
+    border-radius: 50px; /* Bordes totalmente redondeados */
+    padding: 4px; /* Espacio para el efecto de "cápsula" */
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
 }
 
-/* 3. Creamos un espacio vacío a la derecha para equilibrar el flex: 1 del logo */
+/* Efecto de foco en todo el contenedor */
+.search-container:focus-within {
+    background: white;
+    border-color: #d9534f; /* Rojo Albyon */
+    box-shadow: 0 4px 12px rgba(217, 83, 79, 0.15);
+}
+
+.search-container input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    outline: none;
+    color: #334155;
+    width: 100%; /* Ocupa todo el espacio disponible */
+}
+
+.search-container input::placeholder {
+    color: #94a3b8;
+}
+
+.search-container button {
+    padding: 10px 30px;
+    background: #d9534f;
+    color: white;
+    border: none;
+    border-radius: 40px; /* Botón tipo píldora */
+    cursor: pointer;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    margin-left: 5px;
+}
+
+.search-container button:hover {
+    background: #1e293b; /* Cambia a azul oscuro al pasar el mouse */
+    transform: translateY(-1px);
+}
+
+/* Ajuste de equilibrio para el logo flex:1 */
 .header-top::after {
     content: "";
     flex: 1;
 }
 
-/* --- Mantenemos tu diseño original de los elementos internos --- */
-.search-container select, 
-.search-container input {
-    padding: 12px;
-    border: 1px solid #ddd;
-    outline: none;
-}
+/* ==========================================================================
+    RESPONSIVO (S22 Ultra y Móviles)
+   ========================================================================== */
+@media (max-width: 900px) {
+    .header-top {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+    }
+    
+    .logo, .header-top::after {
+        flex: none;
+        width: 100%;
+        justify-content: center;
+    }
 
-.search-container select {
-    border-radius: 4px 0 0 4px;
-    background: #f9f9f9;
-    cursor: pointer;
-}
+    .search-container {
+        width: 100%;
+        flex: none;
+    }
 
-.search-container input {
-    width: 300px;
-    border-left: none;
-}
-
-.search-container button {
-    padding: 12px 25px;
-    background: #d9534f;
-    color: white;
-    border: none;
-    border-radius: 0 4px 4px 0;
-    cursor: pointer;
-    font-weight: bold;
-    transition: 0.3s;
-}
-
-.search-container button:hover {
-    background: #c9302c;
+    .search-container input {
+        padding: 10px 15px;
+        font-size: 14px;
+    }
 }
 /* ==========================================================================
     3. NAVBAR PRINCIPAL (Corregido para centrado total)
