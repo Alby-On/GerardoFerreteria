@@ -625,31 +625,46 @@ function validarRut(rut) {
     const regex = /^[0-9]+-[0-9K]$/;
     return regex.test(limpio);
 }
+/**
+ * Función para ordenar productos cargados dinámicamente desde Shopify
+ */
 function ordenarPorPrecio() {
     const contenedor = document.getElementById('shopify-products-load');
     const selector = document.getElementById('sort-price');
     const orden = selector.value;
     
-    // 1. Convertimos los hijos del contenedor (las tarjetas) en un Array
-    const productos = Array.from(contenedor.getElementsByClassName('tarjeta-oferta'));
+    // 1. Buscamos las tarjetas que Shopify ya inyectó
+    // Si usas el componente oficial de Shopify, asegúrate de que la clase coincida
+    let productos = Array.from(contenedor.getElementsByClassName('tarjeta-oferta'));
 
-    // 2. Aplicamos el algoritmo de ordenamiento
+    // Si no encuentra 'tarjeta-oferta', intentamos con 'product-card' (tu clase anterior)
+    if (productos.length === 0) {
+        productos = Array.from(contenedor.getElementsByClassName('product-card'));
+    }
+
+    if (productos.length === 0) {
+        console.warn("Aún no hay productos cargados para ordenar.");
+        return;
+    }
+
+    // 2. Proceso de Ordenamiento
     productos.sort((a, b) => {
-        // Extraemos el texto del precio y lo convertimos a número puro
-        // Eliminamos "$", "." y cualquier espacio
-        const precioA = parseFloat(a.querySelector('.precio-oferta').innerText.replace(/[^0-9.-]+/g, ""));
-        const precioB = parseFloat(b.querySelector('.precio-oferta').innerText.replace(/[^0-9.-]+/g, ""));
+        // Buscamos el precio de oferta (el actual)
+        const elA = a.querySelector('.precio-oferta') || a.querySelector('.price');
+        const elB = b.querySelector('.precio-oferta') || b.querySelector('.price');
 
-        if (orden === 'asc') {
-            return precioA - precioB; // Menor a Mayor
-        } else {
-            return precioB - precioA; // Mayor a Menor
-        }
+        if (!elA || !elB) return 0;
+
+        // LIMPIEZA EXTREMA: Quitamos $, puntos, comas y espacios
+        // Ejemplo: "$ 64.990" -> "64990"
+        const precioA = parseInt(elA.textContent.replace(/\D/g, ""), 10);
+        const precioB = parseInt(elB.textContent.replace(/\D/g, ""), 10);
+
+        return orden === 'asc' ? precioA - precioB : precioB - precioA;
     });
 
-    // 3. Limpiamos el contenedor y reinsertamos los productos en el nuevo orden
-    contenedor.innerHTML = '';
-    productos.forEach(producto => {
-        contenedor.appendChild(producto);
-    });
+    // 3. Re-inyectamos los elementos ordenados al contenedor
+    // Esto no duplica, solo cambia el orden físico en el HTML
+    contenedor.innerHTML = ''; 
+    productos.forEach(p => contenedor.appendChild(p));
 }
