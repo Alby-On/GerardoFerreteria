@@ -355,24 +355,32 @@ body {
     }
 }
 /* ==========================================================================
-    OFERTAS DE ALTO IMPACTO (Gerardo Ferretería) - Diseño Limpio
+    OFERTAS DE ALTO IMPACTO (Gerardo Ferretería) - Diseño Limpio & Centrado
    ========================================================================== */
 
 .seccion-ofertas {
     padding: 60px 5%;
-    background-color: #f8fafc; /* Gris azulado muy tenue */
+    background-color: #f8fafc;
+    /* Aseguramos que el contenedor padre centre todo su contenido */
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    text-align: center;
 }
 
 .carrusel-container {
     display: grid;
-    /* Unificamos el grid para un diseño consistente */
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    /* Justificamos el contenido del grid al centro */
+    justify-content: center; 
+    /* Mantenemos el auto-fill pero con un ancho máximo controlado */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 320px));
     gap: 30px;
     margin-top: 40px;
+    width: 100%;
+    max-width: 1200px; /* Evita que las tarjetas se dispersen demasiado */
 }
 
 .tarjeta-oferta {
-    /* Mantenemos position relative para otros elementos internos */
     position: relative; 
     background: white;
     border-radius: 20px;
@@ -382,14 +390,17 @@ body {
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     border: 1px solid #f1f5f9;
     overflow: hidden;
+    /* Centrado interno por seguridad */
+    margin: 0 auto; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
-
-/* --- ELIMINADO EL BADGE DIAGONAL DE OFERTA --- */
 
 .tarjeta-oferta:hover {
     transform: translateY(-15px);
     box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-    border-color: #d9534f; /* Rojo de tu marca */
+    border-color: #d9534f;
 }
 
 .img-container {
@@ -409,10 +420,9 @@ body {
 }
 
 .tarjeta-oferta:hover .img-container img {
-    transform: scale(1.1); /* Zoom sutil al producto */
+    transform: scale(1.1);
 }
 
-/* Estilos de Precio con Comparación */
 .precio-contenedor {
     display: flex;
     flex-direction: column;
@@ -434,13 +444,12 @@ body {
 }
 
 .precio-oferta span {
-    color: #d9534f; /* El símbolo $ en rojo */
+    color: #d9534f;
     font-size: 1.2rem;
 }
 
-/* Botón Moderno */
 .btn-detalles {
-    background: #1e293b; /* Azul oscuro elegante */
+    background: #1e293b;
     color: white;
     border: none;
     padding: 14px;
@@ -456,11 +465,11 @@ body {
     justify-content: center;
     gap: 10px;
     font-size: 14px;
-    text-decoration: none; /* Por si es un enlace <a> */
+    text-decoration: none;
 }
 
 .btn-detalles:hover {
-    background: #ffb703; /* Amarillo ferretería al hover */
+    background: #ffb703;
     color: #1e293b;
     transform: scale(1.02);
 }
@@ -471,11 +480,13 @@ body {
         padding: 40px 15px;
     }
     .carrusel-container {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        /* En móvil forzamos a que ocupen casi todo el ancho para facilitar el toque */
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
         gap: 20px;
     }
     .tarjeta-oferta {
         padding: 20px;
+        max-width: 100%;
     }
     .img-container {
         height: 180px;
