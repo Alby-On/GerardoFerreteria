@@ -34,15 +34,13 @@
     <div class="total-productos">
         <span id="contador-productos">Mostrando productos...</span>
     </div>
-<div class="filtros-container">
-    <div class="ordenar-por">
-        <label for="sort-price">Ordenar por precio:</label>
-        <select id="sort-price" onchange="ordenarPorPrecio()">
-            <option value="default" selected disabled>Seleccionar...</option>
-            <option value="asc">Menor a Mayor ↑</option>
-            <option value="desc">Mayor a Menor ↓</option>
-        </select>
-    </div>
+<div class="filtros-container" style="margin: 20px 5%; text-align: right;">
+    <label style="font-weight: bold; color: #333;">Ordenar por precio: </label>
+    <select id="sort-price" onchange="ordenarProductosShopify()">
+        <option value="default">Seleccionar...</option>
+        <option value="asc">Menor a Mayor ↑</option>
+        <option value="desc">Mayor a Menor ↓</option>
+    </select>
 </div>
 </div>
         <div id="shopify-products-load">
