@@ -73,12 +73,9 @@
 
    async function gestionarCarrito(variantId) {
     const btn = document.getElementById('btn-add-cart');
-    
-    // 1. Capturamos la cantidad del input 'cantidad'
     const inputCantidad = document.getElementById('cantidad');
     const cantidad = inputCantidad ? parseInt(inputCantidad.value) : 1;
     
-    // Validación de seguridad
     if (isNaN(cantidad) || cantidad < 1) {
         alert("Por favor, ingresa una cantidad válida.");
         return;
@@ -90,30 +87,39 @@
     let cartId = localStorage.getItem('shopify_cart_id');
 
     try {
-        let resultado; // Variable para capturar la respuesta de Shopify
+        let response; 
 
         if (!cartId) {
-            resultado = await crearCarritoNuevo(variantId, cantidad); 
+            response = await crearCarritoNuevo(variantId, cantidad); 
         } else {
-            resultado = await añadirProductoAlCarrito(cartId, variantId, cantidad); 
+            response = await añadirProductoAlCarrito(cartId, variantId, cantidad); 
         }
         
-        // --- LÓGICA DE AVISO DE STOCK ---
-        // Si hay errores de usuario (como falta de stock), se muestran aquí
-        if (resultado && resultado.userErrors && resultado.userErrors.length > 0) {
-            const errorMsg = resultado.userErrors[0].message;
-            alert(`Atención: ${errorMsg}. Se agregó el máximo disponible.`);
-        }
-        // --------------------------------
+        // --- DEPURACIÓN: Ver qué responde Shopify realmente ---
+        console.log("Respuesta cruda de Shopify:", response);
 
-        // Actualiza el sidebar del carrito si la función existe globalmente
+        // Capturamos userErrors de cualquiera de las dos posibles mutaciones
+        // (cartCreate o cartLinesAdd)
+        const errores = response?.userErrors || [];
+
+        if (errores.length > 0) {
+            const errorMsg = errores[0].message;
+            console.warn("⚠️ Shopify userError:", errorMsg);
+            
+            // Si el error es de inventario, avisamos con claridad
+            if (errorMsg.toLowerCase().includes('stock') || errorMsg.toLowerCase().includes('available')) {
+                alert(`📦 Gerardo Ferretería: Solo pudimos añadir lo que queda en bodega. (${errorMsg})`);
+            } else {
+                alert(`Nota: ${errorMsg}`);
+            }
+        }
+
+        // Actualización visual
         if (typeof actualizarVisualizacionCarro === "function") {
             await actualizarVisualizacionCarro(); 
         }
 
         btn.innerText = "¡Añadido!";
-        
-        // Opcional: Resetear el input a 1 tras añadir con éxito
         if (inputCantidad) inputCantidad.value = 1;
 
         setTimeout(() => {
@@ -122,10 +128,9 @@
         }, 2000);
 
     } catch (e) {
-        console.error("❌ Error procesando carrito:", e);
+        console.error("❌ Error técnico:", e);
         btn.innerText = "Error";
         btn.disabled = false;
-        alert("Hubo un problema al conectar con la tienda. Inténtalo de nuevo.");
     }
 }
 
