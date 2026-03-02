@@ -268,6 +268,139 @@ body {
     padding-left: 30px;
     color: #d9534f !important;
 }
+
+/* CARRUSEL MARCAS */
+/* --- COMPONENTE: CARRUSEL INFINITO INTEGRADO (Albyon Digital) --- */
+.galeria-infinita {
+    width: 100%;
+    overflow: hidden;
+    background: white;
+    padding: 10px 0;
+    position: relative;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    /* Eliminamos el margin-top porque ya vive dentro del header */
+    margin-top: 0 !important;
+}
+
+.slider-track {
+    display: flex;
+    /* Forzamos un ancho exacto por imagen */
+    --slide-width: 180px; 
+    width: calc(var(--slide-width) * 18); 
+    animation: scroll-infinito 35s linear infinite;
+    will-change: transform;
+}
+
+.slider-track:hover {
+    animation-play-state: paused;
+}
+
+.slide {
+    /* Aquí forzamos que el contenedor sea siempre del mismo tamaño */
+    width: var(--slide-width);
+    height: 100px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px; /* Espacio interno para que no choquen entre sí */
+    flex-shrink: 0;
+}
+
+.slide img {
+    /* Forzamos a la imagen a ocupar el máximo del contenedor uniforme */
+    width: 120px;  /* Ancho fijo para todas */
+    height: 80px;  /* Alto fijo para todas */
+    object-fit: contain; /* Mantiene la proporción sin estirar */
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));
+    transition: transform 0.3s ease;
+}
+
+.slide img:hover {
+    transform: scale(1.1);
+}
+
+@keyframes scroll-infinito {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(var(--slide-width) * -9)); }
+}
+
+/* Ajuste para móviles (S22 Ultra) */
+@media (max-width: 768px) {
+    .slider-track {
+        --slide-width: 130px; /* Reducimos el paso del carrusel */
+        animation-duration: 25s;
+    }
+    .slide {
+        height: 80px;
+        padding: 10px;
+    }
+    .slide img {
+        width: 100px; /* Ajuste proporcional para móvil */
+        height: 60px;
+    }
+}
+/* ==========================================================================
+    0. TOP BAR (Contacto arriba del Buscador)
+   ========================================================================== */
+.top-bar {
+    background-color: #1e293b; /* Azul oscuro elegante */
+    color: white;
+    padding: 8px 5%;
+    font-size: 13px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.top-bar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.contact-info-left {
+    display: flex;
+    gap: 20px;
+}
+
+.contact-info-left a {
+    color: #cbd5e1;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.3s ease;
+}
+
+.contact-info-left a:hover {
+    color: #25d366; /* Color WhatsApp al pasar el mouse */
+}
+
+.contact-info-left i {
+    color: #d9534f; /* Rojo de tu marca para los iconos */
+    font-size: 14px;
+}
+
+.top-bar-right span {
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+/* Ajuste para móviles (S22 Ultra) */
+@media (max-width: 768px) {
+    .contact-info-left {
+        width: 100%;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap; /* Para que no se amontonen en pantallas pequeñas */
+    }
+    .top-bar-right {
+        display: none; /* Ocultamos la ciudad en móvil para ahorrar espacio */
+    }
+    .top-bar {
+        padding: 10px 5%;
+    }
+}
 /* ==========================================================================
     8. FOOTER PRINCIPAL (Minimalista con Iconos de Pago)
    ========================================================================== */
@@ -758,138 +891,6 @@ body {
     transform: translateY(0);
 }
 
-/* CARRUSEL MARCAS */
-/* --- COMPONENTE: CARRUSEL INFINITO INTEGRADO (Albyon Digital) --- */
-.galeria-infinita {
-    width: 100%;
-    overflow: hidden;
-    background: white;
-    padding: 10px 0;
-    position: relative;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
-    /* Eliminamos el margin-top porque ya vive dentro del header */
-    margin-top: 0 !important;
-}
-
-.slider-track {
-    display: flex;
-    /* Forzamos un ancho exacto por imagen */
-    --slide-width: 180px; 
-    width: calc(var(--slide-width) * 18); 
-    animation: scroll-infinito 35s linear infinite;
-    will-change: transform;
-}
-
-.slider-track:hover {
-    animation-play-state: paused;
-}
-
-.slide {
-    /* Aquí forzamos que el contenedor sea siempre del mismo tamaño */
-    width: var(--slide-width);
-    height: 100px; 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 15px; /* Espacio interno para que no choquen entre sí */
-    flex-shrink: 0;
-}
-
-.slide img {
-    /* Forzamos a la imagen a ocupar el máximo del contenedor uniforme */
-    width: 120px;  /* Ancho fijo para todas */
-    height: 80px;  /* Alto fijo para todas */
-    object-fit: contain; /* Mantiene la proporción sin estirar */
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));
-    transition: transform 0.3s ease;
-}
-
-.slide img:hover {
-    transform: scale(1.1);
-}
-
-@keyframes scroll-infinito {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(calc(var(--slide-width) * -9)); }
-}
-
-/* Ajuste para móviles (S22 Ultra) */
-@media (max-width: 768px) {
-    .slider-track {
-        --slide-width: 130px; /* Reducimos el paso del carrusel */
-        animation-duration: 25s;
-    }
-    .slide {
-        height: 80px;
-        padding: 10px;
-    }
-    .slide img {
-        width: 100px; /* Ajuste proporcional para móvil */
-        height: 60px;
-    }
-}
-/* ==========================================================================
-    0. TOP BAR (Contacto arriba del Buscador)
-   ========================================================================== */
-.top-bar {
-    background-color: #1e293b; /* Azul oscuro elegante */
-    color: white;
-    padding: 8px 5%;
-    font-size: 13px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-}
-
-.top-bar-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1400px;
-    margin: 0 auto;
-}
-
-.contact-info-left {
-    display: flex;
-    gap: 20px;
-}
-
-.contact-info-left a {
-    color: #cbd5e1;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: color 0.3s ease;
-}
-
-.contact-info-left a:hover {
-    color: #25d366; /* Color WhatsApp al pasar el mouse */
-}
-
-.contact-info-left i {
-    color: #d9534f; /* Rojo de tu marca para los iconos */
-    font-size: 14px;
-}
-
-.top-bar-right span {
-    color: #94a3b8;
-    font-weight: 500;
-}
-
-/* Ajuste para móviles (S22 Ultra) */
-@media (max-width: 768px) {
-    .contact-info-left {
-        width: 100%;
-        justify-content: center;
-        gap: 10px;
-        flex-wrap: wrap; /* Para que no se amontonen en pantallas pequeñas */
-    }
-    .top-bar-right {
-        display: none; /* Ocultamos la ciudad en móvil para ahorrar espacio */
-    }
-    .top-bar {
-        padding: 10px 5%;
-    }
-}
 /* ==========================================================================
     SECCIÓN CATEGORÍAS - DISEÑO DE ALTO IMPACTO (8 ITEMS)
    ========================================================================== */
