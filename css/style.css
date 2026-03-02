@@ -355,84 +355,154 @@ body {
     }
 }
 /* ==========================================================================
-    OFERTAS DE ALTO IMPACTO - Versión 4 Columnas Fijas y Centrado
+    OFERTAS DE ALTO IMPACTO - VERSIÓN ULTRA VISUAL (2026)
    ========================================================================== */
 
-/* 1. Contenedor principal para centrar el Título y la Sección */
 .main-content-area {
     width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centra el bloque del título y la sección */
+    align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 60px 0; /* Quitamos padding lateral para no achicar el grid */
+    padding: 80px 0;
+    /* Fondo con un patrón sutil de puntos para dar textura profesional */
+    background-image: radial-gradient(#e2e8f0 0.5px, transparent 0.5px);
+    background-size: 20px 20px;
 }
 
-/* 2. Bloque del título forzado al centro */
-.ofertas-header {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto 50px auto; /* Centra el bloque y da espacio abajo */
-    display: block;
-    text-align: center;
-}
-
+/* 2. Título con Gradiente y Animación */
 .ofertas-header h2 {
-    width: 100%;
-    text-align: center;
-    margin: 0 auto;
+    font-size: 3.2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -2px;
+    /* Efecto Gradiente de Fuego */
+    background: linear-gradient(90deg, #1e293b, #d9534f, #1e293b);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shine-text 3s linear infinite;
+    margin-bottom: 5px;
 }
 
-/* 3. Sección de ofertas y Grid de 4 columnas */
+@keyframes shine-text {
+    to { background-position: 200% center; }
+}
+
+.ofertas-header p {
+    font-size: 1.2rem;
+    color: #64748b;
+    position: relative;
+    display: inline-block;
+}
+
+/* Línea decorativa roja bajo el subtítulo */
+.ofertas-header p::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 25%;
+    width: 50%;
+    height: 3px;
+    background: #d9534f;
+    border-radius: 10px;
+}
+
+/* 3. Grid y Tarjetas con "Power-Up" Visual */
 .seccion-ofertas {
     width: 100%;
-    max-width: 1400px; /* Un poco más ancho para que quepan bien las 4 columnas */
-    margin: 0 auto;
+    max-width: 1400px;
+    margin: 40px auto 0 auto;
     display: flex;
     justify-content: center;
 }
 
 .carrusel-container {
     display: grid;
-    /* FORZAMOS 4 COLUMNAS SIEMPRE EN ESCRITORIO */
     grid-template-columns: repeat(4, 1fr); 
-    gap: 25px;
-    width: 90%; /* Margen de seguridad a los lados */
-    justify-content: center;
+    gap: 30px;
+    width: 92%;
 }
 
 .tarjeta-oferta {
-    background: white;
-    border-radius: 20px;
-    padding: 20px;
+    background: #ffffff;
+    border-radius: 24px; /* Bordes más modernos */
+    padding: 25px;
     text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-    border: 1px solid #f1f5f9;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 100%; /* Ocupa el ancho de su columna */
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
 }
 
-/* --- RESPONSIVO PARA PANTALLAS PEQUEÑAS --- */
+/* Efecto de luz al pasar el mouse */
+.tarjeta-oferta::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(217,83,79,0.05) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.5s;
+    z-index: -1;
+}
 
-/* Tablets: 2 columnas */
+.tarjeta-oferta:hover {
+    transform: translateY(-15px) scale(1.02);
+    border-color: #d9534f;
+    /* Sombra de neón suave */
+    box-shadow: 0 20px 40px rgba(217, 83, 79, 0.15), 0 0 100px rgba(0,0,0,0.02);
+}
+
+.tarjeta-oferta:hover::before {
+    opacity: 1;
+}
+
+/* Animación de la imagen del producto */
+.img-container img {
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.tarjeta-oferta:hover .img-container img {
+    transform: scale(1.15) rotate(2deg); /* Un pequeño giro le da dinamismo */
+}
+
+/* Botón con brillo */
+.btn-detalles {
+    background: #1e293b;
+    overflow: hidden;
+    position: relative;
+}
+
+.btn-detalles::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -60%;
+    width: 20%;
+    height: 200%;
+    background: rgba(255,255,255,0.2);
+    transform: rotate(30deg);
+    transition: all 0.6s;
+}
+
+.btn-detalles:hover::after {
+    left: 120%; /* Efecto flash que atraviesa el botón */
+}
+
+/* --- RESPONSIVO --- */
 @media (max-width: 1024px) {
-    .carrusel-container {
-        grid-template-columns: repeat(2, 1fr);
-    }
+    .carrusel-container { grid-template-columns: repeat(2, 1fr); }
+    .ofertas-header h2 { font-size: 2.5rem; }
 }
 
-/* Móviles (S22 Ultra): 1 columna */
 @media (max-width: 600px) {
-    .carrusel-container {
-        grid-template-columns: 1fr;
-        width: 95%;
-    }
-    .ofertas-header h2 {
-        font-size: 1.8rem;
-    }
+    .carrusel-container { grid-template-columns: 1fr; }
+    .main-content-area { padding: 40px 0; }
 }
 /* ==========================================================================
     BOTON WHATSAPP
