@@ -147,6 +147,13 @@ body {
     gap: 100px; 
 }
 
+/* --- NUEVO AJUSTE: SEPARACIÓN DEL CARRITO --- */
+.nav-right {
+    margin-left: 50px; /* Esto empuja el carrito hacia la derecha de los links */
+    display: flex;
+    align-items: center;
+}
+
 .dropbtn-cat {
     background-color: #f9f9f9; 
     color: #333;               
@@ -170,7 +177,7 @@ body {
     list-style: none;
     display: flex;
     align-items: center;
-    gap: 30px; /* Este mantiene la separación entre Inicio, Productos, etc. */
+    gap: 30px; /* Mantiene la separación entre Inicio, Productos, etc. */
     margin: 0;
     padding: 0;
 }
@@ -186,6 +193,23 @@ body {
 
 .nav-links a:hover {
     color: #ffcc00;
+}
+
+/* Estilo adicional para el botón del carrito si no lo tenías */
+.btn-carrito {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: white;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: transform 0.2s;
+}
+
+.btn-carrito:hover {
+    transform: scale(1.1);
 }
 /* ==========================================================================
     4. MENÚ DESPLEGABLE (Ajustado a la izquierda)
