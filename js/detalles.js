@@ -24,51 +24,98 @@
     }
 
     // 3. Carga de datos del producto
-    async function cargarDetalleProducto() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const idCodificado = urlParams.get('id');
-        if (!idCodificado) return;
+  async function cargarDetalleProducto() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const idCodificado = urlParams.get('id');
+    if (!idCodificado) return;
 
-        try {
-            const productId = atob(idCodificado);
-            const query = `{
-              node(id: "${productId}") {
-                ... on Product {
-                  title
-                  descriptionHtml
-                  images(first: 1) { edges { node { url } } }
-                  variants(first: 1) { edges { node { id price { amount } } } }
-                }
+    try {
+        const productId = atob(idCodificado);
+        
+        // 1. Agregamos quantityAvailable a la consulta GraphQL
+        const query = `{
+          node(id: "${productId}") {
+            ... on Product {
+              title
+              descriptionHtml
+              images(first: 1) { edges { node { url } } }
+              variants(first: 1) { 
+                edges { 
+                  node { 
+                    id 
+                    price { amount } 
+                    quantityAvailable 
+                  } 
+                } 
               }
-            }`;
+            }
+          }
+        }`;
 
-            const { data } = await queryShopify(query);
-            const prod = data.node;
+        const { data } = await queryShopify(query);
+        const prod = data.node;
 
-            if (prod) {
-                document.getElementById('prod-title').textContent = prod.title;
-                document.getElementById('prod-price').textContent = `$${Math.round(prod.variants.edges[0].node.price.amount).toLocaleString('es-CL')}`;
-                document.getElementById('prod-description').innerHTML = prod.descriptionHtml;
-                document.getElementById('main-img').src = prod.images.edges[0].node.url;
+        if (prod) {
+            const variantNode = prod.variants.edges[0].node;
+            const stockReal = variantNode.quantityAvailable; // El stock real desde Shopify
+            const variantId = variantNode.id;
 
-                const variantId = prod.variants.edges[0].node.id;
-                const btnAddCart = document.getElementById('btn-add-cart');
+            // Rellenar datos básicos
+            document.getElementById('prod-title').textContent = prod.title;
+            document.getElementById('prod-price').textContent = `$${Math.round(variantNode.price.amount).toLocaleString('es-CL')}`;
+            document.getElementById('prod-description').innerHTML = prod.descriptionHtml;
+            document.getElementById('main-img').src = prod.images.edges[0].node.url;
 
-                if (btnAddCart) {
-                    const newBtn = btnAddCart.cloneNode(true);
-                    btnAddCart.parentNode.replaceChild(newBtn, btnAddCart);
+            // 2. Lógica Visual de Stock
+            const stockDisplay = document.getElementById('prod-stock');
+            const inputCantidad = document.getElementById('cantidad');
+            const btnAddCart = document.getElementById('btn-add-cart');
+
+            if (stockDisplay) {
+                if (stockReal > 0) {
+                    stockDisplay.innerHTML = `Stock disponible: <strong>${stockReal} unidades</strong>`;
+                    stockDisplay.style.color = "#28a745"; // Verde ferretería
                     
-                    newBtn.addEventListener('click', () => {
-                        console.log("🟢 Agregando al carrito acumulativo:", variantId);
-                        gestionarCarrito(variantId);
-                    });
+                    // Ajustar el límite máximo del selector de cantidad
+                    if (inputCantidad) {
+                        inputCantidad.max = stockReal;
+                        inputCantidad.placeholder = `Máx ${stockReal}`;
+                    }
+                } else {
+                    stockDisplay.innerHTML = `<strong>Agotado temporalmente</strong>`;
+                    stockDisplay.style.color = "#dc3545"; // Rojo alerta
+                    
+                    // Bloquear compra si no hay stock
+                    if (btnAddCart) {
+                        btnAddCart.disabled = true;
+                        btnAddCart.innerText = "Sin Stock";
+                        btnAddCart.style.backgroundColor = "#6c757d";
+                    }
                 }
             }
-        } catch (e) {
-            console.error("❌ Error en la carga inicial:", e);
-        }
-    }
 
+            // 3. Configurar evento del botón
+            if (btnAddCart && stockReal > 0) {
+                const newBtn = btnAddCart.cloneNode(true);
+                btnAddCart.parentNode.replaceChild(newBtn, btnAddCart);
+                
+                newBtn.addEventListener('click', () => {
+                    // Validación extra antes de enviar
+                    const cantSeleccionada = parseInt(inputCantidad.value);
+                    if (cantSeleccionada > stockReal) {
+                        alert(`Solo tenemos ${stockReal} unidades disponibles.`);
+                        inputCantidad.value = stockReal;
+                        return;
+                    }
+                    console.log("🟢 Agregando al carrito:", variantId);
+                    gestionarCarrito(variantId);
+                });
+            }
+        }
+    } catch (e) {
+        console.error("❌ Error en la carga inicial:", e);
+    }
+}
     // --- LÓGICA ACUMULATIVA CORREGIDA ---
 
    async function gestionarCarrito(variantId) {
