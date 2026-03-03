@@ -1,68 +1,49 @@
-// Inicializar EmailJS con tu Public Key
-(function() {
-    emailjs.init("TU_PUBLIC_KEY");
-})();
-
 document.addEventListener('DOMContentLoaded', () => {
-    cargarResumenCotizacion();
+    renderizarResumenCotizacion();
 });
 
-function cargarResumenCotizacion() {
-    const carrito = JSON.parse(localStorage.getItem('cart')) || [];
-    const contenedor = document.getElementById('lista-cotizacion-items');
+function renderizarResumenCotizacion() {
+    // 1. Obtener los datos del localStorage (el carrito de Shopify)
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const container = document.getElementById('lista-cotizacion-items');
     const totalLabel = document.getElementById('total-ref-cot');
+    
     let html = '';
-    let total = 0;
+    let totalAcumulado = 0;
 
-    if (carrito.length === 0) {
-        window.location.href = 'carrito.html'; // Si no hay nada, vuelve al carrito
+    // 2. Verificar si hay productos
+    if (cart.length === 0) {
+        container.innerHTML = `
+            <div class="item-cot" style="justify-content: center; color: #999;">
+                <p>No hay productos seleccionados para cotizar.</p>
+            </div>`;
+        totalLabel.innerText = '$0';
+        
+        // Opcional: Redirigir al carrito tras 3 segundos si está vacío
+        setTimeout(() => { window.location.href = 'carrito.html'; }, 3000);
         return;
     }
 
-    carrito.forEach(item => {
+    // 3. Recorrer el carrito y construir las filas
+    cart.forEach(item => {
         const subtotal = item.price * item.quantity;
-        total += subtotal;
+        totalAcumulado += subtotal;
+
         html += `
             <div class="item-cot">
-                <span>${item.title} (x${item.quantity})</span>
-                <strong>$${subtotal.toLocaleString('es-CL')}</strong>
+                <div class="item-info">
+                    <span class="item-nombre"><strong>${item.title}</strong></span>
+                    <br>
+                    <small class="item-cantidad">Cant: ${item.quantity} x $${item.price.toLocaleString('es-CL')}</small>
+                </div>
+                <div class="item-subtotal">
+                    <strong>$${subtotal.toLocaleString('es-CL')}</strong>
+                </div>
             </div>
         `;
     });
 
-    contenedor.innerHTML = html;
-    totalLabel.innerText = `$${total.toLocaleString('es-CL')}`;
+    // 4. Inyectar el HTML y el Total
+    container.innerHTML = html;
+    totalLabel.innerText = `$${totalAcumulado.toLocaleString('es-CL')}`;
 }
-
-document.getElementById('cotizacion-form').addEventListener('submit', function(event) {
-    event.preventDefault();
-    
-    const btn = document.getElementById('btn-enviar-cot');
-    const carrito = JSON.parse(localStorage.getItem('cart')) || [];
-    
-    btn.innerHTML = 'Enviando... <i class="fas fa-spinner fa-spin"></i>';
-    btn.disabled = true;
-
-    // Formatear lista para el mail
-    let listaTexto = carrito.map(i => `- ${i.title} (Cant: ${i.quantity})`).join('\n');
-
-    const params = {
-        nombre_cliente: document.getElementById('cot-nombre').value,
-        rut_cliente: document.getElementById('cot-rut').value,
-        email_cliente: document.getElementById('cot-email').value,
-        telefono_cliente: document.getElementById('cot-telefono').value,
-        mensaje: document.getElementById('cot-mensaje').value,
-        lista_productos: listaTexto
-    };
-
-    emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', params)
-        .then(() => {
-            alert('✅ Solicitud enviada. En Comercializadora Makro te contactaremos pronto.');
-            localStorage.removeItem('cart');
-            window.location.href = 'index.html';
-        }, (err) => {
-            alert('Fallo el envío: ' + JSON.stringify(err));
-            btn.disabled = false;
-            btn.innerText = 'Enviar Solicitud';
-        });
-});
