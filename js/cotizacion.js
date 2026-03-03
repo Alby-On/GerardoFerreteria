@@ -88,3 +88,11 @@ async function renderizarCotizacionDesdeShopify() {
         console.error("Error en sincronización de cotización:", error);
     }
 }
+function validarAntesDeEnviar() {
+    const cartId = localStorage.getItem('shopify_cart_id');
+    if (!cartId) {
+        alert("El carrito se ha vaciado. Agrega productos antes de enviar.");
+        return false;
+    }
+    return true;
+}
