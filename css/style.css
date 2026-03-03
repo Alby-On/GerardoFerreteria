@@ -575,6 +575,32 @@ html, body {
     color: #555;
     letter-spacing: 0.5px;
 }
+.footer-logo {
+    margin-bottom: 20px;
+    display: block;
+}
+
+.footer-logo img {
+    height: 50px; /* Un tamaño ligeramente menor al header para balancear */
+    width: auto;
+    object-fit: contain;
+    /* Si el fondo del footer es oscuro y tu logo es oscuro, 
+       podrías aplicar un filtro para que se vea blanco:
+       filter: brightness(0) invert(1); */
+}
+
+/* Ajuste para el texto que sigue al logo */
+.footer-section p {
+    line-height: 1.6;
+    font-size: 0.95rem;
+    color: #ccc; /* O el color de texto de tu footer */
+}
+
+@media (max-width: 480px) {
+    .footer-logo img {
+        height: 40px;
+    }
+}
 /* ==========================================================================
     RESPONSIVE BÁSICO (Para Header y Footer)
    ========================================================================== */
