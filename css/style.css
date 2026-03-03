@@ -1216,7 +1216,6 @@ html, body {
     Logo Header
    ========================================================================== */
 
-
 .logo {
     display: flex;
     align-items: center;
@@ -1230,13 +1229,11 @@ html, body {
 }
 
 .logo img {
-    /* Ajusta la altura según prefieras, 50px-60px es el estándar para headers */
-    height: 55px; 
+    /* Altura incrementada un 15% (de 55px a 63px) */
+    height: 63px; 
     width: auto;
     display: block;
-    /* Evita que el logo se estire */
     object-fit: contain; 
-    /* Suavizado para PNG de alta resolución */
     image-rendering: -webkit-optimize-contrast; 
     transition: transform 0.3s ease;
 }
@@ -1249,6 +1246,7 @@ html, body {
 /* Ajuste para el S22 Ultra (Móvil) */
 @media (max-width: 480px) {
     .logo img {
-        height: 45px; /* Un poco más compacto en pantallas pequeñas */
+        /* Altura incrementada un 15% en móvil (de 45px a 52px) */
+        height: 52px; 
     }
 }
