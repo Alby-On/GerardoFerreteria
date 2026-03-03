@@ -3,47 +3,45 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function renderizarResumenCotizacion() {
-    // 1. Obtener los datos del localStorage (el carrito de Shopify)
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    // 1. Intentamos leer 'cart' (asegúrate que sea el nombre correcto)
+    const rawData = localStorage.getItem('cart');
+    console.log("Datos crudos del storage:", rawData); // Esto lo verás en la consola (F12)
+
+    if (!rawData) {
+        document.getElementById('lista-cotizacion-items').innerHTML = "<p>El storage está vacío</p>";
+        return;
+    }
+
+    const cart = JSON.parse(rawData);
     const container = document.getElementById('lista-cotizacion-items');
     const totalLabel = document.getElementById('total-ref-cot');
     
     let html = '';
     let totalAcumulado = 0;
 
-    // 2. Verificar si hay productos
     if (cart.length === 0) {
-        container.innerHTML = `
-            <div class="item-cot" style="justify-content: center; color: #999;">
-                <p>No hay productos seleccionados para cotizar.</p>
-            </div>`;
-        totalLabel.innerText = '$0';
-        
-        // Opcional: Redirigir al carrito tras 3 segundos si está vacío
-        setTimeout(() => { window.location.href = 'carrito.html'; }, 3000);
+        container.innerHTML = "<p>Carrito vacío (array longitud 0)</p>";
         return;
     }
 
-    // 3. Recorrer el carrito y construir las filas
-    cart.forEach(item => {
-        const subtotal = item.price * item.quantity;
+    cart.forEach((item, index) => {
+        // DEBUG: Si los nombres de campos son diferentes, aquí fallará.
+        // Verificamos si existen los datos
+        const nombre = item.title || item.name || "Producto sin nombre";
+        const precio = parseFloat(item.price) || 0;
+        const cantidad = parseInt(item.quantity) || 0;
+        const subtotal = precio * cantidad;
+        
         totalAcumulado += subtotal;
 
         html += `
-            <div class="item-cot">
-                <div class="item-info">
-                    <span class="item-nombre"><strong>${item.title}</strong></span>
-                    <br>
-                    <small class="item-cantidad">Cant: ${item.quantity} x $${item.price.toLocaleString('es-CL')}</small>
-                </div>
-                <div class="item-subtotal">
-                    <strong>$${subtotal.toLocaleString('es-CL')}</strong>
-                </div>
+            <div class="item-cot" style="display:flex; justify-content:space-between; margin-bottom:10px; border-bottom:1px solid #eee;">
+                <span>${nombre} (x${cantidad})</span>
+                <strong>$${subtotal.toLocaleString('es-CL')}</strong>
             </div>
         `;
     });
 
-    // 4. Inyectar el HTML y el Total
     container.innerHTML = html;
     totalLabel.innerText = `$${totalAcumulado.toLocaleString('es-CL')}`;
 }
