@@ -1,3 +1,9 @@
+/* --- RESET GLOBAL PARA EL FORMULARIO --- */
+/* Esto asegura que el padding no sume ancho extra a los inputs */
+.contact-card *, .contact-card *::before, .contact-card *::after {
+    box-sizing: border-box;
+}
+
 /* --- Contenedor General --- */
 .content-wrapper {
     max-width: 1200px;
@@ -22,10 +28,10 @@
     font-size: 1.1rem;
 }
 
-/* --- Layout Grid (Resumen Izquierda | Formulario Derecha) --- */
+/* --- Layout Grid --- */
 .cotizacion-grid {
     display: grid;
-    grid-template-columns: 1fr 1.6fr; /* El formulario es un poco más ancho */
+    grid-template-columns: 1fr 1.6fr;
     gap: 40px;
     align-items: start;
 }
@@ -37,14 +43,14 @@
     border-radius: 15px;
     border: 1px solid #eaeaea;
     box-shadow: 0 5px 15px rgba(0,0,0,0.03);
-    position: sticky; /* Se mantiene a la vista mientras bajas */
+    position: sticky;
     top: 20px;
 }
 
 .resumen-cotizacion h3 {
     text-align: center;
     color: #333;
-    border-bottom: 3px solid #e63946; /* Color Makro */
+    border-bottom: 3px solid #e63946;
     padding-bottom: 15px;
     margin-bottom: 25px;
     text-transform: uppercase;
@@ -69,25 +75,20 @@
     text-align: center;
 }
 
-.total-referencial strong {
-    display: block;
-    font-size: 0.9rem;
-    color: #777;
-    margin-bottom: 5px;
-}
-
 .total-referencial span {
     font-size: 1.5rem;
     font-weight: 800;
     color: #e63946;
 }
 
-/* --- Estilos Columna Derecha (Formulario) --- */
+/* --- Estilos Columna Derecha (Formulario) CORREGIDO --- */
 .contact-card {
     background: #ffffff;
     padding: 40px;
     border-radius: 15px;
     box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+    width: 100%; /* Asegura que la card mande */
+    overflow: hidden; /* Evita cualquier desborde visual */
 }
 
 .contact-card h2 {
@@ -99,6 +100,7 @@
 .form-group {
     margin-bottom: 25px;
     position: relative;
+    width: 100%; /* El grupo ocupa el ancho de la card */
 }
 
 .form-group label {
@@ -112,18 +114,21 @@
 .form-group i {
     position: absolute;
     left: 15px;
-    top: 42px;
+    top: 44px; /* Ajustado para centrar con el input */
     color: #e63946;
     font-size: 1.1rem;
+    z-index: 2;
 }
 
 .form-input {
-    width: 100%;
+    width: 100%; /* Ahora sí respetará el ancho interno */
     padding: 14px 15px 14px 45px;
     border: 1px solid #ddd;
     border-radius: 10px;
     font-size: 1rem;
     transition: all 0.3s ease;
+    background-color: #fff;
+    display: block; /* Elimina espacios residuales */
 }
 
 .form-input:focus {
@@ -150,30 +155,21 @@
     transition: transform 0.2s, background 0.3s;
 }
 
-.submit-btn:hover {
-    background: #c32f3a;
-    transform: translateY(-2px);
-}
-
-.submit-btn:active {
-    transform: translateY(0);
-}
-
 /* --- AJUSTES MÓVILES (S22 Ultra) --- */
 @media (max-width: 992px) {
     .cotizacion-grid {
-        grid-template-columns: 1fr; /* Una sola columna */
+        grid-template-columns: 1fr;
     }
 
     .resumen-cotizacion {
-        position: static; /* Ya no es fijo en móvil */
-        order: 1; /* El resumen sale arriba para confirmar items antes de llenar datos */
+        position: static;
+        order: 1;
         margin-bottom: 30px;
     }
     
     .contact-card {
         order: 2;
-        padding: 25px;
+        padding: 25px; /* Menos padding en móvil para ganar espacio */
     }
 }
 
@@ -183,6 +179,6 @@
     }
     
     .form-input {
-        font-size: 16px; /* Evita zoom molesto en móviles */
+        font-size: 16px; /* Evita zoom automático en navegadores móviles */
     }
 }
