@@ -930,17 +930,27 @@ loadComponent('header-placeholder', 'components/header.html').then(() => {
 });
 
 async function ejecutarBusquedaGlobalPadre(categoriaPadre, nombre) {
-    console.log("Iniciando búsqueda global para:", categoriaPadre); // Ver en consola F12
-    
     const contenedor = document.getElementById('shopify-products-load');
     const titulo = document.getElementById('titulo-coleccion');
 
-    if (titulo) titulo.textContent = nombre || categoriaPadre;
-    if (contenedor) contenedor.innerHTML = '<div class="loader">Cargando catálogo...</div>';
+    if (titulo) titulo.textContent = nombre || "Catálogo Completo";
+    if (contenedor) contenedor.innerHTML = '<div class="loader">Cargando categoría completa...</div>';
 
-    // La clave es el asterisco * que actúa como comodín en Shopify
+    // 1. Construimos la lista de tags a buscar (Padre + todas sus subcategorías)
+    // Esto genera algo como: tag:elec_domiciliaria OR tag:elec_domiciliaria:Conductores OR ...
+    let listaTags = [`tag:${categoriaPadre}`];
+    
+    if (mapeoCategorias[categoriaPadre]) {
+        mapeoCategorias[categoriaPadre].forEach(sub => {
+            listaTags.push(`tag:${categoriaPadre}:${sub}`);
+        });
+    }
+
+    const queryOR = listaTags.join(' OR ');
+
+    // 2. Query de Shopify con los tags específicos
     const query = `{
-      products(first: 50, query: "tag:${categoriaPadre}*") {
+      products(first: 50, query: "${queryOR}") {
         edges {
           node {
             id
@@ -962,14 +972,14 @@ async function ejecutarBusquedaGlobalPadre(categoriaPadre, nombre) {
     try {
         const response = await queryShopify(query);
         const productos = response.data?.products?.edges || [];
-        console.log("Productos encontrados:", productos.length);
         
         if (productos.length === 0) {
-            contenedor.innerHTML = "<p>No hay productos con etiquetas que empiecen por " + categoriaPadre + "</p>";
+            contenedor.innerHTML = `<p>Aún no hay productos etiquetados en esta sección global.</p>`;
         } else {
             renderizarProductos(productos);
         }
     } catch (error) {
-        console.error("Error en búsqueda global:", error);
+        console.error("Error en búsqueda:", error);
+        contenedor.innerHTML = "<p>Error al conectar con la tienda.</p>";
     }
 }
