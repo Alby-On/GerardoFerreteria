@@ -877,16 +877,55 @@ document.querySelectorAll('.slider-btn').forEach(btn => {
 
 function inicializarEventosNav() {
     const enlacesNav = document.querySelectorAll('.btn-categoria-nav');
+    
     enlacesNav.forEach(enlace => {
-        // Al pasar el mouse (hover), cargamos las subcategorías para que estén listas
-        enlace.addEventListener('mouseenter', () => {
+        // Cambiamos 'mouseenter' por 'click' para mejor control en móviles y PC
+        enlace.addEventListener('click', (e) => {
+            // Evitamos que el href="javascript:void(0)" o cualquier link dispare recarga
+            e.preventDefault();
+            e.stopPropagation();
+
             const categoria = enlace.getAttribute('data-categoria');
-            mostrarSubcategorias(categoria);
+            const subLista = document.getElementById(`sub-nav-${categoria}`);
+            
+            // 1. Verificar si ya está abierta
+            const estaActiva = subLista && subLista.classList.contains('activa');
+
+            // 2. Cerrar todas las demás sub-listas de la nav para que no se amontonen
+            document.querySelectorAll('.sub-lista-anidada-nav').forEach(lista => {
+                lista.classList.remove('activa');
+                // Opcional: limpiar el HTML si prefieres recargar siempre los datos
+                // lista.innerHTML = ''; 
+            });
+
+            // 3. Remover estado activo de otros botones padres
+            document.querySelectorAll('.btn-categoria-nav').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // 4. Si no estaba activa, la abrimos
+            if (!estaActiva) {
+                enlace.classList.add('active');
+                // Esta función inyecta los enlaces <a> reales a productos.html
+                mostrarSubcategorias(categoria); 
+            }
         });
+    });
+
+    // Opcional: Cerrar el menú si se hace clic fuera del dropdown
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.dropdown')) {
+            document.querySelectorAll('.sub-lista-anidada-nav').forEach(lista => {
+                lista.classList.remove('activa');
+            });
+            document.querySelectorAll('.btn-categoria-nav').forEach(btn => {
+                btn.classList.remove('active');
+            });
+        }
     });
 }
 
-// Llama a esta función dentro del .then() de loadComponent del Header
+// Mantener la carga después del componente
 loadComponent('header-placeholder', 'components/header.html').then(() => {
     inicializarEventosNav();
-});
+});;
