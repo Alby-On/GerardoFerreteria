@@ -24,7 +24,7 @@
     }
 
     // 3. Carga de datos del producto
-  async function cargarDetalleProducto() {
+async function cargarDetalleProducto() {
     const urlParams = new URLSearchParams(window.location.search);
     const idCodificado = urlParams.get('id');
     if (!idCodificado) return;
@@ -32,7 +32,6 @@
     try {
         const productId = atob(idCodificado);
         
-        // 1. Agregamos quantityAvailable a la consulta GraphQL
         const query = `{
           node(id: "${productId}") {
             ... on Product {
@@ -57,16 +56,23 @@
 
         if (prod) {
             const variantNode = prod.variants.edges[0].node;
-            const stockReal = variantNode.quantityAvailable; // El stock real desde Shopify
+            const stockReal = variantNode.quantityAvailable;
             const variantId = variantNode.id;
 
             // Rellenar datos básicos
             document.getElementById('prod-title').textContent = prod.title;
-            document.getElementById('prod-price').textContent = `$${Math.round(variantNode.price.amount).toLocaleString('es-CL')}`;
+            
+            // --- CAMBIO AQUÍ: OCULTAMOS EL PRECIO ---
+            const priceDisplay = document.getElementById('prod-price');
+            if (priceDisplay) {
+                priceDisplay.innerHTML = `<span style="color: #666; font-size: 0.9rem;">Precio: Consultar en cotización</span>`;
+                // Si quieres que desaparezca totalmente, usa: priceDisplay.style.display = 'none';
+            }
+
             document.getElementById('prod-description').innerHTML = prod.descriptionHtml;
             document.getElementById('main-img').src = prod.images.edges[0].node.url;
 
-            // 2. Lógica Visual de Stock
+            // Lógica Visual de Stock
             const stockDisplay = document.getElementById('prod-stock');
             const inputCantidad = document.getElementById('cantidad');
             const btnAddCart = document.getElementById('btn-add-cart');
@@ -74,18 +80,16 @@
             if (stockDisplay) {
                 if (stockReal > 0) {
                     stockDisplay.innerHTML = `Stock disponible: <strong>${stockReal} unidades</strong>`;
-                    stockDisplay.style.color = "#28a745"; // Verde ferretería
+                    stockDisplay.style.color = "#28a745";
                     
-                    // Ajustar el límite máximo del selector de cantidad
                     if (inputCantidad) {
                         inputCantidad.max = stockReal;
                         inputCantidad.placeholder = `Máx ${stockReal}`;
                     }
                 } else {
                     stockDisplay.innerHTML = `<strong>Agotado temporalmente</strong>`;
-                    stockDisplay.style.color = "#dc3545"; // Rojo alerta
+                    stockDisplay.style.color = "#dc3545";
                     
-                    // Bloquear compra si no hay stock
                     if (btnAddCart) {
                         btnAddCart.disabled = true;
                         btnAddCart.innerText = "Sin Stock";
@@ -94,20 +98,21 @@
                 }
             }
 
-            // 3. Configurar evento del botón
+            // Configurar evento del botón
             if (btnAddCart && stockReal > 0) {
+                // Cambiamos el texto del botón para que sea coherente con la cotización
+                btnAddCart.innerText = "Añadir a mi Cotización"; 
+
                 const newBtn = btnAddCart.cloneNode(true);
                 btnAddCart.parentNode.replaceChild(newBtn, btnAddCart);
                 
                 newBtn.addEventListener('click', () => {
-                    // Validación extra antes de enviar
                     const cantSeleccionada = parseInt(inputCantidad.value);
                     if (cantSeleccionada > stockReal) {
                         alert(`Solo tenemos ${stockReal} unidades disponibles.`);
                         inputCantidad.value = stockReal;
                         return;
                     }
-                    console.log("🟢 Agregando al carrito:", variantId);
                     gestionarCarrito(variantId);
                 });
             }
