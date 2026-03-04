@@ -923,3 +923,42 @@ loadComponent('header-placeholder', 'components/header.html').then(() => {
         inicializarEventosNav();
     }, 100);
 });
+
+async function ejecutarBusquedaGlobalPadre(categoriaPadre) {
+    const contenedor = document.getElementById('shopify-products-load');
+    const titulo = document.getElementById('titulo-coleccion');
+
+    if (titulo) titulo.textContent = "Todos los productos de " + categoriaPadre.replace('_', ' ');
+    contenedor.innerHTML = '<div class="loader">Cargando catálogo completo...</div>';
+
+    // Buscamos productos que contengan la palabra clave de la categoría en sus tags
+    // Ejemplo: query: "tag:elec_domiciliaria*"
+    const query = `{
+      products(first: 50, query: "tag:${categoriaPadre}*") {
+        edges {
+          node {
+            id
+            title
+            handle
+            images(first: 1) { edges { node { url } } }
+            variants(first: 1) {
+              edges {
+                node {
+                  price { amount currencyCode }
+                }
+              }
+            }
+          }
+        }
+      }
+    }`;
+
+    try {
+        const response = await queryShopify(query);
+        const productos = response.data?.products?.edges || [];
+        renderizarProductos(productos);
+    } catch (error) {
+        console.error("Error en búsqueda global:", error);
+        contenedor.innerHTML = "<p>No se encontraron productos en esta categoría.</p>";
+    }
+}
