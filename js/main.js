@@ -188,38 +188,33 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function mostrarSubcategorias(catPadre) {
-    // 1. Intentar encontrar el contenedor o crearlo si no existe
-    let subContainer = document.getElementById('subcategorias-dinamicas');
+    // 1. Usamos el ID real que pusiste en tu HTML
+    const subContainer = document.getElementById('subcategorias-container');
     
     if (!subContainer) {
-        subContainer = document.createElement('div');
-        subContainer.id = 'subcategorias-dinamicas';
-        subContainer.className = 'subcategorias-wrapper';
-        // Lo insertamos justo después del menú de categorías
-        const menuCat = document.getElementById('menu-categorias');
-        if (menuCat) {
-            menuCat.parentNode.insertBefore(subContainer, menuCat.nextSibling);
-        }
+        console.error("No se encontró el contenedor 'subcategorias-container' en el HTML");
+        return;
     }
 
-    subContainer.innerHTML = ''; // Limpiar
+    subContainer.innerHTML = ''; // Limpiamos lo anterior
 
     // 2. Mapear y crear botones
     if (mapeoCategorias[catPadre]) {
         mapeoCategorias[catPadre].forEach(sub => {
             const btn = document.createElement('button');
-            btn.className = 'btn-sub-pastilla';
+            // Mantenemos la clase para el estilo de "pastilla"
+            btn.className = 'btn-sub-pastilla'; 
             btn.textContent = sub;
             
-            // Lógica: Si el tag en Shopify tiene prefijo, se lo sumamos aquí
+            // Construimos el tag tal como lo estás usando en Shopify
             const tagCompleto = `${catPadre}:${sub}`; 
             
             btn.onclick = () => {
-                // Quitamos clase activa de otras pastillas y se la damos a esta
+                // Feedback visual: quitar activo de otros y poner a este
                 document.querySelectorAll('.btn-sub-pastilla').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 
-                // Ejecutamos la búsqueda por el tag completo "elec_domiciliaria:Conductores"
+                // Ejecutamos la búsqueda filtrada
                 ejecutarBusquedaPorTag(tagCompleto);
             };
             subContainer.appendChild(btn);
