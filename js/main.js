@@ -202,36 +202,28 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function mostrarSubcategorias(catPadre) {
-    // 1. Usamos el ID real que pusiste en tu HTML
-    const subContainer = document.getElementById('subcategorias-container');
-    
-    if (!subContainer) {
-        console.error("No se encontró el contenedor 'subcategorias-container' en el HTML");
-        return;
-    }
+    // 1. Cerramos todas las sub-listas abiertas para efecto acordeón
+    document.querySelectorAll('.sub-lista-anidada').forEach(lista => {
+        lista.classList.remove('activa');
+        lista.innerHTML = ''; // Limpiamos contenido
+    });
 
-    subContainer.innerHTML = ''; // Limpiamos lo anterior
+    // 2. Buscamos el contenedor específico de la categoría clickeada
+    const subListaDestino = document.getElementById(`sub-${catPadre}`);
 
-    // 2. Mapear y crear botones
-    if (mapeoCategorias[catPadre]) {
+    if (subListaDestino && mapeoCategorias[catPadre]) {
+        // Marcamos como activa
+        subListaDestino.classList.add('activa');
+
+        // 3. Inyectamos los elementos de subcategoría
         mapeoCategorias[catPadre].forEach(sub => {
-            const btn = document.createElement('button');
-            // Mantenemos la clase para el estilo de "pastilla"
-            btn.className = 'btn-sub-pastilla'; 
-            btn.textContent = sub;
-            
-            // Construimos el tag tal como lo estás usando en Shopify
-            const tagCompleto = `${catPadre}:${sub}`; 
-            
-            btn.onclick = () => {
-                // Feedback visual: quitar activo de otros y poner a este
-                document.querySelectorAll('.btn-sub-pastilla').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                
-                // Ejecutamos la búsqueda filtrada
-                ejecutarBusquedaPorTag(tagCompleto);
-            };
-            subContainer.appendChild(btn);
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <a href="#" class="enlace-sub-anidado" onclick="window.ejecutarBusquedaPorTag('${catPadre}:${sub}'); return false;">
+                    ${sub}
+                </a>
+            `;
+            subListaDestino.appendChild(li);
         });
     }
 }
