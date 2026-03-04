@@ -4,6 +4,20 @@ const shopifyConfig = {
     accessToken: '22259948ae8b45daf91294ada0ff44b4',
     apiVersion: '2024-01'
 };
+
+const mapeoCategorias = {
+    "elec_domiciliaria": ["Conductores", "Canalización PVC", "Artefactos", "Protecciones", "Cajas y Accesorios"],
+    "elec_industrial": ["Tableros y Gabinetes", "Control de Motores", "Maniobra y Relés", "Comandos y Señalética", "Canalización Galvanizada"],
+    "herramientas": ["Herramientas Eléctricas Total", "Herramientas de Mano", "Instrumentos de Medición"],
+    "ferreteria_industrial": ["Fijaciones y Anclajes", "Abrasivos y Corte", "Adhesivos y Sellantes"],
+    "gasfiteria_general": ["Tuberías PPR/PVC", "Llaves de Paso", "Fitting y Válvulas"], // Verifica que el data-categoria sea gasfiteria_general
+    "epp": ["Calzado de Seguridad", "Ropa de Trabajo", "Guantes", "Cascos y Antiparras"],
+    "seguridad_vigilancia": ["Cámaras CCTV", "Alarmas", "Conectividad y Redes"],
+    "automatizacion_control": ["Instrumentación Industrial", "Domótica", "Sensores y PLCs"],
+    "iluminacion": ["Proyectores Exterior", "Focos Interior", "Emergencia"],
+    "ernc_riego": ["Energía Solar", "Sistemas de Riego"]
+};
+
 // Función para cargar componentes estáticos (Header/Footer)
 function loadComponent(id, file) {
     return fetch(file)
