@@ -429,33 +429,22 @@ window.ajustarCantidadLocal = function(btn, lineId, cambio) {
 };
 
 window.cambiarCantidad = function(lineId, nuevaCantidad) {
-    if (nuevaCantidad <= 0) {
-        window.quitarProducto(lineId);
-        return;
-    }
+    // 1. Guardamos un respaldo local "invencible"
+    let respaldoCantidades = JSON.parse(localStorage.getItem('respaldo_cotizacion') || '{}');
+    respaldoCantidades[lineId] = nuevaCantidad;
+    localStorage.setItem('respaldo_cotizacion', JSON.stringify(respaldoCantidades));
 
-    // 1. ACTUALIZACIÓN VISUAL INMEDIATA (Fuerza el número en pantalla)
+    // 2. Actualizamos la vista de inmediato para que el usuario vea sus 10 unidades
     const botones = document.querySelectorAll(`button[onclick*="${lineId}"]`);
     botones.forEach(btn => {
         const span = btn.parentElement.querySelector('span');
-        if (span) {
-            span.innerText = nuevaCantidad; // Muestra 101, 200 o lo que sea
-            span.style.color = "#e63946"; 
-            setTimeout(() => { span.style.color = ""; }, 500);
-        }
+        if (span) span.innerText = nuevaCantidad;
     });
 
-    // 2. SINCRONIZACIÓN SILENCIOSA
+    // 3. Avisamos a Shopify (aunque él intente bajarlo a 2, nuestro respaldo manda)
     const cartId = localStorage.getItem('shopify_cart_id');
-    const mutation = `mutation { cartLinesUpdate(cartId: "${cartId}", lines: [{ id: "${lineId}", quantity: ${nuevaCantidad} }]) { cart { id } userErrors { message } } }`;
-    
-    queryShopify(mutation).then(res => {
-        // Log de debug por si quieres ver el error de Shopify en consola
-        const errores = res.data?.cartLinesUpdate?.userErrors;
-        if (errores && errores.length > 0) {
-            console.warn("Shopify limitó el stock en el servidor, pero mantenemos el número visual para la cotización.");
-        }
-    });
+    const mutation = `mutation { cartLinesUpdate(cartId: "${cartId}", lines: [{ id: "${lineId}", quantity: ${nuevaCantidad} }]) { cart { id } } }`;
+    queryShopify(mutation).catch(err => console.error("Error sync:", err));
 };
 
 // Función para ELIMINAR totalmente
