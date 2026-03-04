@@ -703,63 +703,6 @@ function validarRut(rut) {
 /**
  * Función para ordenar productos cargados dinámicamente desde Shopify
  */
-function ordenarProductosShopify() {
-    const contenedor = document.getElementById('shopify-products-load');
-    const selector = document.getElementById('sort-price');
-    const orden = selector.value;
-
-    if (!contenedor || orden === 'default') return;
-
-    // 1. Capturamos los productos actuales
-    let productos = Array.from(contenedor.children);
-
-    if (productos.length === 0) {
-        console.warn("No hay productos cargados aún.");
-        return;
-    }
-
-    // 2. Proceso de Ordenamiento Numérico
-    productos.sort((a, b) => {
-        // Función interna para extraer el precio real de una tarjeta
-        const extraerPrecio = (el) => {
-            // Prioridad 1: Buscar la clase específica de precio oferta que creamos
-            // Prioridad 2: Buscar cualquier clase que use Shopify para el precio actual
-            const selectorPrecio = el.querySelector('.precio-oferta') || 
-                                   el.querySelector('.shopify-buy__product__actual-price') ||
-                                   el.querySelector('.price');
-            
-            let texto = selectorPrecio ? selectorPrecio.innerText : el.innerText;
-
-            // Si hay dos precios (el tachado y el nuevo), nos quedamos solo con el primero
-            // Esto evita que "15.990 $20.000" se convierta en 1599020000
-            if (texto.includes('$')) {
-                texto = texto.split('$')[1]; // Agarramos lo que está después del primer $
-            }
-
-            // Limpiamos: dejamos solo números. "15.990" -> "15990"
-            const numeroPuro = texto.replace(/\D/g, "");
-            return parseInt(numeroPuro, 10) || 0;
-        };
-
-        const precioA = extraerPrecio(a);
-        const precioB = extraerPrecio(b);
-
-        // Debug para verificar en consola (F12)
-        console.log(`Ordenando: ${precioA} vs ${precioB}`);
-
-        if (orden === 'asc') return precioA - precioB; // Menor a Mayor
-        if (orden === 'desc') return precioB - precioA; // Mayor a Menor
-        return 0;
-    });
-
-    // 3. Re-inyección limpia en el DOM
-    contenedor.innerHTML = '';
-    productos.forEach(p => {
-        contenedor.appendChild(p);
-    });
-
-    console.log("Productos ordenados correctamente.");
-}
 async function actualizarCantidadLinea(cartId, lineId, nuevaCantidad) {
     const mutation = `
         mutation cartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
