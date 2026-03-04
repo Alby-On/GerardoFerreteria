@@ -620,162 +620,140 @@ html, body {
 }
 
 /* ==========================================================================
-    OFERTAS DE ALTO IMPACTO - VERSIÓN ULTRA VISUAL (2026)
+    SECCIÓN: CATÁLOGO DE PRODUCTOS (Optimizado para Android/S22 Ultra)
    ========================================================================== */
 
-.main-content-area {
+.catalogo-container {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 80px 0;
-    /* Fondo con un patrón sutil de puntos para dar textura profesional */
-    background-image: radial-gradient(#e2e8f0 0.5px, transparent 0.5px);
-    background-size: 20px 20px;
+    padding: 60px 0;
+    background-color: #f8fafc;
+    /* Patrón optimizado: menos carga de renderizado */
+    background-image: radial-gradient(#e2e8f0 0.8px, transparent 0.8px);
+    background-size: 24px 24px;
 }
 
-/* 2. Título con Gradiente y Animación */
-.ofertas-header h2 {
-    font-size: 3.2rem;
+/* Encabezado del Catálogo */
+.catalogo-header {
+    margin-bottom: 40px;
+    padding: 0 20px;
+}
+
+.catalogo-header h2 {
+    font-size: 2.8rem;
     font-weight: 900;
     text-transform: uppercase;
-    letter-spacing: -2px;
-    /* Efecto Gradiente de Fuego */
-    background: linear-gradient(90deg, #1e293b, #d9534f, #1e293b);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: shine-text 3s linear infinite;
-    margin-bottom: 5px;
+    color: #1e293b;
+    margin-bottom: 10px;
+    letter-spacing: -1px;
 }
 
-@keyframes shine-text {
-    to { background-position: 200% center; }
-}
-
-.ofertas-header p {
-    font-size: 1.2rem;
-    color: #64748b;
-    position: relative;
-    display: inline-block;
-}
-
-/* Línea decorativa roja bajo el subtítulo */
-.ofertas-header p::after {
-    content: "";
-    position: absolute;
-    bottom: -10px;
-    left: 25%;
-    width: 50%;
-    height: 3px;
-    background: #d9534f;
-    border-radius: 10px;
-}
-
-/* 3. Grid y Tarjetas con "Power-Up" Visual */
-.seccion-ofertas {
-    width: 100%;
-    max-width: 1400px;
-    margin: 40px auto 0 auto;
+/* Tarjeta de Producto Centrada */
+.producto-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 20px;
+    border: 1px solid #e2e8f0;
     display: flex;
+    flex-direction: column;
+    align-items: center;    /* Centrado Horizontal */
+    justify-content: space-between;
+    text-align: center;     /* Centrado de Texto */
+    transition: transform 0.2s ease-out; /* Animación más corta para móviles */
+    position: relative;
+    height: 100%;
+    /* Optimización Android: Evita parpadeos en animaciones */
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Grid de Productos */
+.catalogo-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+    width: 90%;
+    max-width: 1400px;
+}
+
+/* Contenedor de Imagen */
+.producto-img-box {
+    width: 100%;
+    height: 180px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.producto-img-box img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    /* Hardware acceleration para Android */
+    transform: translateZ(0); 
+}
+
+/* Título de Producto */
+.producto-nombre {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 20px;
+    min-height: 2.4em;
+    display: flex;
+    align-items: center;
     justify-content: center;
 }
 
-.carrusel-container {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); 
-    gap: 30px;
-    width: 92%;
-}
-
-.tarjeta-oferta {
-    background: #ffffff;
-    border-radius: 24px; /* Bordes más modernos */
-    padding: 25px;
-    text-align: center;
-    border: 1px solid rgba(226, 232, 240, 0.8);
-    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-    position: relative;
-    overflow: hidden;
-    z-index: 1;
-}
-
-/* Efecto de luz al pasar el mouse */
-.tarjeta-oferta::before {
-    content: "";
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(217,83,79,0.05) 0%, transparent 70%);
-    opacity: 0;
-    transition: opacity 0.5s;
-    z-index: -1;
-}
-
-.tarjeta-oferta:hover {
-    transform: translateY(-15px) scale(1.02);
-    border-color: #d9534f;
-    /* Sombra de neón suave */
-    box-shadow: 0 20px 40px rgba(217, 83, 79, 0.15), 0 0 100px rgba(0,0,0,0.02);
-}
-
-.tarjeta-oferta:hover::before {
-    opacity: 1;
-}
-
-/* Animación de la imagen del producto */
-.img-container img {
-    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.tarjeta-oferta:hover .img-container img {
-    transform: scale(1.15) rotate(2deg); /* Un pequeño giro le da dinamismo */
-}
-
-/* Botón con brillo */
-.btn-detalles {
+/* Botón de Cotización Estilo Android */
+.btn-cotizar {
+    width: 100%;
     background: #1e293b;
-    overflow: hidden;
-    position: relative;
+    color: #ffffff;
+    padding: 14px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    /* Evita el delay del clic en Chrome Android */
+    touch-action: manipulation; 
+    transition: background 0.2s;
 }
 
-.btn-detalles::after {
-    content: "";
-    position: absolute;
-    top: -50%;
-    left: -60%;
-    width: 20%;
-    height: 200%;
-    background: rgba(255,255,255,0.2);
-    transform: rotate(30deg);
-    transition: all 0.6s;
+.btn-cotizar:active {
+    background: #d9534f; /* Rojo al tocarlo (feedback táctil) */
+    transform: scale(0.98);
 }
 
-.btn-detalles:hover::after {
-    left: 120%; /* Efecto flash que atraviesa el botón */
-}
+/* ==========================================================================
+    ADAPTACIÓN MÓVIL (Android / S22 Ultra)
+   ========================================================================== */
 
-/* Reemplaza tus @media de la sección de ofertas por este bloque único */
 @media (max-width: 1024px) {
-    .carrusel-container { 
-        grid-template-columns: repeat(2, 1fr); /* 2 columnas en tablets */
-        gap: 20px; 
-    }
-    .ofertas-header h2 { font-size: 2.2rem; }
+    .catalogo-grid { grid-template-columns: repeat(2, 1fr); }
+    .catalogo-header h2 { font-size: 2rem; }
 }
 
 @media (max-width: 500px) {
-    .carrusel-container { 
-        grid-template-columns: repeat(2, 1fr); /* ¡Mantenemos 2 columnas! */
+    .catalogo-container { padding: 30px 0; }
+    .catalogo-grid { 
+        width: 94%;
         gap: 12px; 
     }
-    .tarjeta-oferta { padding: 15px; border-radius: 15px; }
-    .ofertas-header h2 { font-size: 1.6rem; letter-spacing: -1px; }
-    .btn-detalles { padding: 10px 5px; font-size: 11px; }
+    .producto-card { padding: 15px; border-radius: 16px; }
+    .producto-img-box { height: 140px; }
+    .producto-nombre { font-size: 0.9rem; margin-bottom: 15px; }
+    .catalogo-header h2 { font-size: 1.5rem; }
+    
+    /* Desactivamos sombras pesadas en móvil para mejor rendimiento */
+    .producto-card:hover { transform: none; box-shadow: none; }
 }
 /* ==========================================================================
     BOTON WHATSAPP
