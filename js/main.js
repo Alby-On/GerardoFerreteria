@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // ================================
-        // CATEGORÍAS Y SUBCATEGORÍAS
+        // CATEGORÍAS Y SUBCATEGORÍAS (Actualizado)
         // ================================
 
         const menuCat = document.getElementById('menu-categorias');
@@ -142,8 +142,16 @@ document.addEventListener("DOMContentLoaded", () => {
                     const categoria = enlace.getAttribute('data-categoria');
                     const nombreCategoria = enlace.textContent;
 
-                    ejecutarCargaPorCategoria(categoria, nombreCategoria);
+                    // 1. NUEVO: Carga GLOBAL de todos los productos del padre
+                    // Usamos la búsqueda por prefijo (tag:categoria*)
+                    if (typeof ejecutarBusquedaGlobalPadre === 'function') {
+                        ejecutarBusquedaGlobalPadre(categoria, nombreCategoria);
+                    } else {
+                        // Fallback por si la función no está definida aún
+                        ejecutarCargaPorCategoria(categoria, nombreCategoria);
+                    }
 
+                    // 2. Despliega el acordeón de subcategorías
                     if (typeof mostrarSubcategorias === 'function') {
                         mostrarSubcategorias(categoria);
                     }
@@ -171,22 +179,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
 
                 if (botonFiltrar) {
-                    // Si hay subcategoría en la URL, cargamos el menú y filtramos por tag
                     if (subcategoriaSolicitada) {
                         botonFiltrar.classList.add('active');
-                        mostrarSubcategorias(categoriaSolicitada); // Desplegamos el acordeón
+                        mostrarSubcategorias(categoriaSolicitada);
                         
                         const tagCompleto = `${categoriaSolicitada}:${subcategoriaSolicitada}`;
-                        // Pequeño delay para asegurar que el DOM de subcategorías se inyectó
                         setTimeout(() => {
                             ejecutarBusquedaPorTag(tagCompleto);
-                            // Marcamos la subcategoría visualmente como activa
                             document.querySelectorAll('.enlace-sub-anidado').forEach(a => {
                                 if(a.textContent.trim() === subcategoriaSolicitada) a.classList.add('active');
                             });
                         }, 500);
                     } else {
-                        // Si solo hay categoría, hacemos el click normal
+                        // Al venir por URL solo con categoría, disparamos el click que ahora busca global
                         botonFiltrar.click();
                     }
                     botonFiltrar.scrollIntoView({ behavior: 'smooth', block: 'center' });
