@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // ================================
-        // CATEGORÍAS Y SUBCATEGORÍAS (Actualizado)
+        // CATEGORÍAS Y SUBCATEGORÍAS
         // ================================
 
         const menuCat = document.getElementById('menu-categorias');
@@ -136,17 +136,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 enlace.addEventListener('click', (e) => {
                     e.preventDefault();
                     
-                    // Removemos clase 'active' de otros botones para feedback visual
                     enlaces.forEach(el => el.classList.remove('active'));
                     enlace.classList.add('active');
 
                     const categoria = enlace.getAttribute('data-categoria');
                     const nombreCategoria = enlace.textContent;
 
-                    // 1. Carga productos de la categoría padre
                     ejecutarCargaPorCategoria(categoria, nombreCategoria);
 
-                    // 2. NUEVO: Muestra las subcategorías (pastillas) si existen
                     if (typeof mostrarSubcategorias === 'function') {
                         mostrarSubcategorias(categoria);
                     }
@@ -157,6 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // --- LÓGICA DE ACTIVACIÓN (URL) ---
         const urlParams = new URLSearchParams(window.location.search);
         const categoriaSolicitada = urlParams.get('cat');
+        const subcategoriaSolicitada = urlParams.get('sub');
 
         if (categoriaSolicitada) {
             if (categoriaSolicitada.toLowerCase() === 'all') {
@@ -173,7 +171,24 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
 
                 if (botonFiltrar) {
-                    botonFiltrar.click(); // Esto ahora también activará las subcategorías
+                    // Si hay subcategoría en la URL, cargamos el menú y filtramos por tag
+                    if (subcategoriaSolicitada) {
+                        botonFiltrar.classList.add('active');
+                        mostrarSubcategorias(categoriaSolicitada); // Desplegamos el acordeón
+                        
+                        const tagCompleto = `${categoriaSolicitada}:${subcategoriaSolicitada}`;
+                        // Pequeño delay para asegurar que el DOM de subcategorías se inyectó
+                        setTimeout(() => {
+                            ejecutarBusquedaPorTag(tagCompleto);
+                            // Marcamos la subcategoría visualmente como activa
+                            document.querySelectorAll('.enlace-sub-anidado').forEach(a => {
+                                if(a.textContent.trim() === subcategoriaSolicitada) a.classList.add('active');
+                            });
+                        }, 500);
+                    } else {
+                        // Si solo hay categoría, hacemos el click normal
+                        botonFiltrar.click();
+                    }
                     botonFiltrar.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
             }
@@ -202,28 +217,45 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function mostrarSubcategorias(catPadre) {
-    // 1. Cerramos todas las sub-listas abiertas para efecto acordeón
-    document.querySelectorAll('.sub-lista-anidada').forEach(lista => {
+    // 1. Cerramos todas las sub-listas abiertas (tanto de Sidebar como de Nav)
+    document.querySelectorAll('.sub-lista-anidada, .sub-lista-anidada-nav').forEach(lista => {
         lista.classList.remove('activa');
-        lista.innerHTML = ''; // Limpiamos contenido
+        lista.innerHTML = ''; 
     });
 
-    // 2. Buscamos el contenedor específico de la categoría clickeada
-    const subListaDestino = document.getElementById(`sub-${catPadre}`);
+    // 2. Buscamos los dos posibles contenedores
+    const asideDestino = document.getElementById(`sub-${catPadre}`); // Sidebar
+    const navDestino = document.getElementById(`sub-nav-${catPadre}`); // Navbar (Header)
+    
+    // Filtramos solo los que existan en el DOM actual
+    const destinos = [asideDestino, navDestino].filter(d => d !== null);
 
-    if (subListaDestino && mapeoCategorias[catPadre]) {
-        // Marcamos como activa
-        subListaDestino.classList.add('activa');
+    if (destinos.length > 0 && mapeoCategorias[catPadre]) {
+        destinos.forEach(contenedor => {
+            contenedor.classList.add('activa');
 
-        // 3. Inyectamos los elementos de subcategoría
-        mapeoCategorias[catPadre].forEach(sub => {
-            const li = document.createElement('li');
-            li.innerHTML = `
-                <a href="#" class="enlace-sub-anidado" onclick="window.ejecutarBusquedaPorTag('${catPadre}:${sub}'); return false;">
-                    ${sub}
-                </a>
-            `;
-            subListaDestino.appendChild(li);
+            mapeoCategorias[catPadre].forEach(sub => {
+                const li = document.createElement('li');
+                const esNav = contenedor.id.includes('nav'); // ¿Es el menú del header?
+
+                if (esNav) {
+                    // En la NAVBAR: Enlaces reales para navegar entre páginas
+                    li.innerHTML = `
+                        <a href="productos.html?cat=${catPadre}&sub=${encodeURIComponent(sub)}" class="enlace-sub-anidado">
+                            ${sub}
+                        </a>
+                    `;
+                } else {
+                    // En el SIDEBAR: Filtrado rápido sin recargar página
+                    li.innerHTML = `
+                        <a href="#" class="enlace-sub-anidado" 
+                           onclick="window.ejecutarBusquedaPorTag('${catPadre}:${sub}'); return false;">
+                            ${sub}
+                        </a>
+                    `;
+                }
+                contenedor.appendChild(li);
+            });
         });
     }
 }
@@ -841,4 +873,20 @@ document.querySelectorAll('.slider-btn').forEach(btn => {
         clearInterval(autoPlay);
         autoPlay = setInterval(() => moveSlider(1), 5000);
     });
+});
+
+function inicializarEventosNav() {
+    const enlacesNav = document.querySelectorAll('.btn-categoria-nav');
+    enlacesNav.forEach(enlace => {
+        // Al pasar el mouse (hover), cargamos las subcategorías para que estén listas
+        enlace.addEventListener('mouseenter', () => {
+            const categoria = enlace.getAttribute('data-categoria');
+            mostrarSubcategorias(categoria);
+        });
+    });
+}
+
+// Llama a esta función dentro del .then() de loadComponent del Header
+loadComponent('header-placeholder', 'components/header.html').then(() => {
+    inicializarEventosNav();
 });
