@@ -272,17 +272,21 @@ html, body {
    ========================================================================== */
 .dropdown {
     position: relative;
-    /* inline-flex hace que el contenedor mida exactamente lo que mide el botón */
+    /* inline-flex asegura que el contenedor mida SOLO lo que mide el botón */
     display: inline-flex; 
     align-items: center; 
-    height: 100%; /* Se mantiene en el alto de la navbar */
+    height: 100%; /* Se mantiene en el alto de la navbar (55px) */
     vertical-align: middle;
+    /* EVITA INVASIÓN: No permite que el contenedor se estire hacia los lados */
+    flex: 0 0 auto; 
+    margin: 0;
+    padding: 0;
 }
 
 .dropdown-content {
     display: block;
     position: absolute;
-    /* Forzamos el inicio justo al final de la navbar (55px) */
+    /* Ajustado al ras de la navbar para evitar huecos de activación */
     top: 55px; 
     left: 0; 
     background-color: white;
@@ -290,7 +294,7 @@ html, body {
     box-shadow: 0px 10px 20px rgba(0,0,0,0.1);
     z-index: 1000;
     
-    /* BLOQUEO DE SEGURIDAD: El menú no existe para el mouse si no es visible */
+    /* SEGURIDAD: El menú es invisible e intocable hasta que el mouse toque el botón */
     visibility: hidden;
     opacity: 0;
     pointer-events: none; 
@@ -300,7 +304,7 @@ html, body {
     border-top: 3px solid #d9534f;
 }
 
-/* Solo se activa si el puntero toca el botón .dropdown */
+/* Solo se activa si el puntero toca REALMENTE el área del botón .dropdown */
 .dropdown:hover .dropdown-content {
     visibility: visible;
     opacity: 1;
@@ -327,8 +331,9 @@ html, body {
 /* --- RESPONSIVO (S22 Ultra) --- */
 @media (max-width: 768px) {
     .dropdown {
-        display: flex; /* En móvil vuelve a flex para ocupar el ancho asignado */
+        display: flex; /* En móvil vuelve a flex para centrarse en la columna */
         width: 100%;
+        justify-content: center;
     }
     .dropdown-content {
         width: 90vw; 
