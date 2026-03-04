@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // ================================
-        // CATEGORÍAS
+        // CATEGORÍAS Y SUBCATEGORÍAS (Actualizado)
         // ================================
 
         const menuCat = document.getElementById('menu-categorias');
@@ -121,9 +121,21 @@ document.addEventListener("DOMContentLoaded", () => {
             enlaces.forEach(enlace => {
                 enlace.addEventListener('click', (e) => {
                     e.preventDefault();
+                    
+                    // Removemos clase 'active' de otros botones para feedback visual
+                    enlaces.forEach(el => el.classList.remove('active'));
+                    enlace.classList.add('active');
+
                     const categoria = enlace.getAttribute('data-categoria');
                     const nombreCategoria = enlace.textContent;
+
+                    // 1. Carga productos de la categoría padre
                     ejecutarCargaPorCategoria(categoria, nombreCategoria);
+
+                    // 2. NUEVO: Muestra las subcategorías (pastillas) si existen
+                    if (typeof mostrarSubcategorias === 'function') {
+                        mostrarSubcategorias(categoria);
+                    }
                 });
             });
         }
@@ -134,10 +146,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (categoriaSolicitada) {
             if (categoriaSolicitada.toLowerCase() === 'all') {
-                // ADICIONAL: Carga total si el parámetro es "all"
                 ejecutarCargaTodosLosProductos();
             } else {
-                // Mantener filtrado por categorías original
                 const botones = document.querySelectorAll('.btn-categoria');
                 let botonFiltrar = null;
 
@@ -149,12 +159,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
 
                 if (botonFiltrar) {
-                    botonFiltrar.click();
+                    botonFiltrar.click(); // Esto ahora también activará las subcategorías
                     botonFiltrar.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
             }
         } else if (window.location.pathname.includes('productos.html') && !urlParams.get('q')) {
-            // ADICIONAL: Si entra a productos sin parámetros, carga todo por defecto
             ejecutarCargaTodosLosProductos();
         }
     });
