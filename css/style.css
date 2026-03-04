@@ -134,7 +134,7 @@ html, body {
     }
 }
 /* ==========================================================================
-    3. NAVBAR PRINCIPAL (Corregido para centrado total)
+   3. NAVBAR PRINCIPAL (Separación Optimizada)
    ========================================================================== */
 .navbar {
     background: #333;
@@ -147,7 +147,7 @@ html, body {
 
 .nav-container {
     display: flex;
-    justify-content: center; 
+    justify-content: space-between; /* Cambiado a space-between para distribuir los bloques */
     align-items: center;
     max-width: 1400px;
     margin: 0 auto;
@@ -158,43 +158,42 @@ html, body {
 .nav-left {
     display: flex;
     align-items: center;
-    /* AJUSTE: Aumentamos el espacio para separar Categorías del link Inicio */
-    gap: 100px; 
+    flex-grow: 1; /* Permite que este contenedor use el espacio disponible */
 }
 
-/* --- NUEVO AJUSTE: SEPARACIÓN DEL CARRITO --- */
-.nav-right {
-    margin-left: 50px; /* Esto empuja el carrito hacia la derecha de los links */
-    display: flex;
-    align-items: center;
-}
-
-.dropbtn-cat {
-    background-color: #f9f9f9; 
-    color: #333;               
-    padding: 0 30px;
-    font-size: 15px;
-    font-weight: bold;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    height: 55px;
-    transition: background 0.3s;
-}
-
-.dropbtn-cat:hover {
-    background-color: #eeeeee;
-}
-
+/* --- EL TRUCO DE SEPARACIÓN --- */
 .nav-links {
     list-style: none;
     display: flex;
     align-items: center;
-    gap: 30px; /* Mantiene la separación entre Inicio, Productos, etc. */
+    gap: 30px; 
     margin: 0;
     padding: 0;
+    margin-left: 80px; /* Separación base fija entre Categorías e Inicio */
+}
+
+/* Si quieres que los links estén totalmente a la derecha y el botón a la izquierda:
+   Cambia el margin-left: 80px; por margin-left: auto; */
+
+.dropbtn-cat {
+    background-color: #f9f9f9; 
+    color: #333;               
+    padding: 0 25px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px; /* Un pequeño redondeo lo hace ver más moderno */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 40px; /* Reducimos un poco para que no toque los bordes de la navbar */
+    transition: all 0.3s;
+}
+
+.dropbtn-cat:hover {
+    background-color: #e63946; /* Rojo Makro al pasar el mouse */
+    color: white;
 }
 
 .nav-links a {
@@ -204,59 +203,59 @@ html, body {
     font-weight: 500;
     transition: 0.3s;
     padding: 10px 5px;
+    position: relative;
+}
+
+/* Línea sutil debajo de los links al hacer hover */
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 5px;
+    left: 0;
+    background-color: #e63946;
+    transition: width 0.3s;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
 }
 
 .nav-links a:hover {
-    color: #ffcc00;
+    color: white;
 }
 
-/* Estilo adicional para el botón del carrito si no lo tenías */
-.btn-carrito {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: white;
-    font-size: 1.2rem;
+.nav-right {
+    margin-left: 40px;
     display: flex;
     align-items: center;
-    gap: 5px;
-    transition: transform 0.2s;
 }
 
-.btn-carrito:hover {
-    transform: scale(1.1);
-}
+/* --- AJUSTES MÓVILES (S22 Ultra) --- */
 @media (max-width: 768px) {
     .navbar {
-        height: auto; /* Permite que la barra crezca si los elementos se apilan */
+        height: auto;
         padding: 10px 0;
     }
     .nav-container {
-        flex-direction: column; /* Apila Categorías arriba y Carrito abajo */
-        gap: 10px;
+        flex-direction: column;
+        gap: 12px;
     }
     .nav-left {
-        gap: 15px; /* Eliminamos los 100px que rompen el diseño */
         flex-direction: column;
         width: 100%;
+        gap: 10px;
     }
     .nav-links {
+        margin-left: 0; /* Eliminamos el margen en móvil */
         gap: 15px;
         justify-content: center;
         width: 100%;
     }
-    .nav-links a {
-        font-size: 13px;
-        padding: 5px;
-    }
-    .nav-right {
-        margin-left: 0; /* Centramos el carrito en móvil */
-    }
     .dropbtn-cat {
-        width: 100%;
+        width: 90%;
         justify-content: center;
-        height: 45px;
-        border-radius: 8px;
     }
 }
 /* ==========================================================================
