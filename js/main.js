@@ -326,7 +326,6 @@ async function actualizarVisualizacionCarro() {
     const query = `{
       cart(id: "${cartId}") {
         totalQuantity
-        checkoutUrl
         lines(first: 20) {
           edges {
             node {
@@ -361,10 +360,10 @@ async function actualizarVisualizacionCarro() {
         countEl.style.display = cart.totalQuantity > 0 ? 'inline-block' : 'none';
     }
 
-    // 2. Ocultar Monto Total en el footer del carrito
+    // 2. Footer con mensaje de cotización
     const totalEl = document.getElementById('carrito-total-monto');
     if (totalEl) {
-        totalEl.innerHTML = `<span style="font-size: 0.9rem; color: #64748b;">Precio: Pendiente de Cotización</span>`;
+        totalEl.innerHTML = `<span style="font-size: 0.9rem; color: #64748b; font-weight: bold;">Precio: Pendiente de Cotización</span>`;
     }
 
     // 3. Renderizado de productos
@@ -385,6 +384,7 @@ async function actualizarVisualizacionCarro() {
         const imageUrl = prod.image ? prod.image.url : 'img/placeholder.jpg';
 
         const div = document.createElement('div');
+        div.className = 'carrito-item-row'; // Para mejor manejo de CSS
         div.style.cssText = 'display: flex; align-items: center; padding: 15px 0; border-bottom: 1px solid #eee; gap: 12px;';
 
         div.innerHTML = `
@@ -393,33 +393,61 @@ async function actualizarVisualizacionCarro() {
                 <div style="font-weight: bold; font-size: 0.95rem; color: #1e293b; line-height: 1.2;">
                     ${prod.product.title}
                 </div>
-                <div style="font-size: 0.85rem; color: #64748b;">
-                    Cantidad: ${qty}
-                </div>
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 4px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 8px;">
                     <div style="display: flex; align-items: center; background: #f1f5f9; border-radius: 6px; overflow: hidden;">
-                        <button onclick="cambiarCantidad('${lineId}', ${qty - 1})" style="padding: 4px 10px; border: none; background: none; cursor: pointer; font-weight: bold;">-</button>
-                        <span style="padding: 0 8px; font-size: 0.85rem; font-weight: 600;">${qty}</span>
-                        <button onclick="cambiarCantidad('${lineId}', ${qty + 1})" style="padding: 4px 10px; border: none; background: none; cursor: pointer; font-weight: bold;">+</button>
+                        <button onclick="ajustarCantidadRelativa(this, '${lineId}', -1)" style="padding: 6px 12px; border: none; background: none; cursor: pointer; font-weight: bold; font-size: 1.1rem;">-</button>
+                        <span style="padding: 0 10px; font-size: 1rem; font-weight: 700; min-width: 25px; text-align: center;">${qty}</span>
+                        <button onclick="ajustarCantidadRelativa(this, '${lineId}', 1)" style="padding: 6px 12px; border: none; background: none; cursor: pointer; font-weight: bold; font-size: 1.1rem;">+</button>
                     </div>
                 </div>
             </div>
-            <button onclick="quitarProducto('${lineId}')" 
-                style="background: #fff1f0; border: none; color: #ff4d4f; cursor: pointer; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">🗑️</button>
+            <button onclick="quitarProductoInstantaneo(this, '${lineId}')" 
+                style="background: #fff1f0; border: none; color: #ff4d4f; cursor: pointer; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;" 
+                title="Quitar">🗑️</button>
         `;
         listContainer.appendChild(div);
     });
 }
+
+window.ajustarCantidadLocal = function(btn, lineId, cambio) {
+    // Obtenemos el span que está al lado del botón
+    const span = btn.parentElement.querySelector('span');
+    const cantidadActual = parseInt(span.innerText);
+    const nuevaCantidad = cantidadActual + cambio;
+
+    // Llamamos a tu función que ya tienes lista
+    window.cambiarCantidad(lineId, nuevaCantidad);
+};
+
 // Función para sumar o restar
-window.cambiarCantidad = async function(lineId, nuevaCantidad) {
+window.cambiarCantidad = function(lineId, nuevaCantidad) {
     if (nuevaCantidad <= 0) {
         quitarProducto(lineId);
         return;
     }
+
+    // --- PASO 1: ACTUALIZACIÓN VISUAL INMEDIATA ---
+    // Buscamos el elemento span que contiene el número en el carrito lateral
+    const botones = document.querySelectorAll(`button[onclick*="${lineId}"]`);
+    botones.forEach(btn => {
+        const span = btn.parentElement.querySelector('span');
+        if (span) {
+            span.innerText = nuevaCantidad; // El cambio es instantáneo a la vista
+            span.style.fontWeight = "bold";
+            span.style.color = "#e63946"; // Feedback visual de que cambió
+        }
+    });
+
+    // --- PASO 2: SINCRONIZACIÓN SILENCIOSA CON SHOPIFY ---
     const cartId = localStorage.getItem('shopify_cart_id');
     const mutation = `mutation { cartLinesUpdate(cartId: "${cartId}", lines: [{ id: "${lineId}", quantity: ${nuevaCantidad} }]) { cart { id } } }`;
-    await queryShopify(mutation);
-    actualizarVisualizacionCarro();
+    
+    // No usamos 'await' aquí para no bloquear el hilo principal
+    queryShopify(mutation).then(response => {
+        console.log("Sincronizado con Shopify por detrás");
+    }).catch(err => {
+        console.error("Error silencioso:", err);
+    });
 };
 
 // Función para ELIMINAR totalmente
