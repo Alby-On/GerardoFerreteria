@@ -187,6 +187,71 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+function mostrarSubcategorias(catPadre) {
+    // Buscamos o creamos el contenedor donde irán las subcategorías
+    let subContainer = document.getElementById('subcategorias-dinamicas');
+    
+    if (!subContainer) {
+        // Si no existe en el HTML, lo creamos dinámicamente debajo del menú
+        subContainer = document.createElement('div');
+        subContainer.id = 'subcategorias-dinamicas';
+        subContainer.className = 'subcategorias-wrapper';
+        document.getElementById('menu-categorias').after(subContainer);
+    }
+
+    subContainer.innerHTML = ''; // Limpiamos las anteriores
+
+    if (mapeoCategorias[catPadre]) {
+        mapeoCategorias[catPadre].forEach(sub => {
+            const btn = document.createElement('button');
+            btn.className = 'btn-sub-pastilla';
+            btn.textContent = sub;
+            // Al hacer clic, busca en Shopify por el TAG exacto
+            btn.onclick = () => ejecutarBusquedaPorTag(sub);
+            subContainer.appendChild(btn);
+        });
+    }
+}
+async function ejecutarBusquedaPorTag(tagSeleccionado) {
+    const contenedor = document.getElementById('shopify-products-load');
+    const titulo = document.getElementById('titulo-coleccion');
+
+    if (titulo) titulo.textContent = tagSeleccionado;
+    contenedor.innerHTML = '<div class="loader">Buscando productos...</div>';
+
+    // Query de GraphQL buscando por TAG
+    const query = `{
+      products(first: 50, query: "tag:'${tagSeleccionado}'") {
+        edges {
+          node {
+            id
+            title
+            handle
+            description
+            images(first: 1) { edges { node { url } } }
+            variants(first: 1) {
+              edges {
+                node {
+                  id
+                  price { amount currencyCode }
+                }
+              }
+            }
+          }
+        }
+      }
+    }`;
+
+    try {
+        const response = await queryShopify(query);
+        const productos = response.data?.products?.edges || [];
+        // Reutilizamos tu función de renderizado existente
+        renderizarProductos(productos);
+    } catch (error) {
+        console.error("Error al filtrar por subcategoría:", error);
+        contenedor.innerHTML = "<p>Error al cargar los productos.</p>";
+    }
+}
 // 4. Carga específica para el Inicio (Tags descuento1, 2, 3)
 async function ejecutarCargaOfertasInicio() {
     const contenedor = document.getElementById('carrusel-ofertas');
