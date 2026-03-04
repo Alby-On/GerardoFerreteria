@@ -43,7 +43,6 @@ async function cargarDetalleProducto() {
                   node { 
                     id 
                     price { amount } 
-                    quantityAvailable 
                   } 
                 } 
               }
@@ -56,61 +55,42 @@ async function cargarDetalleProducto() {
 
         if (prod) {
             const variantNode = prod.variants.edges[0].node;
-            const stockReal = variantNode.quantityAvailable;
             const variantId = variantNode.id;
 
-            // Rellenar datos básicos
+            // 1. Rellenar datos básicos (Título e Imagen)
             document.getElementById('prod-title').textContent = prod.title;
-            
-            // --- CAMBIO AQUÍ: OCULTAMOS EL PRECIO ---
-            const priceDisplay = document.getElementById('prod-price');
-            if (priceDisplay) {
-                priceDisplay.innerHTML = `<span style="color: #666; font-size: 0.9rem;">Precio: Consultar en cotización</span>`;
-                // Si quieres que desaparezca totalmente, usa: priceDisplay.style.display = 'none';
-            }
-
             document.getElementById('prod-description').innerHTML = prod.descriptionHtml;
             document.getElementById('main-img').src = prod.images.edges[0].node.url;
 
-            // Lógica Visual de Stock
-            const stockDisplay = document.getElementById('prod-stock');
-            const inputCantidad = document.getElementById('cantidad');
-            const btnAddCart = document.getElementById('btn-add-cart');
-
-            if (stockDisplay) {
-                if (stockReal > 0) {
-                    stockDisplay.innerHTML = `Stock disponible: <strong>${stockReal} unidades</strong>`;
-                    stockDisplay.style.color = "#28a745";
-                    
-                    if (inputCantidad) {
-                        inputCantidad.max = stockReal;
-                        inputCantidad.placeholder = `Máx ${stockReal}`;
-                    }
-                } else {
-                    stockDisplay.innerHTML = `<strong>Agotado temporalmente</strong>`;
-                    stockDisplay.style.color = "#dc3545";
-                    
-                    if (btnAddCart) {
-                        btnAddCart.disabled = true;
-                        btnAddCart.innerText = "Sin Stock";
-                        btnAddCart.style.backgroundColor = "#6c757d";
-                    }
-                }
+            // 2. Ocultar el precio (Manteniendo tu lógica de cotización)
+            const priceDisplay = document.getElementById('prod-price');
+            if (priceDisplay) {
+                priceDisplay.innerHTML = `<span style="color: #666; font-size: 0.9rem;">Precio: Consultar en cotización</span>`;
             }
 
-            // Configurar evento del botón
-            if (btnAddCart && stockReal > 0) {
-                // Cambiamos el texto del botón para que sea coherente con la cotización
+            // 3. Limpiar indicador de Stock (Eliminamos el texto de unidades)
+            const stockDisplay = document.getElementById('prod-stock');
+            if (stockDisplay) {
+                stockDisplay.style.display = 'none'; // Desaparece el elemento por completo
+            }
+
+            // 4. Configurar botón (Sin restricciones de stock)
+            const btnAddCart = document.getElementById('btn-add-cart');
+            const inputCantidad = document.getElementById('cantidad');
+
+            if (btnAddCart) {
                 btnAddCart.innerText = "Añadir a mi Cotización"; 
+                btnAddCart.disabled = false; // Siempre habilitado
+                btnAddCart.style.backgroundColor = ""; // Reset de color gris si existía
 
                 const newBtn = btnAddCart.cloneNode(true);
                 btnAddCart.parentNode.replaceChild(newBtn, btnAddCart);
                 
                 newBtn.addEventListener('click', () => {
+                    // Ahora solo validamos que sea un número positivo, no el stock real
                     const cantSeleccionada = parseInt(inputCantidad.value);
-                    if (cantSeleccionada > stockReal) {
-                        alert(`Solo tenemos ${stockReal} unidades disponibles.`);
-                        inputCantidad.value = stockReal;
+                    if (isNaN(cantSeleccionada) || cantSeleccionada < 1) {
+                        alert("Por favor, ingresa una cantidad válida.");
                         return;
                     }
                     gestionarCarrito(variantId);
