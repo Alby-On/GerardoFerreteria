@@ -179,23 +179,33 @@
     margin-top: auto !important; /* Empuja el precio hacia abajo si el título es corto */
 }
 
-/* --- BOTÓN --- */
+/* --- BOTÓN CENTRADO --- */
 .tarjeta-oferta .btn-detalles {
-    width: 100% !important;
+    /* Cambiamos width 100% por un ancho automático o máximo para que no sea gigante */
+    width: auto !important; 
+    min-width: 160px !important; /* Asegura un tamaño mínimo decente */
+    max-width: 90% !important;   /* Evita que toque los bordes en móviles */
+    
     background: #333 !important;
     color: white !important;
-    padding: 12px !important;
+    padding: 12px 25px !important; /* Aumentamos el padding lateral para que se vea mejor */
     border: none !important;
     cursor: pointer !important;
     font-weight: bold !important;
-    border-radius: 6px !important;
+    border-radius: 50px !important; /* Forma de píldora, más moderna */
     text-decoration: none !important;
-    transition: background 0.3s;
-    display: block !important;
+    transition: all 0.3s ease;
+    
+    /* EL SECRETO DEL CENTRADO: */
+    display: inline-flex !important; /* Permite centrar contenido interno como iconos */
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 auto !important;     /* Margen automático a los lados */
 }
 
 .tarjeta-oferta .btn-detalles:hover {
     background: #e63946 !important;
+    transform: scale(1.05); /* Efecto de crecimiento sutil */
 }
 /* ==========================================================================
     OPTIMIZACIÓN RESPONSIVE: GRID DE PRODUCTOS (2 Columnas en Móvil)
