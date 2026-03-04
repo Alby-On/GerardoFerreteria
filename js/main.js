@@ -360,7 +360,7 @@ async function actualizarVisualizacionCarro() {
         countEl.style.display = cart.totalQuantity > 0 ? 'inline-block' : 'none';
     }
 
-    // 2. Footer con mensaje de cotización
+    // 2. Footer con mensaje de cotización (Precio oculto)
     const totalEl = document.getElementById('carrito-total-monto');
     if (totalEl) {
         totalEl.innerHTML = `<span style="font-size: 0.9rem; color: #64748b; font-weight: bold;">Precio: Pendiente de Cotización</span>`;
@@ -384,7 +384,8 @@ async function actualizarVisualizacionCarro() {
         const imageUrl = prod.image ? prod.image.url : 'img/placeholder.jpg';
 
         const div = document.createElement('div');
-        div.className = 'carrito-item-row'; // Para mejor manejo de CSS
+        // Importante: mantenemos la clase para que quitarProducto pueda ocultarla
+        div.className = 'carrito-item-row'; 
         div.style.cssText = 'display: flex; align-items: center; padding: 15px 0; border-bottom: 1px solid #eee; gap: 12px;';
 
         div.innerHTML = `
@@ -395,9 +396,9 @@ async function actualizarVisualizacionCarro() {
                 </div>
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 8px;">
                     <div style="display: flex; align-items: center; background: #f1f5f9; border-radius: 6px; overflow: hidden;">
-                        <button onclick="ajustarCantidadRelativa(this, '${lineId}', -1)" style="padding: 6px 12px; border: none; background: none; cursor: pointer; font-weight: bold; font-size: 1.1rem;">-</button>
+                        <button onclick="ajustarCantidadLocal(this, '${lineId}', -1)" style="padding: 6px 12px; border: none; background: none; cursor: pointer; font-weight: bold; font-size: 1.1rem;">-</button>
                         <span style="padding: 0 10px; font-size: 1rem; font-weight: 700; min-width: 25px; text-align: center;">${qty}</span>
-                        <button onclick="ajustarCantidadRelativa(this, '${lineId}', 1)" style="padding: 6px 12px; border: none; background: none; cursor: pointer; font-weight: bold; font-size: 1.1rem;">+</button>
+                        <button onclick="ajustarCantidadLocal(this, '${lineId}', 1)" style="padding: 6px 12px; border: none; background: none; cursor: pointer; font-weight: bold; font-size: 1.1rem;">+</button>
                     </div>
                 </div>
             </div>
