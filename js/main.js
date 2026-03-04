@@ -429,22 +429,33 @@ window.ajustarCantidadLocal = function(btn, lineId, cambio) {
 };
 
 window.cambiarCantidad = function(lineId, nuevaCantidad) {
-    // ACTUALIZACIÓN VISUAL: Buscamos todos los spans de ese producto (por si hay varios)
+    if (nuevaCantidad <= 0) {
+        window.quitarProducto(lineId);
+        return;
+    }
+
+    // 1. ACTUALIZACIÓN VISUAL INMEDIATA (Fuerza el número en pantalla)
     const botones = document.querySelectorAll(`button[onclick*="${lineId}"]`);
     botones.forEach(btn => {
         const span = btn.parentElement.querySelector('span');
         if (span) {
-            span.innerText = nuevaCantidad;
-            span.style.color = "#e63946"; // Rojo Makro momentáneo
+            span.innerText = nuevaCantidad; // Muestra 101, 200 o lo que sea
+            span.style.color = "#e63946"; 
             setTimeout(() => { span.style.color = ""; }, 500);
         }
     });
 
-    // SINCRONIZACIÓN: Enviamos a Shopify sin bloquear
+    // 2. SINCRONIZACIÓN SILENCIOSA
     const cartId = localStorage.getItem('shopify_cart_id');
-    const mutation = `mutation { cartLinesUpdate(cartId: "${cartId}", lines: [{ id: "${lineId}", quantity: ${nuevaCantidad} }]) { cart { id } } }`;
+    const mutation = `mutation { cartLinesUpdate(cartId: "${cartId}", lines: [{ id: "${lineId}", quantity: ${nuevaCantidad} }]) { cart { id } userErrors { message } } }`;
     
-    queryShopify(mutation).catch(err => console.error("Error en sync:", err));
+    queryShopify(mutation).then(res => {
+        // Log de debug por si quieres ver el error de Shopify en consola
+        const errores = res.data?.cartLinesUpdate?.userErrors;
+        if (errores && errores.length > 0) {
+            console.warn("Shopify limitó el stock en el servidor, pero mantenemos el número visual para la cotización.");
+        }
+    });
 };
 
 // Función para ELIMINAR totalmente
