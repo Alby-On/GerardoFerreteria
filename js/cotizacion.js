@@ -2,16 +2,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. Carga inicial
     setTimeout(renderizarCotizacionDesdeShopify, 500);
 
-    // 2. ESCUCHA ACTIVA: Si el carrito cambia en otra pestaña o mediante el lateral
+    // 2. ESCUCHA ACTIVA: Si el carrito cambia
     window.addEventListener('storage', (event) => {
-        if (event.key === 'shopify_cart_id' || event.key === 'shopify_checkout_url') {
-            console.log("Cambio detectado en el carrito, actualizando vista...");
+        if (event.key === 'shopify_cart_id') {
             renderizarCotizacionDesdeShopify();
         }
     });
 
-    // 3. POLLING (Opcional): Por si los cambios ocurren dentro de la misma página 
-    // sin recargar (como el carrito lateral). Ejecuta cada 2 segundos.
+    // 3. POLLING: Sincronización continua cada 2 segundos
     setInterval(renderizarCotizacionDesdeShopify, 2000);
 });
 
@@ -21,13 +19,14 @@ async function renderizarCotizacionDesdeShopify() {
     const totalLabel = document.getElementById('total-ref-cot');
 
     if (!cartId) {
-        if (container) container.innerHTML = "<p>Tu carrito está vacío.</p>";
+        if (container) container.innerHTML = "<p>Tu lista de cotización está vacía.</p>";
+        if (totalLabel) totalLabel.style.display = 'none'; // Ocultamos el label de total
         return;
     }
 
+    // Simplificamos la query: Ya no pedimos 'cost' ni 'price'
     const query = `{
       cart(id: "${cartId}") {
-        cost { totalAmount { amount } }
         lines(first: 20) {
           edges {
             node {
@@ -35,7 +34,6 @@ async function renderizarCotizacionDesdeShopify() {
               merchandise {
                 ... on ProductVariant {
                   product { title }
-                  price { amount }
                 }
               }
             }
@@ -48,50 +46,52 @@ async function renderizarCotizacionDesdeShopify() {
         const response = await queryShopify(query);
         const cart = response.data?.cart;
 
-        // Si no hay respuesta o el carrito se vació en Shopify
         if (!cart || cart.lines.edges.length === 0) {
             container.innerHTML = "<p>No hay productos seleccionados.</p>";
-            totalLabel.textContent = "$0";
+            if (totalLabel) totalLabel.style.display = 'none';
             return;
         }
 
         let html = '';
-        const totalNeto = Number(cart.cost.totalAmount.amount);
 
         cart.lines.edges.forEach(item => {
             const prod = item.node.merchandise;
             const qty = item.node.quantity;
-            const price = Number(prod.price.amount);
-            const subtotal = price * qty;
 
+            // Renderizamos solo Título y Cantidad
             html += `
-                <div class="item-cot" style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #eee;">
-                    <div style="text-align: left; padding-right: 10px;">
-                        <span style="display: block; font-weight: bold; color: #222; font-size: 0.95rem;">${prod.product.title}</span>
-                        <small style="color: #777;">${qty} unidad(es) x $${Math.round(price).toLocaleString('es-CL')}</small>
+                <div class="item-cot" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #eee;">
+                    <div style="text-align: left;">
+                        <span style="display: block; font-weight: bold; color: #1e293b; font-size: 1rem;">${prod.product.title}</span>
+                        <span style="color: #64748b; font-size: 0.9rem;">Cantidad solicitada: <strong>${qty} unidades</strong></span>
                     </div>
-                    <div style="font-weight: bold; color: #e63946; white-space: nowrap;">
-                        $${Math.round(subtotal).toLocaleString('es-CL')}
+                    <div style="color: #d9534f; font-weight: bold; font-size: 0.85rem; text-transform: uppercase;">
+                        Pendiente
                     </div>
                 </div>
             `;
         });
 
-        // Solo actualizamos el DOM si el HTML generado es distinto al actual 
-        // (para evitar parpadeos innecesarios en el S22 Ultra)
         if (container.innerHTML !== html) {
             container.innerHTML = html;
-            totalLabel.textContent = `$${Math.round(totalNeto).toLocaleString('es-CL')}`;
+            
+            // Ocultamos o cambiamos el texto del total general
+            if (totalLabel) {
+                totalLabel.innerHTML = "Precio final se enviará por correo";
+                totalLabel.style.color = "#64748b";
+                totalLabel.style.fontSize = "0.9rem";
+            }
         }
 
     } catch (error) {
         console.error("Error en sincronización de cotización:", error);
     }
 }
+
 function validarAntesDeEnviar() {
     const cartId = localStorage.getItem('shopify_cart_id');
     if (!cartId) {
-        alert("El carrito se ha vaciado. Agrega productos antes de enviar.");
+        alert("La lista está vacía. Agrega productos antes de solicitar tu cotización.");
         return false;
     }
     return true;
