@@ -929,15 +929,16 @@ loadComponent('header-placeholder', 'components/header.html').then(() => {
     }, 100);
 });
 
-async function ejecutarBusquedaGlobalPadre(categoriaPadre) {
+async function ejecutarBusquedaGlobalPadre(categoriaPadre, nombre) {
+    console.log("Iniciando búsqueda global para:", categoriaPadre); // Ver en consola F12
+    
     const contenedor = document.getElementById('shopify-products-load');
     const titulo = document.getElementById('titulo-coleccion');
 
-    if (titulo) titulo.textContent = "Todos los productos de " + categoriaPadre.replace('_', ' ');
-    contenedor.innerHTML = '<div class="loader">Cargando catálogo completo...</div>';
+    if (titulo) titulo.textContent = nombre || categoriaPadre;
+    if (contenedor) contenedor.innerHTML = '<div class="loader">Cargando catálogo...</div>';
 
-    // Buscamos productos que contengan la palabra clave de la categoría en sus tags
-    // Ejemplo: query: "tag:elec_domiciliaria*"
+    // La clave es el asterisco * que actúa como comodín en Shopify
     const query = `{
       products(first: 50, query: "tag:${categoriaPadre}*") {
         edges {
@@ -961,9 +962,14 @@ async function ejecutarBusquedaGlobalPadre(categoriaPadre) {
     try {
         const response = await queryShopify(query);
         const productos = response.data?.products?.edges || [];
-        renderizarProductos(productos);
+        console.log("Productos encontrados:", productos.length);
+        
+        if (productos.length === 0) {
+            contenedor.innerHTML = "<p>No hay productos con etiquetas que empiecen por " + categoriaPadre + "</p>";
+        } else {
+            renderizarProductos(productos);
+        }
     } catch (error) {
         console.error("Error en búsqueda global:", error);
-        contenedor.innerHTML = "<p>No se encontraron productos en esta categoría.</p>";
     }
 }
