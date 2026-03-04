@@ -731,3 +731,25 @@ async function actualizarCantidadLinea(cartId, lineId, nuevaCantidad) {
         console.error("Error actualizando stock:", e);
     }
 }
+let currentSlide = 0;
+const slider = document.getElementById('slider-main');
+
+function moveSlider(direction) {
+    if (!slider) return;
+    const slides = slider.querySelectorAll('.slide-item');
+    const totalSlides = slides.length;
+
+    currentSlide = (currentSlide + direction + totalSlides) % totalSlides;
+    slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+}
+
+// Rotación automática cada 5 segundos
+let autoPlay = setInterval(() => moveSlider(1), 5000);
+
+// Resetear el tiempo si el usuario navega manualmente
+document.querySelectorAll('.slider-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        clearInterval(autoPlay);
+        autoPlay = setInterval(() => moveSlider(1), 5000);
+    });
+});
