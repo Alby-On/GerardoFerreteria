@@ -1370,3 +1370,30 @@ html, body {
     font-weight: bold;
     border-bottom: 2px solid #e63946;
 }
+.subcategorias-wrapper {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 15px 5px;
+    margin-bottom: 20px;
+    -webkit-overflow-scrolling: touch; /* Scroll suave en Android */
+    scrollbar-width: none;
+}
+
+.btn-sub-pastilla {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    padding: 8px 18px;
+    border-radius: 25px;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #475569;
+    transition: all 0.2s;
+}
+
+.btn-sub-pastilla:active, .btn-sub-pastilla:hover {
+    background: #e63946; /* Rojo Makro */
+    color: white;
+    border-color: #e63946;
+}
