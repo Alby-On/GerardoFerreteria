@@ -1328,72 +1328,113 @@ html, body {
 
 
 /* ==========================================================================
-   Categorias
+   Categorías Anidadas (Efecto Acordeón)
    ========================================================================== */
 
-.subcategorias-flotantes {
-    margin-top: 15px;
-    padding: 10px;
-    background: #f8fafc;
-    border-radius: 8px;
+/* Contenedor principal de la lista */
+.filtro-lista {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
-.lista-sub-botones {
+/* Estilo del botón Padre */
+.btn-categoria {
     display: flex;
-    gap: 10px;
-    overflow-x: auto; /* Scroll horizontal si son muchos */
-    padding: 10px 0;
-    scrollbar-width: none; /* Ocultar barra en Firefox */
-}
-
-.lista-sub-botones::-webkit-scrollbar { display: none; } /* Ocultar en Chrome/S22 */
-
-.btn-sub-filtro {
-    white-space: nowrap;
-    padding: 8px 16px;
-    background: white;
-    border: 1px solid #e2e8f0;
-    border-radius: 20px;
-    color: #475569;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 15px;
+    background: #ffffff;
+    border-bottom: 1px solid #edf2f7;
+    color: #2d3748;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
     cursor: pointer;
-    font-size: 0.85rem;
-    transition: all 0.3s ease;
 }
 
-.btn-sub-filtro:hover, .btn-sub-filtro:active {
-    background: #e63946;
-    color: white;
-    border-color: #e63946;
-}
+/* Estado activo del padre cuando se hace clic */
 .btn-categoria.active {
     color: #e63946;
-    font-weight: bold;
-    border-bottom: 2px solid #e63946;
-}
-.subcategorias-wrapper {
-    display: flex;
-    gap: 10px;
-    overflow-x: auto;
-    padding: 15px 5px;
-    margin-bottom: 20px;
-    -webkit-overflow-scrolling: touch; /* Scroll suave en Android */
-    scrollbar-width: none;
+    background: #fff5f5;
+    border-left: 4px solid #e63946;
 }
 
-.btn-sub-pastilla {
-    background: #f1f5f9;
-    border: 1px solid #e2e8f0;
-    padding: 8px 18px;
-    border-radius: 25px;
-    white-space: nowrap;
-    cursor: pointer;
+/* Icono de flecha con rotación */
+.btn-categoria i {
+    font-size: 0.8rem;
+    transition: transform 0.3s ease;
+    color: #a0aec0;
+}
+
+.btn-categoria.active i {
+    transform: rotate(180deg);
+    color: #e63946;
+}
+
+/* ==========================================================================
+   Sub-lista Anidada
+   ========================================================================== */
+
+.sub-lista-anidada {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 0; /* Oculto por defecto */
+    overflow: hidden;
+    background: #f8fafc;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Clase que activa el JS para expandir */
+.sub-lista-anidada.activa {
+    max-height: 600px; /* Altura suficiente para desplegar */
+    border-bottom: 1px solid #e2e8f0;
+}
+
+/* Enlaces de las subcategorías */
+.enlace-sub-anidado {
+    display: block;
+    padding: 12px 15px 12px 35px; /* Sangría notable para jerarquía */
     font-size: 0.9rem;
-    color: #475569;
-    transition: all 0.2s;
+    color: #4a5568;
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.5);
 }
 
-.btn-sub-pastilla:active, .btn-sub-pastilla:hover {
-    background: #e63946; /* Rojo Makro */
-    color: white;
-    border-color: #e63946;
+/* Hover y Activo en Subcategoría */
+.enlace-sub-anidado:hover, 
+.enlace-sub-anidado.active {
+    background: #edf2f7;
+    color: #e63946;
+    border-left: 3px solid #e63946;
+    padding-left: 40px; /* Efecto de desplazamiento */
+}
+
+/* ==========================================================================
+   Ajustes para Dispositivos Móviles (S22 Ultra / iPhone)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .sidebar-filtros {
+        margin-bottom: 20px;
+    }
+
+    .btn-categoria {
+        padding: 16px 15px; /* Área de toque más grande para pulgares */
+        font-size: 1rem;
+    }
+
+    .enlace-sub-anidado {
+        padding: 14px 15px 14px 40px; /* Mayor facilidad de clic en móvil */
+    }
+
+    /* Opcional: Hacer que el sidebar sea un poco más angosto si el catálogo necesita espacio */
+    .tienda-layout {
+        display: flex;
+        flex-direction: column;
+    }
 }
