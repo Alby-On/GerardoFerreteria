@@ -58,13 +58,13 @@
     font-weight: 800;
 }
 
-/* Botón Volver a Productos (Optimizado) */
+/* Botón Volver a Productos (Estilo Industrial Makro) */
 .btn-volver-productos {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    background: #1e293b; /* Gris oscuro industrial */
+    background: #1e293b; /* Azul/Gris oscuro industrial */
     color: #fff !important;
     padding: 14px 25px;
     border-radius: 10px;
@@ -74,12 +74,13 @@
     transition: all 0.3s ease;
     margin-top: 20px;
     border: none;
-    width: 100%; 
+    width: 100%;
     text-align: center;
+    cursor: pointer;
 }
 
 .btn-volver-productos:hover {
-    background: #e63946; /* Rojo Makro */
+    background: #e63946; /* Rojo corporativo */
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(230, 57, 70, 0.3);
 }
@@ -214,7 +215,7 @@
     }
     
     .form-input {
-        font-size: 16px;
+        font-size: 16px; /* Evita zoom automático en móvil */
     }
 
     .btn-volver-productos {
