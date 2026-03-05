@@ -64,7 +64,7 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
-    background: #1e293b; /* Azul/Gris oscuro industrial */
+    background: #1e293b;
     color: #fff !important;
     padding: 14px 25px;
     border-radius: 10px;
@@ -80,7 +80,7 @@
 }
 
 .btn-volver-productos:hover {
-    background: #e63946; /* Rojo corporativo */
+    background: #e63946;
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(230, 57, 70, 0.3);
 }
@@ -105,8 +105,8 @@
 
 .total-referencial span {
     display: block;
-    font-size: 1.6rem;
-    font-weight: 800;
+    font-size: 1.1rem;
+    font-weight: 700;
     color: #e63946;
     margin-top: 5px;
 }
@@ -168,6 +168,63 @@
     outline: none;
 }
 
+/* --- SELECTOR DE MÉTODO (NUEVO) --- */
+.metodo-envio-selector {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.metodo-envio-selector label {
+    display: block;
+    margin-bottom: 12px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #1e293b;
+}
+
+.opciones-metodo {
+    display: flex;
+    gap: 12px;
+}
+
+.opciones-metodo input[type="radio"] {
+    display: none; /* Ocultamos el radio original */
+}
+
+.label-radio {
+    flex: 1;
+    background: #fff;
+    border: 2px solid #ddd;
+    padding: 15px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-weight: 600 !important;
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+/* Efecto cuando se selecciona el método */
+.opciones-metodo input[type="radio"]:checked + .label-radio {
+    border-color: #e63946;
+    color: #e63946;
+    background: #fff5f5;
+    box-shadow: 0 4px 12px rgba(230, 57, 70, 0.1);
+}
+
+.opciones-metodo input[type="radio"]:checked + .label-radio i {
+    color: #e63946;
+}
+
+/* --- BOTÓN ENVIAR --- */
 .submit-btn {
     width: 100%;
     background: #e63946;
@@ -210,12 +267,16 @@
 }
 
 @media (max-width: 480px) {
+    .opciones-metodo {
+        flex-direction: column; /* Botones uno sobre otro en móviles pequeños */
+    }
+
     .page-title h1 {
         font-size: 1.8rem;
     }
     
     .form-input {
-        font-size: 16px; /* Evita zoom automático en móvil */
+        font-size: 16px;
     }
 
     .btn-volver-productos {
