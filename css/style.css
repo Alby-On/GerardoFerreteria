@@ -268,7 +268,7 @@ html, body {
     }
 }
 /* ==========================================================================
-    4. MENÚ DESPLEGABLE (Área de contacto quirúrgica - Versión Final)
+    4. MENÚ DESPLEGABLE (Con Puente de Conexión y Seguridad)
    ========================================================================== */
 .dropdown {
     position: relative;
@@ -277,7 +277,6 @@ html, body {
     align-items: center; 
     height: 100%; /* Se mantiene en el alto de la navbar (55px) */
     vertical-align: middle;
-    /* EVITA INVASIÓN: No permite que el contenedor se estire hacia los lados */
     flex: 0 0 auto; 
     margin: 0;
     padding: 0;
@@ -286,25 +285,38 @@ html, body {
 .dropdown-content {
     display: block;
     position: absolute;
-    /* Ajustado al ras de la navbar para evitar huecos de activación */
-    top: 55px; 
+    /* Ajustado para nacer justo debajo del botón */
+    top: 100%; 
     left: 0; 
     background-color: white;
     min-width: 280px;
     box-shadow: 0px 10px 20px rgba(0,0,0,0.1);
     z-index: 1000;
     
-    /* SEGURIDAD: El menú es invisible e intocable hasta que el mouse toque el botón */
+    /* SEGURIDAD: Invisible e intocable por defecto */
     visibility: hidden;
     opacity: 0;
     pointer-events: none; 
     
-    transform: translateY(5px);
+    transform: translateY(10px);
     transition: all 0.2s ease-in-out;
     border-top: 3px solid #d9534f;
 }
 
-/* Solo se activa si el puntero toca REALMENTE el área del botón .dropdown */
+/* --- EL PUENTE DE CONEXIÓN --- 
+   Este pseudo-elemento rellena el espacio vacío entre el botón y el menú
+   evitando que el hover se pierda al bajar el mouse. */
+.dropdown-content::before {
+    content: "";
+    position: absolute;
+    top: -15px; /* Crea un área de contacto hacia arriba */
+    left: 0;
+    width: 100%;
+    height: 15px;
+    background: transparent; /* Es invisible pero capta el mouse */
+}
+
+/* Activación al tocar el área del .dropdown */
 .dropdown:hover .dropdown-content {
     visibility: visible;
     opacity: 1;
@@ -331,7 +343,7 @@ html, body {
 /* --- RESPONSIVO (S22 Ultra) --- */
 @media (max-width: 768px) {
     .dropdown {
-        display: flex; /* En móvil vuelve a flex para centrarse en la columna */
+        display: flex;
         width: 100%;
         justify-content: center;
     }
@@ -344,6 +356,9 @@ html, body {
         pointer-events: auto;
     }
     
+    /* En móvil el puente no es necesario, lo desactivamos para evitar clics fantasma */
+    .dropdown-content::before { display: none; }
+
     .dropdown:hover .dropdown-content {
         transform: translateX(-50%) translateY(0);
     }
