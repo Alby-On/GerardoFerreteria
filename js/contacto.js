@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
             btnText.innerText = 'Enviando...';
 
             // 2. Captura de datos directamente desde los atributos 'name' del HTML
-            // Asegúrate que en tu plantilla de EmailJS uses: {{nombre}}, {{email}}, {{asunto}}, {{mensaje}}
             const templateParams = {
                 nombre: this.nombre.value,
                 email: this.email.value,
@@ -22,29 +21,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 mensaje: this.mensaje.value
             };
 
-            // 3. IDs de tu cuenta Makro SPA (Ya verificados)
+            // 3. IDs de tu cuenta Makro SPA
             const SERVICE_ID = 'service_skk8kaa';
-            const TEMPLATE_ID = 'template_n5utbcf'; // <--- REEMPLAZA ESTO
+            const TEMPLATE_ID = 'template_n5utbcf'; 
             const PUBLIC_KEY = 'h3oIE9KDa7Ujtsnw_';
 
             try {
-                // Enviamos los datos
+                // Enviamos los datos a EmailJS
                 const response = await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY);
 
                 if (response.status === 200) {
                     alert('¡Mensaje enviado con éxito! Te contactaremos a la brevedad.');
-                    this.reset(); // Limpia el formulario
+                    this.reset(); // Limpia el formulario tras el éxito
                 }
             } catch (error) {
                 console.error('Error detallado de EmailJS:', error);
                 const errorMsg = error.text || "No se pudo conectar con el servidor.";
                 alert('Hubo un error al enviar el mensaje: ' + errorMsg);
             } finally {
-                // Restauramos el botón
+                // Restauramos el botón a su estado original
                 btn.disabled = false;
                 btnText.innerText = originalText;
             }
         });
     }
-});}
 });
