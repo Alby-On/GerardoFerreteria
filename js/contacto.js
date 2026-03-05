@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             // 3. IDs de tu cuenta Makro SPA
-            const SERVICE_ID = 'service_skk8kaa';
+            const SERVICE_ID = 'service_fpz8ov2';
             const TEMPLATE_ID = 'template_n5utbcf'; 
             const PUBLIC_KEY = 'h3oIE9KDa7Ujtsnw_';
 
