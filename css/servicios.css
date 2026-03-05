@@ -50,21 +50,39 @@
 
 .hero-content h1 span { color: #e63946; }
 
+/* AJUSTE DE LOGO (Reducido 50%) */
 .hero-logos {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 20px;
+    gap: 25px;
     margin-top: 30px;
 }
 
-.logo-mini { height: 50px; }
-.plus { font-size: 2rem; font-weight: bold; }
-.inglobal-placeholder { 
-    font-size: 1.5rem; 
-    font-weight: 800; 
-    border-left: 2px solid #e63946;
+.logo-hero-grande { 
+    height: 45px !important; /* Reducción a tamaño equilibrado */
+    width: auto !important;
+}
+
+.plus { font-size: 1.5rem; font-weight: bold; color: #e63946; }
+
+.inglobal-header {
+    text-align: left;
+    border-left: 3px solid #e63946;
     padding-left: 15px;
+}
+
+.inglobal-name {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.inglobal-sub {
+    font-size: 0.8rem;
+    color: #e63946;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 /* --- INTRO --- */
@@ -86,13 +104,16 @@
     color: #64748b;
 }
 
-/* --- GRID SERVICIOS --- */
+/* --- GRID SERVICIOS (Ajuste 2x2 Ordenado) --- */
 .servicios-grid-section { padding: 80px 0; }
 
-.grid-servicios {
+.grid-servicios-2x2 {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    /* Forzamos 2 columnas iguales */
+    grid-template-columns: repeat(2, 1fr); 
     gap: 30px;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
 .servicio-card {
@@ -101,15 +122,19 @@
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.05);
     transition: transform 0.3s ease;
-    border-bottom: 4px solid #e63946;
+    border-top: 5px solid #e63946; /* Estilo industrial superior */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .servicio-card:hover { transform: translateY(-10px); }
 
 .icon-box {
-    width: 60px; height: 60px;
+    width: 65px; height: 65px;
     background: #f1f5f9;
-    border-radius: 12px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -118,21 +143,17 @@
 
 .icon-box i { font-size: 1.8rem; color: #e63946; }
 
-.servicio-card h3 { margin-bottom: 15px; color: #1e293b; }
-
-.servicio-card ul {
-    list-style: none;
-    padding: 0;
-    margin-top: 20px;
+.servicio-card h3 { 
+    margin-bottom: 15px; 
+    color: #1e293b; 
+    font-weight: 800;
 }
 
-.servicio-card ul li {
-    font-size: 0.9rem;
-    margin-bottom: 8px;
+.servicio-card p {
+    font-size: 0.95rem;
+    line-height: 1.6;
     color: #64748b;
 }
-
-.servicio-card ul li i { color: #10b981; margin-right: 8px; }
 
 /* --- CTA --- */
 .cta-servicios { padding-bottom: 80px; }
@@ -160,7 +181,12 @@
 .btn-industrial:hover { background: #c52e39; }
 
 /* --- MOBILE S22 Ultra --- */
-@media (max-width: 768px) {
-    .hero-content h1 { font-size: 2rem; }
+@media (max-width: 850px) {
+    .grid-servicios-2x2 {
+        grid-template-columns: 1fr; /* Una columna para el celular */
+    }
+    
+    .hero-content h1 { font-size: 2.2rem; }
+    .logo-hero-grande { height: 35px !important; }
     .cta-box { padding: 40px 20px; }
 }
