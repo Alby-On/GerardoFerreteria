@@ -177,7 +177,7 @@ async function enviarCorreo(datos, productosArray) {
 
     try {
         // IDs Reales de tu cuenta Makro SPA
-        const SERVICE_ID = ' service_fpz8ov2';
+        const SERVICE_ID = 'service_fpz8ov2';
         const TEMPLATE_ID = 'template_3ohukvt';
         const PUBLIC_KEY = 'h3oIE9KDa7Ujtsnw_';
 
