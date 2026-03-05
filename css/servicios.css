@@ -11,11 +11,11 @@
     padding: 0 20px;
 }
 
-/* --- HERO SECTION --- */
+/* --- HERO SECTION (Imagen removida para evitar Error 404) --- */
 .servicios-hero {
     position: relative;
-    height: 60vh;
-    background: url('../images/industrial_bg.jpg') center/cover no-repeat;
+    height: 40vh; /* Reducimos un poco la altura al no haber imagen */
+    background-color: #1e293b; /* Azul industrial sólido de respaldo */
     display: flex;
     align-items: center;
     justify-content: center;
