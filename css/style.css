@@ -1485,3 +1485,77 @@ html, body {
         flex-direction: column;
     }
 }
+/* ==========================================================================
+   BOTÓN DEL CARRITO MODERNO
+   ========================================================================== */
+.nav-right {
+    display: flex;
+    align-items: center;
+    margin-left: 50px;
+}
+
+.btn-carrito {
+    background: #ffffff; /* Fondo blanco para que resalte sobre el negro */
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 15px;
+    border-radius: 50px; /* Estilo cápsula */
+    position: relative;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-carrito:hover {
+    background: #f1f5f9;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(230, 57, 70, 0.3); /* Sombra con el rojo de tu marca */
+}
+
+/* El Icono del carrito */
+.cart-icon {
+    font-size: 1.4rem;
+    margin-right: 12px;
+}
+
+/* El Contador (Burbuja Roja) */
+#cart-count {
+    background: #e63946; /* El rojo Makro */
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 800;
+    min-width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    padding: 2px;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    border: 2px solid #333; /* Borde oscuro para que no se pierda */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+/* Animación cuando el carrito no está vacío (se activa con JS si quieres) */
+.btn-carrito.active {
+    animation: bounce 0.5s ease-in-out;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+}
+
+/* Ajuste S22 Ultra */
+@media (max-width: 768px) {
+    .btn-carrito {
+        padding: 6px 12px;
+    }
+    .cart-icon {
+        font-size: 1.2rem;
+    }
+}
