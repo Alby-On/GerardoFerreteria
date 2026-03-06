@@ -1,217 +1,164 @@
-/* --- RESET GLOBAL Y PREVENCIÓN DE DESBORDE --- */
+/* --- CONFIGURACIÓN BASE Y RESET --- */
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent; /* Mejora UX en móviles */
+}
+
 html, body {
-    overflow-x: hidden;
+    overflow-x: hidden; /* Evita el scroll lateral rebelde */
     width: 100%;
     margin: 0;
     padding: 0;
-}
-
-.contact-card *, 
-.contact-card *::before, 
-.contact-card *::after {
-    box-sizing: border-box;
+    font-family: 'Segoe UI', Roboto, sans-serif;
 }
 
 /* --- Contenedor General --- */
 .content-wrapper {
+    width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 40px 20px;
-    width: 100%;
+    padding: 20px 15px; /* Reducido para móviles */
 }
 
-/* --- Encabezado Centrado --- */
+/* --- Encabezado --- */
 .page-title {
     text-align: center;
-    margin-bottom: 50px;
-    padding: 0 10px;
+    margin-bottom: 30px;
 }
 
 .page-title h1 {
-    font-size: 2.2rem;
-    color: #222;
-    margin-bottom: 10px;
+    font-size: 1.6rem; /* Tamaño optimizado para móvil */
+    color: #1e293b;
+    margin-bottom: 8px;
     font-weight: 800;
 }
 
 .page-title p {
-    color: #666;
-    font-size: 1.1rem;
+    color: #64748b;
+    font-size: 0.95rem;
 }
 
-/* --- Layout Grid --- */
+/* --- Layout Grid (Responsivo por defecto) --- */
 .cotizacion-grid {
-    display: grid;
-    grid-template-columns: 1fr 1.6fr;
-    gap: 40px;
-    align-items: start;
+    display: flex;
+    flex-direction: column; /* Columna única para móviles */
+    gap: 20px;
 }
 
-/* --- Estilos Columna Izquierda (Resumen) --- */
+/* --- Estilos Columna Resumen --- */
 .resumen-cotizacion {
-    background: #fcfcfc;
-    padding: 30px;
-    border-radius: 15px;
-    border: 1px solid #eaeaea;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.03);
-    position: sticky;
-    top: 20px;
+    background: #f8fafc;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
     width: 100%;
 }
 
 .resumen-cotizacion h3 {
     text-align: center;
-    color: #333;
+    color: #1e293b;
     border-bottom: 3px solid #e63946;
-    padding-bottom: 15px;
-    margin-bottom: 25px;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
     text-transform: uppercase;
-    font-size: 1.1rem;
-    font-weight: 800;
-}
-
-.btn-volver-productos {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    background: #1e293b;
-    color: #fff !important;
-    padding: 14px 25px;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 0.95rem;
-    transition: all 0.3s ease;
-    margin-top: 20px;
-    border: none;
-    width: 100%;
-    cursor: pointer;
-}
-
-.btn-volver-productos:hover {
-    background: #e63946;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(230, 57, 70, 0.3);
+    font-size: 1rem;
 }
 
 .item-cot {
     display: flex;
     justify-content: space-between;
-    padding: 15px 0;
-    border-bottom: 1px solid #eee;
-    font-size: 0.95rem;
-    color: #444;
+    padding: 12px 0;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 0.9rem;
 }
 
 .total-referencial {
-    margin-top: 30px;
-    padding: 20px;
+    margin-top: 20px;
+    padding: 15px;
     background: #fff;
     border: 2px solid #e63946;
-    border-radius: 10px;
+    border-radius: 8px;
     text-align: center;
 }
 
 .total-referencial span {
     display: block;
-    font-size: 1.1rem;
-    font-weight: 700;
+    font-size: 1.2rem;
+    font-weight: 800;
     color: #e63946;
-    margin-top: 5px;
 }
 
-/* --- Estilos Columna Derecha (Formulario) --- */
+/* --- Estilos Formulario (Contact Card) --- */
 .contact-card {
     background: #ffffff;
-    padding: 40px;
-    border-radius: 15px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+    padding: 20px; /* Padding humano para móvil */
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     width: 100%;
-    overflow: hidden; /* Evita que elementos internos se asomen */
 }
 
 .contact-card h2 {
-    margin-bottom: 30px;
-    font-size: 1.4rem;
-    color: #333;
-    font-weight: 700;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    color: #1e293b;
 }
 
 .form-group {
-    margin-bottom: 25px;
-    position: relative;
+    margin-bottom: 15px;
     width: 100%;
 }
 
 .form-group label {
     display: block;
     font-weight: 600;
-    margin-bottom: 10px;
-    color: #555;
-    font-size: 0.9rem;
-}
-
-.form-group i {
-    position: absolute;
-    left: 15px;
-    top: 44px;
-    color: #e63946;
-    font-size: 1.1rem;
-    z-index: 2;
+    margin-bottom: 8px;
+    color: #475569;
+    font-size: 0.85rem;
 }
 
 .form-input {
     width: 100%;
-    padding: 14px 15px 14px 45px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    background-color: #fff;
-    display: block;
+    padding: 12px; /* Más cómodo para dedos */
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 16px; /* Evita zoom automático en iPhone */
+    transition: border-color 0.2s;
+    background: #fff;
 }
 
 .form-input:focus {
     border-color: #e63946;
-    box-shadow: 0 0 0 4px rgba(230, 57, 70, 0.1);
     outline: none;
 }
 
-/* --- SELECTOR DE MÉTODO --- */
+/* --- Selector de Método de Envío --- */
 .metodo-envio-selector {
-    margin-bottom: 30px;
-    padding: 20px;
-    background: #f8fafc;
-    border-radius: 12px;
-    border: 1px solid #e2e8f0;
+    margin: 20px 0;
+    padding: 15px;
+    background: #f1f5f9;
+    border-radius: 10px;
 }
 
 .opciones-metodo {
     display: flex;
-    gap: 12px;
-}
-
-.opciones-metodo input[type="radio"] {
-    display: none;
+    flex-direction: column; /* Apilados en móvil */
+    gap: 10px;
 }
 
 .label-radio {
-    flex: 1;
+    width: 100%;
     background: #fff;
-    border: 2px solid #ddd;
-    padding: 15px 10px;
-    border-radius: 10px;
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.3s ease;
-    display: flex !important;
+    border: 2px solid #cbd5e1;
+    padding: 12px;
+    border-radius: 8px;
+    display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    font-weight: 600 !important;
+    gap: 8px;
+    font-weight: 600;
     font-size: 0.9rem;
     color: #64748b;
+    cursor: pointer;
 }
 
 .opciones-metodo input[type="radio"]:checked + .label-radio {
@@ -220,75 +167,61 @@ html, body {
     background: #fff5f5;
 }
 
-/* --- BOTÓN ENVIAR --- */
-.submit-btn {
+/* --- Botones --- */
+.submit-btn, .btn-volver-productos {
     width: 100%;
-    background: #e63946;
-    color: #fff;
-    padding: 18px;
-    border: none;
-    border-radius: 10px;
-    font-size: 1.1rem;
+    padding: 16px;
+    border-radius: 8px;
     font-weight: 700;
+    font-size: 1rem;
+    border: none;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
+    text-decoration: none;
 }
 
-/* --- MEDIA QUERIES PARA MÓVIL (S22 Ultra y similares) --- */
-@media (max-width: 992px) {
-    .cotizacion-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
+.submit-btn {
+    background: #e63946;
+    color: #fff;
+    margin-top: 10px;
+}
+
+.btn-volver-productos {
+    background: #1e293b;
+    color: #fff !important;
+    margin-top: 15px;
+}
+
+/* --- QUERIES PARA ESCRITORIO (Ajuste para PCs) --- */
+@media (min-width: 768px) {
+    .content-wrapper {
+        padding: 40px 20px;
     }
 
-    .content-wrapper {
-        padding: 20px 15px;
+    .page-title h1 {
+        font-size: 2.2rem;
+    }
+
+    .cotizacion-grid {
+        flex-direction: row; /* Vuelve a dos columnas */
+        display: grid;
+        grid-template-columns: 1fr 1.6fr;
+        align-items: start;
     }
 
     .resumen-cotizacion {
-        position: static;
-        order: 1;
-        margin-bottom: 20px;
-    }
-    
-    .contact-card {
-        order: 2;
-        padding: 30px 20px; /* Padding reducido para evitar desborde */
-    }
-}
-
-@media (max-width: 480px) {
-    .page-title h1 {
-        font-size: 1.6rem;
+        position: sticky;
+        top: 20px;
     }
 
     .contact-card {
-        padding: 20px 15px; /* Padding mínimo de seguridad */
+        padding: 40px;
     }
 
     .opciones-metodo {
-        flex-direction: column; /* Apilado vertical para que no se salga */
-    }
-
-    .label-radio {
-        width: 100%;
-        padding: 12px;
-    }
-
-    .form-input {
-        font-size: 16px; /* Evita zoom automático en móviles */
-        padding-left: 40px;
-    }
-
-    .form-group i {
-        left: 12px;
-    }
-
-    .submit-btn {
-        padding: 16px;
-        font-size: 1rem;
+        flex-direction: row; /* Botones lado a lado en PC */
     }
 }
