@@ -1,15 +1,14 @@
-/* --- CONFIGURACIÓN BASE Y RESET --- */
+/* --- RESET Y PREVENCIÓN DE DESBORDE --- */
 * {
     box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent; /* Mejora UX en móviles */
+    -webkit-tap-highlight-color: transparent;
 }
 
 html, body {
-    overflow-x: hidden; /* Evita el scroll lateral rebelde */
+    overflow-x: hidden; /* Evita que la pantalla baile hacia los lados */
     width: 100%;
     margin: 0;
     padding: 0;
-    font-family: 'Segoe UI', Roboto, sans-serif;
 }
 
 /* --- Contenedor General --- */
@@ -17,7 +16,7 @@ html, body {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px 15px; /* Reducido para móviles */
+    padding: 20px 15px; /* Reducido para que el formulario respire en móvil */
 }
 
 /* --- Encabezado --- */
@@ -27,7 +26,7 @@ html, body {
 }
 
 .page-title h1 {
-    font-size: 1.6rem; /* Tamaño optimizado para móvil */
+    font-size: 1.6rem; /* Más pequeño para móvil */
     color: #1e293b;
     margin-bottom: 8px;
     font-weight: 800;
@@ -35,17 +34,17 @@ html, body {
 
 .page-title p {
     color: #64748b;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
 }
 
-/* --- Layout Grid (Responsivo por defecto) --- */
+/* --- Layout Grid (Columna única por defecto para móvil) --- */
 .cotizacion-grid {
     display: flex;
-    flex-direction: column; /* Columna única para móviles */
+    flex-direction: column;
     gap: 20px;
 }
 
-/* --- Estilos Columna Resumen --- */
+/* --- Resumen de Cotización (Columna Izquierda) --- */
 .resumen-cotizacion {
     background: #f8fafc;
     padding: 20px;
@@ -59,17 +58,17 @@ html, body {
     color: #1e293b;
     border-bottom: 3px solid #e63946;
     padding-bottom: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     text-transform: uppercase;
-    font-size: 1rem;
+    font-size: 0.95rem;
 }
 
 .item-cot {
     display: flex;
     justify-content: space-between;
-    padding: 12px 0;
-    border-bottom: 1px solid #e2e8f0;
-    font-size: 0.9rem;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 0.85rem;
 }
 
 .total-referencial {
@@ -77,7 +76,7 @@ html, body {
     padding: 15px;
     background: #fff;
     border: 2px solid #e63946;
-    border-radius: 8px;
+    border-radius: 10px;
     text-align: center;
 }
 
@@ -88,10 +87,10 @@ html, body {
     color: #e63946;
 }
 
-/* --- Estilos Formulario (Contact Card) --- */
+/* --- Formulario (Contact Card - Columna Derecha) --- */
 .contact-card {
     background: #ffffff;
-    padding: 20px; /* Padding humano para móvil */
+    padding: 20px; /* Reducido de 40px para que no se vea gigante */
     border-radius: 12px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     width: 100%;
@@ -118,22 +117,24 @@ html, body {
 
 .form-input {
     width: 100%;
-    padding: 12px; /* Más cómodo para dedos */
+    padding: 12px 12px 12px 40px; /* Espacio para el icono */
     border: 1.5px solid #cbd5e1;
     border-radius: 8px;
-    font-size: 16px; /* Evita zoom automático en iPhone */
-    transition: border-color 0.2s;
+    font-size: 16px; /* 16px evita el zoom forzado en móviles */
     background: #fff;
 }
 
-.form-input:focus {
-    border-color: #e63946;
-    outline: none;
+.form-group i {
+    position: absolute;
+    left: 12px;
+    top: 38px; /* Ajustado para estar alineado al input */
+    color: #e63946;
+    font-size: 1rem;
 }
 
-/* --- Selector de Método de Envío --- */
+/* --- Selector de Envío --- */
 .metodo-envio-selector {
-    margin: 20px 0;
+    margin-bottom: 20px;
     padding: 15px;
     background: #f1f5f9;
     border-radius: 10px;
@@ -141,14 +142,13 @@ html, body {
 
 .opciones-metodo {
     display: flex;
-    flex-direction: column; /* Apilados en móvil */
+    flex-direction: column; /* Apilados por defecto para móvil */
     gap: 10px;
 }
 
 .label-radio {
-    width: 100%;
     background: #fff;
-    border: 2px solid #cbd5e1;
+    border: 2px solid #ddd;
     padding: 12px;
     border-radius: 8px;
     display: flex;
@@ -170,7 +170,7 @@ html, body {
 /* --- Botones --- */
 .submit-btn, .btn-volver-productos {
     width: 100%;
-    padding: 16px;
+    padding: 15px;
     border-radius: 8px;
     font-weight: 700;
     font-size: 1rem;
@@ -183,33 +183,18 @@ html, body {
     text-decoration: none;
 }
 
-.submit-btn {
-    background: #e63946;
-    color: #fff;
-    margin-top: 10px;
-}
+.submit-btn { background: #e63946; color: #fff; }
+.btn-volver-productos { background: #1e293b; color: #fff !important; }
 
-.btn-volver-productos {
-    background: #1e293b;
-    color: #fff !important;
-    margin-top: 15px;
-}
-
-/* --- QUERIES PARA ESCRITORIO (Ajuste para PCs) --- */
+/* --- DISEÑO PARA ESCRITORIO (PC) --- */
 @media (min-width: 768px) {
-    .content-wrapper {
-        padding: 40px 20px;
-    }
-
-    .page-title h1 {
-        font-size: 2.2rem;
-    }
+    .content-wrapper { padding: 40px 20px; }
+    .page-title h1 { font-size: 2.2rem; }
 
     .cotizacion-grid {
-        flex-direction: row; /* Vuelve a dos columnas */
         display: grid;
-        grid-template-columns: 1fr 1.6fr;
-        align-items: start;
+        grid-template-columns: 1fr 1.6fr; /* Vuelve a dos columnas */
+        gap: 40px;
     }
 
     .resumen-cotizacion {
@@ -217,9 +202,7 @@ html, body {
         top: 20px;
     }
 
-    .contact-card {
-        padding: 40px;
-    }
+    .contact-card { padding: 40px; }
 
     .opciones-metodo {
         flex-direction: row; /* Botones lado a lado en PC */
