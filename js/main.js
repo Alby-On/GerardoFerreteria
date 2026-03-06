@@ -101,60 +101,24 @@ document.addEventListener("DOMContentLoaded", () => {
         loadComponent('carrito-placeholder', 'components/carro_compras.html')
     ]).then(() => {
 
-        // ==========================================
-        // 2. LÓGICA DEL MENÚ LATERAL (MÓVIL) - NUEVO
-        // ==========================================
-        const btnOpen = document.getElementById('mobile-menu-btn');
-        const btnClose = document.getElementById('close-drawer');
-        const drawer = document.getElementById('mobile-drawer');
-        const overlay = document.getElementById('drawer-overlay');
-        const mobileLinksContainer = document.getElementById('mobile-links-container');
-        const mobileCatsContainer = document.getElementById('mobile-categories-container');
+        // ================================
+        // LÓGICA DEL MENÚ SANDWICH (NUEVO)
+        // ================================
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
 
-        // Función para abrir/cerrar
-        const toggleDrawer = () => {
-            if (drawer && overlay) {
-                drawer.classList.toggle('active');
-                overlay.classList.toggle('active');
-                document.body.style.overflow = drawer.classList.contains('active') ? 'hidden' : 'auto';
-            }
-        };
-
-        // Clonar enlaces y categorías al Menú Lateral
-        if (mobileLinksContainer && mobileCatsContainer) {
-            // Clonar Links Principales (Inicio, Nosotros, etc)
-            const navLinksOriginals = document.querySelectorAll('.nav-links li a');
-            navLinksOriginals.forEach(link => {
-                const li = document.createElement('li');
-                const clone = link.cloneNode(true);
-                // Si el link de escritorio tenía clases de cierre, se las quitamos para el móvil
-                clone.classList.remove('active'); 
-                li.appendChild(clone);
-                mobileLinksContainer.appendChild(li);
+        if (menuBtn && navLinks) {
+            menuBtn.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
             });
 
-            // Clonar Categorías (Botones del Mega Menú)
-            const catLinksOriginals = document.querySelectorAll('.btn-categoria-nav');
-            catLinksOriginals.forEach(cat => {
-                const li = document.createElement('li');
-                const a = document.createElement('a');
-                a.href = `productos.html?cat=${cat.getAttribute('data-categoria')}`;
-                a.textContent = cat.textContent.trim();
-                li.appendChild(a);
-                mobileCatsContainer.appendChild(li);
+            // Cerrar menú al hacer clic en un enlace
+            navLinks.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                });
             });
         }
-
-        // Eventos de interacción
-        if (btnOpen) btnOpen.addEventListener('click', toggleDrawer);
-        if (btnClose) btnClose.addEventListener('click', toggleDrawer);
-        if (overlay) overlay.addEventListener('click', toggleDrawer);
-
-        // Cerrar menú al hacer clic en cualquier link interno
-        drawer?.addEventListener('click', (e) => {
-            if (e.target.tagName === 'A') toggleDrawer();
-        });
-
 
         // ================================
         // INICIALIZACIONES GENERALES
@@ -171,23 +135,21 @@ document.addEventListener("DOMContentLoaded", () => {
         // EVENTOS DEL CARRITO
         // ================================
 
-        // Sincronizamos ambos botones del carrito (Header Top y Navbar)
-        const botonesCarrito = ['cart-button', 'cart-button-top'];
-        botonesCarrito.forEach(id => {
-            const btn = document.getElementById(id);
-            if (btn) btn.addEventListener('click', (e) => {
+        const btnAbrir = document.getElementById('cart-button');
+        if (btnAbrir) {
+            btnAbrir.addEventListener('click', (e) => {
                 e.preventDefault();
                 toggleCarrito();
             });
-        });
+        }
 
-        const overlayCart = document.getElementById('carrito-overlay');
-        if (overlayCart) {
-            overlayCart.addEventListener('click', toggleCarrito);
+        const overlay = document.getElementById('carrito-overlay');
+        if (overlay) {
+            overlay.addEventListener('click', toggleCarrito);
         }
 
         // ================================
-        // CATEGORÍAS Y SUBCATEGORÍAS
+        // CATEGORÍAS Y SUBCATEGORÍAS (Actualizado)
         // ================================
 
         const menuCat = document.getElementById('menu-categorias');
@@ -196,17 +158,21 @@ document.addEventListener("DOMContentLoaded", () => {
             enlaces.forEach(enlace => {
                 enlace.addEventListener('click', (e) => {
                     e.preventDefault();
+
                     enlaces.forEach(el => el.classList.remove('active'));
                     enlace.classList.add('active');
+
                     const categoria = enlace.getAttribute('data-categoria');
                     const nombreCategoria = enlace.textContent;
 
+                    // 1. NUEVO: Carga GLOBAL de todos los productos del padre
                     if (typeof ejecutarBusquedaGlobalPadre === 'function') {
                         ejecutarBusquedaGlobalPadre(categoria, nombreCategoria);
                     } else {
                         ejecutarCargaPorCategoria(categoria, nombreCategoria);
                     }
 
+                    // 2. Despliega el acordeón de subcategorías
                     if (typeof mostrarSubcategorias === 'function') {
                         mostrarSubcategorias(categoria);
                     }
@@ -237,12 +203,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (subcategoriaSolicitada) {
                         botonFiltrar.classList.add('active');
                         mostrarSubcategorias(categoriaSolicitada);
-                        
+
                         const tagCompleto = `${categoriaSolicitada}:${subcategoriaSolicitada}`;
                         setTimeout(() => {
                             ejecutarBusquedaPorTag(tagCompleto);
                             document.querySelectorAll('.enlace-sub-anidado').forEach(a => {
-                                if(a.textContent.trim() === subcategoriaSolicitada) a.classList.add('active');
+                                if (a.textContent.trim() === subcategoriaSolicitada) a.classList.add('active');
                             });
                         }, 500);
                     } else {
@@ -273,7 +239,7 @@ document.addEventListener("DOMContentLoaded", () => {
             ejecutarBusquedaAPI(decodeURIComponent(busquedaURL));
         }
     }
-});
+});;
 
 function mostrarSubcategorias(catPadre) {
     // 1. Cerramos todas las sub-listas abiertas (tanto de Sidebar como de Nav)
