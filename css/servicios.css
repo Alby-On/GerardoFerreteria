@@ -7,14 +7,19 @@
 }
 
 .container {
-    max-width: 1300px; /* Un poco más ancho para el grid 4x2 */
+    max-width: 1300px; 
     margin: 0 auto;
     padding: 0 20px;
+    /* Asegura que el contenido dentro del container se pueda centrar */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 /* --- HERO SECTION --- */
 .servicios-hero {
     position: relative;
+    width: 100%;
     height: 45vh;
     background-color: #1e293b;
     display: flex;
@@ -93,16 +98,50 @@
     letter-spacing: 1px;
 }
 
-/* --- GRID SERVICIOS (ESTRUCTURA 4x2) --- */
-.servicios-grid-section { 
-    padding: 80px 0; 
+/* --- SECCIÓN TÍTULOS (CENTRADOS) --- */
+.section-title {
+    width: 100%;
+    max-width: 800px;
+    margin: 60px auto 40px auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra h2, p y divider */
 }
 
-/* Clase actualizada para manejar 4 columnas */
+.section-title h2 {
+    font-size: 2.2rem;
+    color: #1e293b;
+    text-transform: uppercase;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+.section-title p {
+    font-size: 1.1rem;
+    color: #64748b;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.divider {
+    width: 70px;
+    height: 4px;
+    background: #e63946;
+    border-radius: 5px;
+}
+
+/* --- GRID SERVICIOS (ESTRUCTURA 4x2) --- */
+.servicios-grid-section { 
+    padding: 20px 0 80px 0; 
+    width: 100%;
+}
+
 .grid-servicios-industrial, .grid-servicios-2x2 {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 Columnas exactas en escritorio */
+    grid-template-columns: repeat(4, 1fr); /* 4 Columnas exactas */
     gap: 25px;
+    width: 100%;
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -113,11 +152,11 @@
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.05);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    border-top: 5px solid #1e293b; /* Iniciamos con azul */
+    border-top: 5px solid #1e293b;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centrado horizontal */
-    text-align: center;   /* Centrado de texto */
+    align-items: center; 
+    text-align: center;  
     position: relative;
     overflow: hidden;
 }
@@ -125,10 +164,9 @@
 .servicio-card:hover { 
     transform: translateY(-12px);
     box-shadow: 0 15px 35px rgba(230, 57, 70, 0.15);
-    border-top: 5px solid #e63946; /* Cambia a rojo al hover */
+    border-top: 5px solid #e63946;
 }
 
-/* Línea decorativa inferior (Animación extra) */
 .servicio-card::after {
     content: "";
     position: absolute;
@@ -177,7 +215,7 @@
 }
 
 /* --- CTA SECTION --- */
-.cta-servicios { padding-bottom: 80px; }
+.cta-servicios { padding-bottom: 80px; width: 100%; }
 
 .cta-box {
     background: #1e293b;
@@ -209,9 +247,8 @@
     transform: scale(1.05);
 }
 
-/* --- RESPONSIVE (Optimizado para S22 Ultra y Tablets) --- */
+/* --- RESPONSIVE (S22 Ultra y Tablets) --- */
 
-/* Tablets y Laptops Pequeñas (2 columnas) */
 @media (max-width: 1100px) {
     .grid-servicios-industrial, .grid-servicios-2x2 {
         grid-template-columns: repeat(2, 1fr);
@@ -219,15 +256,16 @@
     }
 }
 
-/* Móviles (1 columna) */
 @media (max-width: 650px) {
     .grid-servicios-industrial, .grid-servicios-2x2 {
         grid-template-columns: 1fr;
     }
     
-    .servicios-hero { height: auto; padding: 80px 0; }
+    .servicios-hero { height: auto; padding: 60px 20px; }
     
-    .hero-content h1 { font-size: 2rem; }
+    .section-title h2 { font-size: 1.6rem; }
+
+    .hero-content h1 { font-size: 1.8rem; }
     
     .logo-hero-grande { height: 45px !important; }
 
