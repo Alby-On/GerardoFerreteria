@@ -68,11 +68,15 @@ async function queryShopify(query) {
 function templateProducto(prod) {
     const imagen = prod.images.edges[0]?.node.url || 'img/placeholder.jpg';
     const idProducto = btoa(prod.id); 
+    
+    // Optimizamos el texto ALT para SEO
+    // Ejemplo: "Taladro Percutor Total - Comercializadora Makro SPA"
+    const altText = `${prod.title} - Comercializadora Makro SPA`;
 
     return `
         <div class="tarjeta-oferta">
             <div class="img-container">
-                <img src="${imagen}" alt="${prod.title}">
+                <img src="${imagen}" alt="${altText}" loading="lazy">
             </div>
             
             <div class="info-contenedor">
